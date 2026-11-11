@@ -1,5 +1,5 @@
 // Browser check: every example runs, its name matches the parsed config, roster buttons map to 01-07.
-import {createRequire} from 'node:module';const require=createRequire('/home/user/workspace/series/');
+import {createRequire} from 'node:module';const require=createRequire(import.meta.url);
 const {chromium}=require('playwright');const assert=require('assert/strict');
 const url=process.argv[2]||'http://127.0.0.1:3018/';const b=await chromium.launch();let n=0;
 for(const [w,h,dark] of [[1440,900,0],[375,812,0],[1440,900,1]]){
@@ -12,6 +12,9 @@ for(const [w,h,dark] of [[1440,900,0],[375,812,0],[1440,900,1]]){
   const r=await p.evaluate(()=>({err:!document.querySelector('#error').hidden,desc:document.querySelector('#config-description').textContent,out:document.querySelector('#output').textContent,note:document.querySelector('#example-note').textContent}));
   assert.ok(!r.err,o.t);assert.ok(r.note.length>3,o.t);
   const [pl,lv,ct]=r.desc.split(' · ');
+  assert.equal(o.t,`${String(Number(o.v)+1).padStart(2,'0')} · ${pl} · ${lv} · ${ct}`);
+  assert.ok((await p.locator('#example-level').innerText()).includes(lv));
+  assert.ok((await p.locator('#example-court').innerText()).includes(ct));
   const lvl={'초보':'1','통상':'2','프로':'3'}[lv];
   assert.ok(o.t.includes(pl)||(pl==='동현'&&!/뭉치|뚱띠|또치|포동이|꽥꽥|슈슈/.test(o.t)),o.t+' player '+r.desc);assert.ok(o.t.includes(ct)||o.t.includes(ct.replace(/ .*/,'')),o.t+' court '+r.desc);
   assert.ok(o.t.includes(lv)||o.t.includes('난이도 '+lvl)||(o.g==='선수 고르기'&&lv==='초보'),o.t+' level '+r.desc);n++;

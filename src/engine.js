@@ -17,6 +17,7 @@ const COURTS=[
  {name:'프랑스',surface:'클레이',bounce:.83,retain:.72,ground:'#b7795b',outer:'#405f55',line:'#f2dfc9',accent:'#d3b594',desc:'속도는 줄고 높이 튀는 공'}
 ];
 const LEVELS=[{name:'초보',speed:.88,react:.24,error:.65},{name:'통상',speed:1,react:.14,error:.32},{name:'프로',speed:1.13,react:.07,error:.13}];
+const SKILL_KINDS=[['fire','comet'],['win','lose'],['wind','slow'],['drop','dance'],['miss','fall'],['vanish','serveVanish'],['long','predict']];
 const G=13,NET=.92,W=4.115,L=11.885,DT=1/120;
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 function parse(out){
@@ -38,7 +39,7 @@ class Match{
  event(type,text){this.events.push({type,text});if(this.events.length>30)this.events.shift();}
  score(){if(this.tb)return this.points.map(String);if(this.points[0]>=3&&this.points[1]>=3)return this.points[0]===this.points[1]?['40','40']:this.points[0]>this.points[1]?['AD','40']:['40','AD'];return this.points.map(p=>['0','15','30','40'][p]||'40');}
  setupPoint(){
-  this.phase='ready';this.timer=0;this.ball=null;this.pendingServe=null;this.armed=null;this.effects={};this.fx=null;this.rally=0;
+  this.phase='ready';this.timer=0;this.ball=null;this.pendingServe=null;this.armed=null;this.effects={};this.fx=null;this.skillCue=null;this.rally=0;
   const s=this.people[this.server],r=this.people[1-this.server],parity=(this.points[0]+this.points[1])%2;
   s.x=(parity? -1:1)*s.side*1.5;s.y=s.side*12.3;r.x=-s.x;r.y=r.side*10.8;
   for(const p of this.people){p.pose='idle';p.swing=0;p.cool=0;p.anim=null;p.walk=false;p.gait=0;p.moveX=0;p.moveY=0;}
@@ -51,6 +52,12 @@ class Match{
   }
  }
  animate(i,name,duration,hand=1,height=1){this.people[i].anim={name,time:0,duration,hand,height};}
+ cueSkill(kind,prepared=false){
+  // Presentation only: no random numbers, hit windows, energy or world coordinates.
+  const id=this.people[0].id,slot=SKILL_KINDS[id].indexOf(kind);
+  if(slot<0)return;
+  this.skillCue={kind,prepared,player:id,slot,name:PLAYERS[id].skills[slot][0],ttl:1.6,duration:1.6};
+ }
  finish(w,why){this.phase='match';this.winner=w;this.message=why+' · '+(w===0?'승리':'패배');this.ball=null;this.event('match',this.message);}
  point(w,why){
   if(['point','match'].includes(this.phase))return;
@@ -124,7 +131,7 @@ class Match{
   const hand=this.ball&&this.ball.x<p.x? -1:1;this.animate(i,kind==='lob'?'lobWindup':'windup',.3,hand);
   if(i===0&&this.armed==='comet'&&this.reachable(0,true)){
    this.fx={type:'comet',x:p.x,y:p.y,toX:this.ball.x,toY:this.ball.y,ttl:.7};
-   p.x=this.ball.x;p.y=this.ball.y+.25*p.side;this.armed=null;
+   p.x=this.ball.x;p.y=this.ball.y+.25*p.side;this.armed=null;this.cueSkill('comet');
   }
   return this.tryHit(i);
  }
@@ -147,7 +154,7 @@ class Match{
   if(oldArm==='wind'||oldArm==='drop'){ty=-p.side*1.7;tx=oldArm==='drop'?(this.people[1].x>=0?-3.5:3.5):clamp(tx,-3.4,3.4);t=Math.max(1.05,Math.abs(b.y-ty)/10);}
   this.launch(i,tx,ty,t,isSmash?'smash':isVolley?(kind==='lob'?'softVolley':'volley'):kind);
   this.ball.power=oldArm;this.ball.slow=false;
-  if(oldArm&&oldArm!=='serveVanish'){this.armed=null;this.fx={type:oldArm,x:p.x,y:p.y,ttl:1.1};}
+  if(oldArm&&oldArm!=='serveVanish'){this.armed=null;this.fx={type:oldArm,x:p.x,y:p.y,ttl:1.1};this.cueSkill(oldArm);}
   p.swing=0;p.pose=isSmash?'smash':isVolley?'volley':'swing';p.cool=.24;
   this.animate(i,isSmash?'smash':isVolley?(kind==='lob'?'softVolley':'volley'):kind==='lob'?'lob':hitHand<0?'backhand':'forehand',isSmash?.40:kind==='lob'?.46:.34,hitHand,hitHeight);
   this.rally++;if(i===0){this.returns++;if(this.returns%4===0){this.energy=clamp(this.energy+1,0,6);this.event('charge','리턴 4회 · 기술 +1');}}
@@ -157,14 +164,14 @@ class Match{
   if(this.paused||['point','fault','match'].includes(this.phase))return {ok:false,why:'공이 살아 있을 때 쓰자.'};
   const id=this.people[0].id,sk=PLAYERS[id].skills[slot];if(!sk)return {ok:false,why:'없는 기술'};
   if(this.energy<sk[1])return {ok:false,why:`기술 에너지 ${sk[1]}칸이 필요하다.`};
-  let kind=[['fire','comet'],['win','lose'],['wind','slow'],['drop','dance'],['miss','fall'],['vanish','serveVanish'],['long','predict']][id][slot];
+  let kind=SKILL_KINDS[id][slot];
   const arm=['fire','comet','wind','drop','vanish','serveVanish'].includes(kind);
   if(arm&&this.armed)return {ok:false,why:'이미 준비한 기술이 있다.'};
   if(kind==='serveVanish'&&!(this.server===0&&['ready','toss'].includes(this.phase)))return {ok:false,why:'내 서브 토스 전후에 준비하자.'};
   if(kind==='slow'&&!(this.phase==='rally'&&this.ball.by===1))return {ok:false,why:'상대가 친 공이 있을 때 쓰자.'};
   if(['dance','miss','fall','long','predict'].includes(kind)&&this.effects[kind])return {ok:false,why:'아직 효과가 남아 있다.'};
   if(kind==='slow'&&this.ball.slow)return {ok:false,why:'이미 느려진 공이다.'};
-  this.energy-=sk[1];this.event('skill',sk[0]);this.message=sk[0];
+  this.energy-=sk[1];this.event('skill',sk[0]);this.message=sk[0];this.cueSkill(kind,arm);
   if(arm)this.armed=kind;
   else if(kind==='win'||kind==='lose'){this.fx={type:kind,ttl:3};this.finish(kind==='win'?0:1,sk[0]);}
   else if(kind==='slow')this.ball.slow=true;
@@ -209,6 +216,7 @@ class Match{
  step(dt,input={}){
   if(this.paused)return;
   this.time+=dt;this.tick++;
+  if(this.skillCue){this.skillCue.ttl-=dt;if(this.skillCue.ttl<=0)this.skillCue=null;}
   if(this.fx){this.fx.ttl-=dt;if(this.fx.ttl<=0)this.fx=null;}
   for(const k of ['fall','whiff'])if(this.effects[k]>0)this.effects[k]-=dt;
   for(const p of this.people){p.cool=Math.max(0,p.cool-dt);p.swing=Math.max(0,p.swing-dt);if(p.anim){p.anim.time+=dt;if(p.anim.time>=p.anim.duration){p.anim=null;if(!['fall','dance','whiff'].includes(p.pose))p.pose=p.walk?'run':'idle';}}}
@@ -266,7 +274,7 @@ class Match{
       const box=legal&&Math.abs(b.y)<=6.4+.035&&b.x*(b.serviceOriginX??this.people[b.by].x)<=0;
       if(!box){this.fault('서비스 아웃');return;}
       if(b.netTouch){this.phase='fault';this.timer=1.0;this.ball=null;this.message='렛 · 같은 서브 다시';this.event('let',this.message);return;}
-      if(b.by===0&&this.armed==='serveVanish'){this.fx={type:'vanish',x:b.x,y:b.y,ttl:1.5};this.point(0,'알려고하지마');return;}
+      if(b.by===0&&this.armed==='serveVanish'){this.fx={type:'vanish',x:b.x,y:b.y,ttl:1.5};this.cueSkill('serveVanish');this.point(0,'알려고하지마');return;}
      }else if(!legal){this.point(1-b.by,'아웃');return;}
      if(b.by===0&&['fire','drop','vanish'].includes(b.power)){
       this.fx={type:b.power==='fire'?'wall':b.power,x:b.x,y:b.y,ttl:1.6};this.point(0,b.power==='fire'?'샤아아즈나블':b.power==='drop'?'구마몬기쥬츠':'비밀이야');return;

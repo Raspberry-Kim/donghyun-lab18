@@ -4,6 +4,8 @@ const $=s=>document.querySelector(s),E=Te,R=new TeRender.Renderer($('#court')),k
 let match=new E.Match(),active=false,tab='play',manual=false,pending=null,sound=true,ctx=null,last=0,acc=0,notice='',noticeTime=0;
 let oldPad=[],padAxes={x:0,y:0},fps=60,frames=0,fpsLast=0,musicNext=0,musicStep=0,hudKey='',fullRequest=Promise.resolve();
 let tossGain=null;
+const motionQuery=matchMedia('(prefers-reduced-motion: reduce)');
+R.reducedMotion=motionQuery.matches;motionQuery.addEventListener('change',e=>{R.reducedMotion=e.matches;});
 const captions=['WIMBLEDON / GRASS','AUSTRALIA / HARD','US / HARD','FRANCE / CLAY'];
 const encode=n=>'도'+'오'.repeat(n-1)+'옹';
 const makeCode=(p=0,l=0,c=0)=>`나는 동현이냐?\n   ㅋㅋ 선수 ${p+1} · ${E.PLAYERS[p].name}\n  뿡뿡 ${encode(p+1)}~뿡뿡뿡\n   ㅋㅋ 난이도 ${l+1} · ${E.LEVELS[l].name}\n  뿡뿡 ${encode(l+1)}~뿡뿡뿡\n   ㅋㅋ 경기장 ${c+1} · ${E.COURTS[c].name}\n  뿡뿡 ${encode(c+1)}~뿡뿡뿡\n동현이구나`;
@@ -25,13 +27,21 @@ const examples=E.PLAYERS.map((p,i)=>ex('선수 고르기',`${String(i+1).padStar
   ex('선수와 코트','22 · 또치 · 프로 · US',3,2,2,'이동 120. 빠른 하드 코트와 프로 상대에서 넓게 뛰며 버티는 조합이다.'),
   ex('선수와 코트','23 · 뭉치 · 통상 · 호주',1,1,1,'능력치가 모두 90인 균형형. 중간 높이 반발의 호주에서 기본기를 확인하자.'),
   ex('선수와 코트','24 · 꽥꽥 · 프로 · 윔블던',5,2,0,'공격 80·수비 90. 가장 빠른 조합에서 비밀이야·알려고하지마로 포인트를 노린다.')]);
+// Derive all titles from the config, rather than maintaining inconsistent hand-written names.
+examples.forEach((e,i)=>{e.name=`${String(i+1).padStart(2,'0')} · ${E.PLAYERS[e.p].name} · ${E.LEVELS[e.l].name} · ${E.COURTS[e.c].name}`;});
 {const sel=$('#example');let html='',group='';examples.forEach((e,i)=>{if(e.group!==group){if(group)html+='</optgroup>';group=e.group;html+=`<optgroup label="${group}">`;}html+=`<option value="${i}">${e.name}</option>`;});sel.innerHTML=html+'</optgroup>';}
+function explainConfig(cfg){
+ const l=E.LEVELS[cfg.level],c=E.COURTS[cfg.court];
+ $('#example-level').textContent=`난이도 ${cfg.level+1} · ${l.name}: ${['통상보다 느리고 상대의 자리 선정도 느슨하다.','속도 비교의 기준이며, 반응과 자리 오차는 중간이다.','공과 두 선수의 이동이 빨라지고 상대의 판단도 더 촘촘하다.'][cfg.level]} 공의 비행 시간·선수 이동에 적용하는 속도 배율 ${l.speed.toFixed(2)}. 상대 재판단 약 ${l.react.toFixed(2)}초, 바운드 전 좌우 목표 오차 최대 ±${(l.error/2).toFixed(3)}m.`;
+ $('#example-court').textContent=`코트 ${cfg.court+1} · ${c.name} / ${c.surface}: ${c.desc}. 같은 입사 조건에서 수직 속도 반발 ${c.bounce.toFixed(2)}, 수평 속도 유지 ${Math.round(c.retain*100)}%. ${['네 코트 중 가장 낮게 튀고 수평 속도를 가장 많이 유지한다.','US보다 높게 튀고 수평 속도는 더 줄어든다.','호주보다 낮게 튀고 수평 속도를 더 많이 유지한다.','네 코트 중 가장 높게 튀고 수평 속도가 가장 많이 줄어든다.'][cfg.court]}`;
+ $('.example-comparison').hidden=false;
+}
 function lineNumbers(){const code=$('#code');$('#lines').textContent=Array.from({length:code.value.split('\n').length},(_,i)=>i+1).join('\n');$('#lines').scrollTop=code.scrollTop;}
 function parsed(){const result=Donghyun.run($('#code').value,{maxSteps:100000});return {config:E.parse(result.output),output:result.output.trim().split(/\s+/).join('  ')};}
 function validate(){
  lineNumbers();
- try{const r=parsed();$('#error').hidden=true;$('#output').textContent=r.output;$('#config-description').textContent=`${E.PLAYERS[r.config.player].name} · ${E.LEVELS[r.config.level].name} · ${E.COURTS[r.config.court].name}`;if(!active){match=new E.Match(r.config);draw();}return r.config;}
- catch(e){$('#error').hidden=false;$('#error').textContent=e.message;$('#output').textContent='실행 오류';return null;}
+ try{const r=parsed();$('#error').hidden=true;$('#output').textContent=r.output;$('#config-description').textContent=`${E.PLAYERS[r.config.player].name} · ${E.LEVELS[r.config.level].name} · ${E.COURTS[r.config.court].name}`;explainConfig(r.config);if(!active){match=new E.Match(r.config);draw();}return r.config;}
+ catch(e){$('#error').hidden=false;$('#error').textContent=e.message;$('#output').textContent='실행 오류';$('.example-comparison').hidden=true;return null;}
 }
 function example(i){const e=examples[i];$('#code').value=makeCode(e.p,e.l,e.c);$('#example-note').textContent=e.note;validate();}
 $('#example').onchange=()=>example(Number($('#example').value));
@@ -153,7 +163,20 @@ function pollPad(){
 }
 function draw(){
  R.draw(match);const cfg=match.config,p=E.PLAYERS[cfg.player],opp=E.PLAYERS[match.people[1].id];
- const showEnd=match.phase==='match'&&!(match.fx?.type==='lose'&&match.fx.ttl>1.8);
+ const cue=match.skillCue,el=$('#skill-cue');
+ el.hidden=!active||!cue||match.paused||!!pending;
+ if(active&&cue){
+  R.skillBurst(TeRender.viewMatch(match));
+  const style=TeRender.skillStyles[cue.kind],label=`${p.name} · ${cue.prepared?'준비':'발동'}`;
+  if($('#skill-cue-who').textContent!==label)$('#skill-cue-who').textContent=label;
+  if($('#skill-cue-name').textContent!==cue.name)$('#skill-cue-name').textContent=cue.name;
+  const detail=cue.prepared?style[2]:style[1];
+  if($('#skill-cue-detail').textContent!==detail)$('#skill-cue-detail').textContent=detail;
+  el.style.setProperty('--cue-color',style[0]);
+  el.style.opacity=R.reducedMotion?'1':String(Math.min(1,cue.ttl/.2));
+  el.style.transform=R.reducedMotion?'none':`translateY(${-8*Math.max(0,1-(cue.duration-cue.ttl)/.15)}px)`;
+ }
+ const showEnd=match.phase==='match'&&!cue&&!(match.fx?.type==='lose'&&match.fx.ttl>1.8);
  const next=JSON.stringify([active,tab,cfg,match.phase,match.paused,match.points,match.games,match.sets,match.server,match.energy,match.winner,match.message,noticeTime>0?notice:'',!!pending,showEnd]);
  if(next===hudKey)return;hudKey=next;
  $('#court-caption').textContent=captions[cfg.court];
@@ -184,7 +207,7 @@ $('#open-code').onchange=async e=>{const f=e.target.files[0];if(!f)return;if(f.s
 $('#court-cards').innerHTML=E.COURTS.map((c,i)=>`<article class="court-card" style="--court:${c.ground}"><h3>${c.name}<small>${c.surface}</small></h3><p>${c.desc}</p><div class="coeff">반발 ${c.bounce.toFixed(2)} · 속도 유지 ${c.retain.toFixed(2)}</div></article>`).join('');
 $('#roster').innerHTML=E.PLAYERS.map((p,i)=>`<article class="player-card"><div class="player-top"><img src="${R.portrait(i)}" alt="${p.name} 테니스 도트"><div><span>PLAYER 0${i+1}</span><h2>${p.name}</h2></div></div><div class="stats"><span>공격 <b>${p.atk}</b></span><span>수비 <b>${p.def}</b></span><span>이동 <b>${p.mov}</b></span></div>${p.skills.map((s,j)=>`<h3>${j?'A':'S'} · ${s[0]} <small>${s[1]}칸</small></h3><p>${s[2]}</p>`).join('')}<button data-player="${i}">이 선수의 출전 코드 불러오기</button></article>`).join('');
 document.querySelectorAll('[data-player]').forEach(b=>b.onclick=()=>{$('#example').value=b.dataset.player;example(Number(b.dataset.player));setTab('play');$('#code').focus();});
-window.render_game_to_text=()=>JSON.stringify({phase:active?match.phase:'setup',paused:match.paused,coordinate:'World XYZ; display x/y = world x/y × viewSide. Human always bottom; fixed camera.',viewSide:match.people[0].side,config:match.config,people:match.people,ball:match.ball,score:match.score(),games:match.games,sets:match.sets,server:match.server,energy:match.energy,armed:match.armed,effects:match.effects,fx:match.fx,message:match.message,tab,winner:match.winner});
+window.render_game_to_text=()=>JSON.stringify({phase:active?match.phase:'setup',paused:match.paused,coordinate:'World XYZ; display x/y = world x/y × viewSide. Human always bottom; fixed camera.',viewSide:match.people[0].side,config:match.config,people:match.people,ball:match.ball,score:match.score(),games:match.games,sets:match.sets,server:match.server,energy:match.energy,armed:match.armed,effects:match.effects,fx:match.fx,skillCue:match.skillCue,message:match.message,tab,winner:match.winner});
 window.advanceTime=ms=>{manual=true;for(let i=0;i<Math.round(ms/1000/E.DT);i++)tick(E.DT);draw();};
 window.TeApp={get match(){return match;},begin,setup,makeCode,renderer:R,resumeClock(){manual=false;acc=0;}};
 example(0);requestAnimationFrame(loop);

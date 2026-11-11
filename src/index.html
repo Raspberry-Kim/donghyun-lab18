@@ -19,6 +19,7 @@
     <div id="stage" class="stage" tabindex="0" aria-label="테니스 경기장. 방향키 이동, X 스트로크, Z 로브, S와 A 특수기술.">
      <div class="scoreboard"><div class="score-names"><span id="player-name">동현 <small>나</small></span><span id="opponent-name">슈슈 <small>동현AI™</small></span></div><div class="score-column"><small>SET</small><span id="set-score">0 : 0</span></div><div class="score-column"><small>GAME</small><span id="game-score">0 : 0</span></div><div class="score-column point-column"><small>POINT</small><span id="point-score">0 : 0</span></div><button id="full-close" hidden>전체 화면 닫기</button></div>
      <div class="canvas-shell"><canvas id="court" width="320" height="288" aria-label="고정 시점 테니스 코트"></canvas>
+      <div id="skill-cue" class="skill-cue" role="status" aria-live="polite" aria-atomic="true" hidden><span id="skill-cue-who"></span><strong id="skill-cue-name"></strong><small id="skill-cue-detail"></small></div>
       <div id="start-card" class="overlay"><div class="start-inner"><span class="eyebrow">ONE PLAYER · SINGLES</span><h2 id="start-title">동현, 윔블던에 서다.</h2><p>공보다 그림자를 보자.<br>작은 타이밍이 큰 차이를 만든다.</p><div class="start-meta" id="start-meta">공격 100 / 수비 100 / 이동 100</div><button id="court-start" class="primary">출전 <kbd>Enter</kbd></button><small>설정은 오른쪽 동현랭 코드에서 바꾼다.</small></div></div>
       <div id="pause-card" class="overlay" hidden><div class="start-inner"><span class="eyebrow">PAUSED</span><h2>잠시 숨을 고르자.</h2><p>Enter로 경기를 계속한다.<br>F는 전체 화면, M은 소리.</p><button id="resume" class="primary">계속하기 <kbd>Enter</kbd></button><button id="restart-menu">출전 준비로</button></div></div>
       <div id="end-card" class="overlay" hidden><div class="start-inner"><span id="end-eyebrow" class="eyebrow">MATCH</span><h2 id="end-title">경기 종료</h2><p id="end-detail"></p><button id="new-match" class="primary">출전 준비로 <kbd>Enter</kbd></button></div></div>
@@ -32,6 +33,7 @@
    <aside class="editor-column">
     <div class="editor-heading"><span class="eyebrow">MATCH PROGRAM</span><h2>오늘의 출전 코드</h2><p>선수, 난이도, 경기장.<br>정수 세 개로 경기를 열자.</p></div>
     <label class="field-label" for="example">예제 불러오기</label><select id="example"></select><p id="example-note" class="example-note"></p>
+    <div class="example-comparison" aria-label="선택한 예제의 난이도와 코트 차이"><p id="example-level"></p><p id="example-court"></p><small>이 수치는 동현테의 자체 설정이다. 반발은 바운드 직후 수직 속도의 비율이며, 튀어 오르는 높이의 비율은 아니다.</small></div>
     <label class="field-label" for="code">동현랭 코드 <span>tennis.dh</span></label>
     <div class="code-shell"><pre id="lines" aria-hidden="true"></pre><textarea id="code" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="code-help"></textarea></div>
     <div id="code-help" class="output"><span>출력</span><code id="output">1  1  1</code><small id="config-description">동현 · 초보 · 윔블던</small></div>
