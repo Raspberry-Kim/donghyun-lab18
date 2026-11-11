@@ -33,7 +33,7 @@ function racketFrame(v){
  const [x,y]=v.racket,hand={x:v.right[2],y:v.right[3]};
  const dx=x-hand.x,dy=y-hand.y,length=Math.hypot(dx,dy)||1;
  // The oval's long axis continues the shaft, rather than leaning against it.
- return {x,y,hand,ux:dx/length,uy:dy/length,angle:Math.atan2(dx,-dy),minor:3.7*(v.face??.85),major:5.8};
+ return {x,y,hand,ux:dx/length,uy:dy/length,angle:Math.atan2(dx,-dy),minor:2.2+2.9*(v.face??.85),major:5.8};
 }
 const gait=[
  [-4,0,-3,-3,3,-1,1,-3],[-2,-1,-3,-3,3,0,2,-4],[-1,0,-1,-3,1,-2,3,-3],
@@ -46,8 +46,12 @@ function poseFrame(p,override){
  const v={kind,frame:0,lean:0,lift:0,bob:walk&&[1,4].includes(f)?-1:0,
   left:[-4,-12,-4,-9],right:[4,-12,4,-10],racket:[10,-17,'tilt'],face:.85,
   feet:walk?gait[f]:[-2,0,-2,-3,2,0,2,-3]};
- if(walk){const sway=[-1,-2,-1,1,2,1][f];v.frame=f;v.lean=p.moveX||0;
-  v.left=[-4,-12,-4+sway,-9-sway];v.right=[4,-12,4,-10+sway];v.racket=[10,-17+sway,'tilt'];v.face=.65+.2*Math.abs(sway)/2;}
+ if(walk){const sway=[-1,-2,-1,1,2,1][f],dir=Math.sign(p.moveX||0),bounce=Math.abs(sway)>1?-1:0;v.frame=f;v.lean=dir;
+  v.left=[-4,-12,-4+sway,-9-sway];v.face=.8+.05*Math.abs(sway)/2;
+  // ROM walk: the head rides behind the shoulder, opposite the run, at head height.
+  if(dir){const low=p.id===6?4:0; // Shushu's shoulder sits lower; keep the arm off her face
+   v.right=[(2-dir*5)/2,-15+low,-dir*5,-16+low+bounce];v.racket=[-dir*11,-21+low+bounce,'tilt'];}
+  else{v.right=[4,-12,4,-10+sway];v.racket=[10,-17+sway,'tilt'];}}
  if(kind==='toss'){
   const n=Math.min(3,Math.floor(t*10));v.frame=n;
   const tossX=Math.round(.65*20*(1+(p.y||0)*.006));
@@ -146,7 +150,7 @@ class Renderer{
    g.beginPath();g.moveTo(-minor*.5,4.5);g.lineTo(0,7.8);g.lineTo(minor*.5,4.5);g.strokeStyle='#eadab3';g.lineWidth=1;g.stroke();
    g.beginPath();g.ellipse(0,0,minor,major,0,0,Math.PI*2);g.fillStyle='#45695c';g.fill();
    g.save();g.clip();g.strokeStyle='#b2c5a5';g.lineWidth=.55;g.beginPath();
-   for(let q=-5;q<=5;q+=2){g.moveTo(q,-6);g.lineTo(q,6);g.moveTo(-4,q);g.lineTo(4,q);}g.stroke();g.restore();
+   for(let q=-5;q<=5;q+=2){g.moveTo(q,-6);g.lineTo(q,6);g.moveTo(-6,q);g.lineTo(6,q);}g.stroke();g.restore();
    g.beginPath();g.ellipse(0,0,minor,major,0,0,Math.PI*2);g.strokeStyle='#f5ecd2';g.lineWidth=1.25;g.stroke();g.restore();
   }
   g.restore();
