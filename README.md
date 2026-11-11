@@ -1,4 +1,4 @@
-# 동현테 v0.01
+# 동현테 v0.02
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24133576.svg)](https://doi.org/10.5281/zenodo.24133576)
 
@@ -6,9 +6,9 @@
 
 [바로 하기](https://raspberry-kim.github.io/donghyun-lab18/) · [GitHub](https://github.com/Raspberry-Kim/donghyun-lab18)
 
-첫 공개판은 [v0.01 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.01)와 [Zenodo 보관본](https://zenodo.org/records/24133577)에서 받을 수 있다. 이 판의 DOI는 `10.5281/zenodo.24133577`이며, 머리글 배지와 인용 파일은 모든 판을 가리키는 개념 DOI `10.5281/zenodo.24133576`을 쓴다. DOI 표시는 발행 후 별도 커밋으로 추가했으며 발행된 태그와 보관 파일은 변경하지 않았다.
+v0.02는 [v0.02 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.02)에서 받을 수 있다. 첫 공개판은 [v0.01 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.01)와 [Zenodo 보관본](https://zenodo.org/records/24133577)(DOI `10.5281/zenodo.24133577`)에 남아 있다. 머리글 배지와 인용 파일은 모든 판을 가리키는 개념 DOI `10.5281/zenodo.24133576`을 쓴다.
 
-공개 웹판에는 같은 v0.01 표기를 유지한 후속 수정이 있다. 왼팔을 몸 앞 오른쪽으로 뻗어 공을 올리고 오른손 라켓 위에서 서브하도록 토스 위치·팔 자세·타점을 고쳤다. 이 후속 수정은 기존 Zenodo ZIP에 소급 반영하지 않았다.
+v0.02에서는 라켓 머리를 원작처럼 약간 통통한 타원으로 바꾸었다. 좌우로 달릴 때는 라켓 머리가 달리는 방향의 반대쪽 어깨 위, 머리 높이에 들린다. 위아래로만 움직일 때와 서 있을 때의 자세, v0.01 후속 수정의 왼손 토스·오른손 서브는 그대로다.
 
 ## 시작과 조작
 

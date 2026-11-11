@@ -89,4 +89,14 @@ test('view transformation mirrors ball, prediction and skill endpoints without m
  const m=ball();m.swapEnds();m.ball={...m.ball,x:2,y:-5,vx:3,vy:4,z:2,vz:3};m.fx={type:'comet',x:2,y:-5,toX:3,toY:-6};const before=JSON.stringify(m),v=R.viewMatch(m);
  assert.equal(v.ball.x,-2);assert.equal(v.ball.y,5);assert.equal(v.fx.toX,-3);assert.equal(v.predict().x,-m.predict().x);assert.equal(JSON.stringify(m),before);
 });
+test('ROM-like plump oval, and walking carries the head behind the run at head height',()=>{
+ for(const p of [{},{walk:true,moveX:-1,gait:1},{walk:true,moveX:1,gait:4}]){const r=R.racketFrame(R.poseFrame(p));assert.ok(r.minor/r.major>=.75,'plump '+r.minor/r.major);assert.ok(r.major>r.minor);}
+ for(const gait of [0,1,2,3,4,5]){
+  const L=R.poseFrame({walk:true,moveX:-1,gait}),Rt=R.poseFrame({walk:true,moveX:1,gait});
+  assert.ok(L.racket[0]>8&&Rt.racket[0]<-8,'opposite side of travel');assert.ok(L.racket[1]<=-20&&Rt.racket[1]<=-20,'head height');
+  assert.ok(L.right[2]>0&&Rt.right[2]<0,'right hand follows the racket side');
+ }
+ const m=new E.Match();m.swapEnds();m.phase='rally';const p=m.people[0];p.walk=true;p.moveX=1;p.gait=1;
+ const v=R.viewMatch(m).people[0];assert.equal(v.moveX,-1);assert.ok(R.poseFrame(v).racket[0]>0,'mirrored end: screen-left run keeps racket on screen-right');
+});
 console.log(`${count} racket/input/view checks passed`);
