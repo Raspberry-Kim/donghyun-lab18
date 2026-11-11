@@ -2,42 +2,110 @@
 (function(){
 'use strict';
 const heads=[
- ['...hhhhhh....','..hhhhhhhh...','..hssssssh...','..skksskkh...','..swwsswws...','...ssnnss....','....ssss.....'],
- ['....hhhh.....','...hhhhhh....','..hssssssh...','..hskssks....','...ssssss....','....snnss....','.....sss.....'],
- ['...hhhhhh....','..hhhhhhhh...','..hssssssh...','..ssssssss...','..sskssks....','..ssnnnss....','...sssss.....'],
- ['......hh.....','....hhhhh....','...hsssssh...','...sskssks...','...sssssss...','....snnss....','.....sss.....'],
- ['..ww....ww...','.wwwwwwwwww..','wwwwwwwwwwww.','wwwwkwwkwwww.','wwwwwwwwwwww.','.wwwknkwwww..','..wwwwwwww...'],
- ['....yyyy.....','...yyyyyy....','...ykyyky....','...yyyyyy....','...ooooooo...','....ooooo....','.....yyy.....'],
- ['....gggg.....','...gggggg....','..ggwggwgg...','..ggkggkgg...','..gggggggg...','...gkkkkg....','....gggg.....']
+ ['.hhhhh.','hhhhhhh','hsssssh','skkskks','swwswws','.ssnss.','..sss..'],
+ ['..hhh..','.hhhhh.','hhssssh','.skssk.','.sssss.','..sns..','..sss..'],
+ ['.hhhhh.','hhhhhhh','hsssssh','sskssks','sssssss','.snnns.','..sss..'],
+ ['...hh..','..hhhh.','.hssss.','.skssk.','.sssss.','..sns..','..sss..'],
+ ['ww.....ww','wwwwwwwww','wwwwwwwww','wwwkwkwww','wwwwwwwww','.wwknkww.','..wwwww..'],
+ ['..yyy..','.yyyyy.','.ykyky.','.yyyyy.','ooooooo','.ooooo.','..yyy..']
 ];
 const palette={h:'#342e2c',s:'#e3b797',k:'#292e2b',w:'#f5efdd',n:'#ab725c',y:'#e6be62',o:'#c67d43',g:'#a6be7b'};
-const W=320,H=288;
-function project(x,y,z=0){const sy=158+y*7.8,scale=1+y*.006;return {x:150+x*20*scale,y:sy-z*17,scale};}
+const W=320,H=288,Z_SCALE=12;
+function project(x,y,z=0){const sy=158+y*7.8,scale=1+y*.006;return {x:150+x*20*scale,y:sy-z*Z_SCALE,scale};}
 function unproject(x,y){const wy=(y-158)/7.8;return{x:(x-150)/(20*(1+wy*.006)),y:wy};}
+const gait=[
+ [-4,0,-3,-3,3,-1,1,-3],[-2,-1,-3,-3,3,0,2,-4],[-1,0,-1,-3,1,-2,3,-3],
+ [3,-1,1,-3,-4,0,-2,-3],[3,0,2,-3,-2,-1,-3,-3],[1,-2,3,-3,-1,0,-1,-3]
+];
+/* Independent animation clock: hit windows/cooldowns do not decide what is visible. */
+function poseFrame(p,override){
+ const a=p.anim,t=a?.time||0,kind=override||(['fall','dance','whiff'].includes(p.pose)?p.pose:a?.name)||'idle';
+ const walk=p.walk&&kind!=='serve'&&kind!=='toss',f=Math.floor(p.gait||0)%6;
+ const v={kind,frame:0,lean:0,bob:walk&&[1,4].includes(f)?-1:0,
+  left:[-4,-12,-4,-9],right:[4,-12,5,-10],racket:[8,-14,'tilt'],
+  feet:walk?gait[f]:[-2,0,-2,-3,2,0,2,-3]};
+ if(walk){const sway=[-1,-2,-1,1,2,1][f];v.frame=f;v.lean=p.moveX||0;
+  v.left=[-4,-12,-4+sway,-9-sway];v.right=[4,-12,5,-10+sway];v.racket=[8,-14+sway,'tilt'];}
+ if(kind==='toss'){
+  const n=Math.min(3,Math.floor(t*10));v.frame=n;
+  v.left=[[-4,-11,-4,-9],[-5,-17,-3,-22],[-5,-18,-2,-24],[-5,-16,-3,-21]][n];
+  v.right=[[5,-12,5,-10],[5,-12,7,-10],[5,-15,6,-18],[5,-15,6,-18]][n];
+  v.racket=[[8,-14,'tilt'],[10,-12,'wide'],[6,-22,'upright'],[7,-22,'tilt']][n];v.lean=n>1?-1:0;v.bob=n===0?1:0;
+ }else if(kind==='serve'||kind==='smash'){
+  const n=t<.07?0:t<.15?1:t<.28?2:3;v.frame=n;v.lean=[1,2,2,0][n];v.bob=[-1,0,1,0][n];
+  const hitY=-Math.round(Math.max(24,Math.min(31,(a?.height||2.1)*Z_SCALE)));
+  v.right=[[3,-19,0,hitY+4],[5,-17,3,-17],[1,-11,-5,-10],[4,-12,5,-10]][n];
+  v.racket=[[0,hitY,'upright'],[4,-21,'tilt'],[-8,-11,'wide'],[8,-14,'tilt']][n];
+  v.left=[[-4,-14,-5,-16],[-5,-12,-6,-10],[-4,-11,-3,-8],[-4,-12,-4,-9]][n];
+  if(n<3)v.feet=[-3,0,-2,-3,3,-1,1,-4];
+ }else if(['forehand','backhand','lob','volley','windup','whiff'].includes(kind)){
+  const n=Math.min(3,Math.floor(t/.085));v.frame=n;
+  const hand=kind==='backhand'?-1:a?.hand||1;
+  const rack=kind==='lob'?[[8,-9,'wide'],[8,-16,'tilt'],[2,-22,'upright'],[8,-14,'tilt']]
+   :kind==='volley'?[[7*hand,-18,'upright'],[9*hand,-16,'upright'],[4*hand,-14,'tilt'],[8,-14,'tilt']]
+   :kind==='windup'?[[9*hand,-19,'tilt'],[12*hand,-13,'wide'],[-6*hand,-13,'tilt'],[8,-14,'tilt']]
+   :[[12*hand,-13,'wide'],[3*hand,-18,'tilt'],[-7*hand,-12,'wide'],[8,-14,'tilt']];
+  v.racket=rack[n];v.right=[4*hand,-13,v.racket[0]-2*hand,v.racket[1]+3];v.left=[-4,-13,-5,-15];
+  v.lean=n===3?0:hand*(n===0?1:2);v.bob=n===2?1:0;
+  if(!walk&&n<3)v.feet=[-3,0,-2,-3,3,0,2,-4];
+ }else if(kind==='dance'){
+  v.frame=f;v.lean=f<3?-2:2;v.left=[-5,-16,-7,-20];v.right=[5,-17,7,-21];v.racket=[9,-24,'tilt'];v.feet=gait[f];
+ }
+ return v;
+}
 class Renderer{
- constructor(canvas){this.canvas=canvas;this.g=canvas.getContext('2d');canvas.width=W;canvas.height=H;this.g.imageSmoothingEnabled=false;}
+ constructor(canvas){this.canvas=canvas;this.g=canvas.getContext('2d');canvas.width=W;canvas.height=H;this.g.imageSmoothingEnabled=false;
+  this.shushu=[false,true].map(back=>{const c=document.createElement('canvas');c.width=28;c.height=45;const g=c.getContext('2d');
+   TeShushu.rows.forEach((row,y)=>[...row].forEach((ch,x)=>{if(back&&y>=12&&y<21&&'sewbm'.includes(ch))ch='H';const color=TeShushu.colors[ch];if(color){g.fillStyle=color;g.fillRect(x,y,1,1);}}));return c;});
+ }
  rect(x,y,w,h,c){const g=this.g;g.fillStyle=c;g.fillRect(Math.round(x),Math.round(y),Math.ceil(w),Math.ceil(h));}
  line(a,b,c,width=1){const g=this.g;g.strokeStyle=c;g.lineWidth=width;g.beginPath();g.moveTo(Math.round(a.x)+.5,Math.round(a.y)+.5);g.lineTo(Math.round(b.x)+.5,Math.round(b.y)+.5);g.stroke();}
  poly(pts,c){const g=this.g;g.fillStyle=c;g.beginPath();pts.forEach((p,i)=>i?g.lineTo(p.x,p.y):g.moveTo(p.x,p.y));g.closePath();g.fill();}
  worldLine(x,y,x2,y2,c,w=1){this.line(project(x,y),project(x2,y2),c,w);}
- player(p,time,role='',poseOverride=null,size=2){
-  const g=this.g,pos=project(p.x,p.y),walk=p.walk?Math.floor(time*10)%2:0,pose=poseOverride||p.pose,id=p.id;
-  g.save();g.translate(Math.round(pos.x),Math.round(pos.y));g.scale(size,size);
-  if(pose==='fall'){g.rotate(Math.PI/2);g.translate(-7,0);}
-  if(pose==='dance')g.rotate(Math.sin(time*15)*.5);
-  g.fillStyle='#172e3055';g.fillRect(-6,0,13,2);
-  const pal={...palette,b:Te.PLAYERS[id].color};
-  // Seven-pixel head; white floppy ears and green worm body remain recognizable.
-  for(let y=0;y<heads[id].length;y++)for(let x=0;x<heads[id][y].length;x++){let c=heads[id][y][x];if(p.side===1&&c!=='.'){if(id<4)c=y<5?'h':'s';else c=id===4?'w':id===5?'y':'g';}if(pal[c]){g.fillStyle=pal[c];g.fillRect(x-6,y-18,1,1);}}
-  const body=id===6?'#94ae70':id===4?'#f5efdd':Te.PLAYERS[id].color;
-  g.fillStyle='#293731';g.fillRect(-4,-11,9,8);g.fillStyle=body;g.fillRect(-3,-11,7,6);
-  if(id===6){g.fillRect(-4,-5,9,3);g.fillStyle='#526b47';g.fillRect(-3,-8,7,1);}
-  else {g.fillStyle='#eee8d4';g.fillRect(-3,-5,7,2);g.fillStyle='#35473e';g.fillRect(-3,-2-walk,2,3);g.fillRect(2,-3+walk,2,3);}
-  const swing=['swing','smash','volley','whiff'].includes(pose)&&p.cool>0,dir=p.side===1?-1:1;
-  g.strokeStyle='#e2bd92';g.lineWidth=2;g.beginPath();g.moveTo(4,-9);g.lineTo(swing?9:7,swing?-14:-6);g.stroke();
-  if(pose!=='broken'){g.strokeStyle='#eee9d6';g.lineWidth=1;g.beginPath();g.ellipse(swing?11:10,swing?-18:-5,3,4,swing?.7:.3,0,Math.PI*2);g.stroke();
-  g.strokeStyle='#718b7e';g.beginPath();g.moveTo(swing?9:8,swing?-18:-5);g.lineTo(swing?13:12,swing?-18:-5);g.stroke();}
-  if(role){g.fillStyle=role==='P'?'#f3d884':'#e9e9dc';g.fillRect(-2,-23,5,2);}
+ pixels(rows,x,y,pal){rows.forEach((row,j)=>[...row].forEach((ch,i)=>{if(pal[ch])this.rect(x+i,y+j,1,1,pal[ch]);}));}
+ pixelLine(x0,y0,x1,y1,color,width=1){
+  x0=Math.round(x0);y0=Math.round(y0);x1=Math.round(x1);y1=Math.round(y1);
+  const dx=Math.abs(x1-x0),sx=x0<x1?1:-1,dy=-Math.abs(y1-y0),sy=y0<y1?1:-1;let e=dx+dy;
+  for(let n=0;n<90;n++){this.rect(x0,y0,width,width,color);if(x0===x1&&y0===y1)break;const e2=2*e;if(e2>=dy){e+=dy;x0+=sx;}if(e2<=dx){e+=dx;y0+=sy;}}
+ }
+ player(p,time,role='',poseOverride=null,size=1){
+  const g=this.g,pos=project(p.x,p.y),id=p.id,v=poseFrame(p,poseOverride),rear=p.walk&&p.moveY? p.moveY<0:p.side===1,ink=id===6?TeShushu.colors.o:'#343c32',skin=id===4?'#f5efdd':id===5?'#e6be62':id===6?TeShushu.colors.s:'#e3b797';
+  g.save();g.translate(Math.round(pos.x),Math.round(pos.y));g.scale(size,size);g.imageSmoothingEnabled=false;
+  this.rect(-4,0,9,1,'#172e3055');
+  if(v.kind==='fall'){g.rotate(Math.PI/2);g.translate(-6,0);}
+  const feet=v.feet,lean=v.lean,bob=v.bob;
+  const limb=(sx,sy,ex,ey,hx,hy,c=skin)=>{this.pixelLine(sx,sy,ex,ey,ink,2);this.pixelLine(ex,ey,hx,hy,ink,2);this.pixelLine(sx,sy,ex,ey,c);this.pixelLine(ex,ey,hx,hy,c);};
+  if(id!==6){
+   limb(-1,-6,feet[2],feet[3],feet[0],feet[1]-1,ink);limb(1,-6,feet[6],feet[7],feet[4],feet[5]-1,ink);
+   this.rect(feet[0]-1,feet[1],3,1,'#f2ead5');this.rect(feet[4]-1,feet[5],3,1,'#f2ead5');
+  }else{
+   const img=this.shushu[rear?1:0],moving=p.walk&&!['serve','toss'].includes(v.kind);
+   g.drawImage(img,0,35,14,10,-7+(moving?Math.sign(feet[0])*1:0),-5+(moving?feet[1]:0),7,5);
+   g.drawImage(img,14,35,14,10,(moving?Math.sign(feet[4])*1:0),-5+(moving?feet[5]:0),7,5);
+  }
+  g.save();g.translate(lean,bob);
+  const shoulder=id===6?-11:-14,L=v.left,R=v.right;
+  limb(-2,shoulder,...L); // far arm behind the body
+  if(id===6){const img=this.shushu[rear?1:0];g.drawImage(img,0,0,28,35,-7,-22.5,14,17.5);}
+  else {
+   this.rect(-3,-15,6,8,ink);this.rect(-2,-14,4,6,id===4?'#f5efdd':Te.PLAYERS[id].color);
+   this.rect(-3,-8,6,2,'#eee8d4');if(!rear)this.rect(-1,-14,2,1,'#eee8d4');
+   const rows=heads[id].map((row,y)=>[...row].map(ch=>rear&&ch!=='.'?(id<4?(y<5?'h':'s'):id===4?'w':'y'):ch).join(''));
+   this.pixels(rows,-Math.floor(rows[0].length/2),-22,palette);
+   if(['toss','serve','forehand','backhand'].includes(v.kind)&&id<4){ // turning profile, rather than a rigid front/back stamp
+    this.rect(v.lean<0?-4:3,-18,1,2,palette.s);
+   }
+  }
+  limb(2,shoulder,...R);
+  if(v.kind!=='broken'){
+   const [rx,ry,orient]=v.racket,patterns={
+    upright:['.ooo.','ow.wo','o.w.o','ow.wo','o.w.o','ow.wo','.ooo.'],
+    wide:['.ooooo.','ow.w.wo','o.w.w.o','ow.w.wo','.ooooo.'],
+    tilt:['...oo.','..owwo','.ow.wo','ow.wo.','owwo..','.oo...']},rows=patterns[orient];
+   this.pixelLine(R[2],R[3],rx,ry+2,'#b4a16c');this.pixels(rows,rx-Math.floor(rows[0].length/2),ry-Math.floor(rows.length/2),{o:'#e7e4cb',w:'#899c81'});
+  }
+  g.restore();
+  if(role)this.rect(-1,-26,2,1,role==='P'?'#f3d884':'#e9e9dc');
   g.restore();
  }
  umpire(time){
@@ -66,7 +134,7 @@ class Renderer{
   this.worldLine(0,-Te.L,0,-Te.L+.45,c.line);this.worldLine(0,Te.L,0,Te.L-.45,c.line);
   const visible=m.people.filter((p,i)=>!(i===1&&m.fx?.type==='wall'));
   const top=visible.filter(p=>p.y<0);for(const p of top)this.player(p,m.time,p===m.people[0]?'P':'C',p===m.people[0]&&m.fx?.type==='lose'?'broken':null);
-  const a=project(-5.7,0),b=project(5.7,0),nh=Math.round(Te.NET*17);
+  const a=project(-5.7,0),b=project(5.7,0),nh=Math.round(Te.NET*Z_SCALE);
   this.rect(a.x,a.y-nh,b.x-a.x,nh,'#273f3ad9');
   for(let x=a.x+2;x<b.x;x+=3)this.line({x,y:a.y-nh+1},{x,y:a.y},'#a8b4a26f');
   for(let y=a.y-nh+2;y<a.y;y+=3)this.line({x:a.x,y},{x:b.x,y},'#a8b4a26f');
@@ -80,7 +148,7 @@ class Renderer{
    this.rect(shadow.x-2,shadow.y,5,1,'#203832a8');
    if(ball.power==='fire'){for(let i=1;i<7;i++)this.rect(pos.x-ball.vx*i*.018-2,pos.y-ball.vy*i*.12-2,4-i*.4,4-i*.4,i%2?'#e7a94a':'#ce6244');}
    if(ball.slow){g.strokeStyle='#d6b7e0';g.beginPath();g.arc(pos.x,pos.y,6,0,7);g.stroke();}
-   this.rect(pos.x-2,pos.y-2,5,5,'#394b32');this.rect(pos.x-1,pos.y-2,3,4,'#f5e69d');this.rect(pos.x-1,pos.y-2,2,1,'#ffffe3');
+   this.rect(pos.x-1,pos.y-1,3,3,'#394b32');this.rect(pos.x-1,pos.y-1,2,2,'#f5e69d');this.rect(pos.x-1,pos.y-1,1,1,'#ffffe3');
   }
   const fx=m.fx;
   if(fx){
@@ -96,9 +164,9 @@ class Renderer{
   }
  }
  portrait(id,size=52){
-  const cv=document.createElement('canvas');cv.width=26;cv.height=26;const old=this.g;this.g=cv.getContext('2d');this.g.imageSmoothingEnabled=false;
-  this.g.translate(-137,-135);this.player({id,x:0,y:0,side:-1,pose:'idle',cool:0},0,'',null,1);this.g=old;return cv.toDataURL();
+  const cv=document.createElement('canvas');cv.width=32;cv.height=32;const old=this.g;this.g=cv.getContext('2d');this.g.imageSmoothingEnabled=false;
+  this.g.translate(-134,-130);this.player({id,x:0,y:0,side:-1,pose:'idle',cool:0},0,'',null,1);this.g=old;return cv.toDataURL();
  }
 }
-window.TeRender={Renderer,project,unproject};
+window.TeRender={Renderer,project,unproject,poseFrame};
 })();

@@ -28,7 +28,7 @@ function parse(out){
 class Match{
  constructor(config={player:0,level:0,court:0},seed=20261111){
   this.config={...config};this.seed=seed>>>0;this.time=0;this.tick=0;this.level=LEVELS[config.level];this.court=COURTS[config.court];
-  this.people=[{id:config.player,x:1.5,y:12.3,side:1,swing:0,cool:0,pose:'idle'},{id:(config.player+1)%7,x:-1.5,y:-11,side:-1,swing:0,cool:0,pose:'idle'}];
+  this.people=[{id:config.player,x:1.5,y:12.3,side:1,swing:0,cool:0,pose:'idle'},{id:6,x:-1.5,y:-11,side:-1,swing:0,cool:0,pose:'idle'}];
   this.points=[0,0];this.games=[0,0];this.sets=[0,0];this.history=[];this.server=0;this.totalGames=0;this.tb=false;this.tbFirst=0;
   this.energy=2;this.returns=0;this.rally=0;this.totalHits=0;this.events=[];this.phase='ready';this.paused=false;this.winner=null;this.faults=0;
   this.message='X 토스';this.armed=null;this.effects={};this.fx=null;this.ball=null;this.timer=0;this.aiClock=0;this.aiTarget={x:0,y:-10};
@@ -41,10 +41,11 @@ class Match{
   this.phase='ready';this.timer=0;this.ball=null;this.armed=null;this.effects={};this.fx=null;this.rally=0;
   const s=this.people[this.server],r=this.people[1-this.server],parity=(this.points[0]+this.points[1])%2;
   s.x=(parity? -1:1)*s.side*1.5;s.y=s.side*12.3;r.x=-s.x;r.y=r.side*10.8;
-  for(const p of this.people){p.pose='idle';p.swing=0;p.cool=0;}
+  for(const p of this.people){p.pose='idle';p.swing=0;p.cool=0;p.anim=null;p.walk=false;p.gait=0;p.moveX=0;p.moveY=0;}
   this.message=this.server===0?'X 토스 · X 강한 서브 / Z 약한 서브':'동현AI™ 서브 준비';
  }
  swapEnds(){for(const p of this.people)p.side*=-1;}
+ animate(i,name,duration,hand=1,height=1){this.people[i].anim={name,time:0,duration,hand,height};}
  finish(w,why){this.phase='match';this.winner=w;this.message=why+' · '+(w===0?'승리':'패배');this.ball=null;this.event('match',this.message);}
  point(w,why){
   if(['point','match'].includes(this.phase))return;
@@ -76,14 +77,14 @@ class Match{
  toss(){
   if(this.phase!=='ready')return false;
   const p=this.people[this.server];this.ball={x:p.x,y:p.y,z:1.1,vx:0,vy:0,vz:5.1,by:this.server,bounces:0,serve:true,crossed:false};
-  this.phase='toss';this.timer=0;this.message=this.server===0?'토스 · 공이 머리 위일 때 X 또는 Z':'동현AI™ 토스';this.event('toss','토스');return true;
+  this.phase='toss';this.timer=0;this.animate(this.server,'toss',.9);p.walk=false;p.pose='toss';this.message=this.server===0?'토스 · 공이 머리 위일 때 X 또는 Z':'동현AI™ 토스';this.event('toss','토스');return true;
  }
  serve(kind,aim={}){
   const b=this.ball,p=this.people[this.server];if(this.phase!=='toss'||!b)return false;
   if(b.z<1.5||b.z>2.45){this.fault('타점이 맞지 않았다');return false;}
   const side=-Math.sign(p.x),tx=side*2+(aim.x||0)*2.6,ty=-p.side*(4.1-(aim.y||0)*2.0);
   this.launch(this.server,tx,ty,kind==='lob'?1.22:1.0,kind,true);
-  p.pose='smash';p.swing=.22;this.message='서브';return true;
+  p.pose='serve';p.swing=0;this.animate(this.server,'serve',.44,1,b.z);this.message='서브';return true;
  }
  launch(i,tx,ty,t,kind,serve=false){
   const p=this.people[i],old=this.ball;let z=serve?old.z:clamp(old.z,.25,3.4);
@@ -100,6 +101,7 @@ class Match{
  stroke(i,kind='drive',aim={}){
   const p=this.people[i];if(p.cool>0)return false;
   p.swing=.19;p.cool=.30;p.pose='swing';p.kind=kind;p.aim={...aim};
+  const hand=this.ball&&this.ball.x<p.x? -1:1;this.animate(i,'windup',.3,hand);
   if(i===0&&this.armed==='comet'&&this.reachable(0,true)){
    this.fx={type:'comet',x:p.x,y:p.y,toX:this.ball.x,toY:this.ball.y,ttl:.7};
    p.x=this.ball.x;p.y=this.ball.y+.25*p.side;this.armed=null;
@@ -114,7 +116,7 @@ class Match{
   const aim=p.aim||{},kind=p.kind||'drive',isSmash=b.z>2.25,isVolley=b.bounces===0;
   let tx=(aim.x||0)*3.45,depth=(aim.y||0)<0?11.0:(aim.y||0)>0?3.0:9.3;
   if(i===1){tx=(this.rand()>.5?1:-1)*(2.6+this.rand()*.8);depth=8.2+this.rand()*2;}
-  const off=remote?0:b.x-p.x;
+  const off=remote?0:b.x-p.x,hitHand=b.x<p.x?-1:1,hitHeight=b.z;
   tx+=off*.48;
   let ty=-p.side*depth;
   let t=kind==='lob'&&!isVolley?2.20:Math.max(.78,Math.abs(b.y-ty)/(12.5*PLAYERS[p.id].atk/100));
@@ -126,6 +128,7 @@ class Match{
   this.ball.power=oldArm;this.ball.slow=false;
   if(oldArm&&oldArm!=='serveVanish'){this.armed=null;this.fx={type:oldArm,x:p.x,y:p.y,ttl:1.1};}
   p.swing=0;p.pose=isSmash?'smash':isVolley?'volley':'swing';p.cool=.24;
+  this.animate(i,isSmash?'smash':isVolley?'volley':kind==='lob'?'lob':hitHand<0?'backhand':'forehand',isSmash?.40:.34,hitHand,hitHeight);
   this.rally++;if(i===0){this.returns++;if(this.returns%4===0){this.energy=clamp(this.energy+1,0,6);this.event('charge','리턴 4회 · 기술 +1');}}
   this.message=isSmash?'스매시':isVolley?'발리':kind==='lob'?'로브':'스트로크';return true;
  }
@@ -153,9 +156,11 @@ class Match{
   return {x:b.x+b.vx*t,y:b.y+b.vy*t,t};
  }
  move(i,dx,dy,dt){
-  const p=this.people[i],sp=4.9*PLAYERS[p.id].mov/100*this.level.speed*(i?1.06:1),len=Math.hypot(dx,dy)||1;
+  const p=this.people[i],sp=4.9*PLAYERS[p.id].mov/100*this.level.speed*(i?1.06:1),len=Math.hypot(dx,dy)||1,ox=p.x,oy=p.y;
   if(len>1){dx/=len;dy/=len;}p.x=clamp(p.x+dx*sp*dt,-6.3,6.3);p.y=clamp(p.y+dy*sp*dt,p.side===1?.8:-14.2,p.side===1?14.2:-.8);
-  p.walk=(Math.abs(dx)+Math.abs(dy)>.1);if(p.cool<=0)p.pose=p.walk?'run':'idle';
+  const distance=Math.hypot(p.x-ox,p.y-oy);p.walk=distance>1e-6;
+  if(p.walk){p.gait=(p.gait||0)+distance*2.2;p.moveX=Math.sign(dx);p.moveY=Math.sign(dy);}
+  if(p.cool<=0&&!p.anim)p.pose=p.walk?'run':'idle';
  }
  ai(dt){
   const p=this.people[1],b=this.ball;
@@ -185,7 +190,7 @@ class Match{
   this.time+=dt;this.tick++;
   if(this.fx){this.fx.ttl-=dt;if(this.fx.ttl<=0)this.fx=null;}
   for(const k of ['fall','whiff'])if(this.effects[k]>0)this.effects[k]-=dt;
-  for(const p of this.people){p.cool=Math.max(0,p.cool-dt);p.swing=Math.max(0,p.swing-dt);}
+  for(const p of this.people){p.cool=Math.max(0,p.cool-dt);p.swing=Math.max(0,p.swing-dt);if(p.anim){p.anim.time+=dt;if(p.anim.time>=p.anim.duration){p.anim=null;if(!['fall','dance','whiff'].includes(p.pose))p.pose=p.walk?'run':'idle';}}}
   if(this.phase==='match')return;
   if(this.phase==='point'||this.phase==='fault'){this.timer-=dt;if(this.timer<=0)this.setupPoint();return;}
   const p=this.people[0];
@@ -196,7 +201,7 @@ class Match{
   this.ai(dt);
   if(this.phase==='toss'){
    const b=this.ball;b.z+=b.vz*dt-.5*G*dt*dt;b.vz-=G*dt;
-   if(b.z<=1.1&&b.vz<0){this.ball=null;this.phase='ready';this.timer=0;this.message='다시 X로 토스';}
+   if(b.z<=1.1&&b.vz<0){this.people[this.server].anim=null;this.people[this.server].pose='idle';this.ball=null;this.phase='ready';this.timer=0;this.message='다시 X로 토스';}
    return;
   }
   if(this.phase!=='rally'||!this.ball)return;
