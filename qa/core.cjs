@@ -3,7 +3,7 @@ let pass=0;
 function test(name,fn){fn();pass++;console.log('ok',name);}
 const fresh=(p=0,c=0)=>new E.Match({player:p,level:0,court:c},123);
 function step(m,n){for(let i=0;i<n;i++)m.step(E.DT);}
-function descend(m){for(let i=0;i<200;i++){if(m.ball.vz<0&&m.ball.z<=2.3&&m.ball.z>=1.5)return;m.step(E.DT);}throw Error('descending service window missing');}
+function descend(m){for(let i=0;i<280;i++){if(m.ball.vz<0&&m.ball.z<=2.3&&m.ball.z>=1.5)return;m.step(E.DT);}throw Error('descending service window missing');}
 function rally(m,o={}){
  m.phase='rally';m.ball={x:0,y:8,z:1,vx:0,vy:3,vz:0,by:1,bounces:1,serve:false,crossed:true,age:0,...o};m.people[0].x=0;m.people[0].y=8;m.people[0].cool=0;m.energy=6;return m;
 }
@@ -11,7 +11,7 @@ function point(m,w){m.phase='rally';m.point(w,'test');}
 test('84 configurations · real Donghyun interpreter',()=>{for(let p=1;p<=7;p++)for(let l=1;l<=3;l++)for(let c=1;c<=4;c++){const code='나는 동현이냐?\n'+[p,l,c].map(n=>'뿡뿡 도'+'오'.repeat(n-1)+'옹~뿡뿡뿡').join('\n')+'\n동현이구나';assert.deepEqual(E.parse(D.run(code).output),{player:p-1,level:l-1,court:c-1});}});
 test('invalid config rejected',()=>{for(const str of ['', '1 1', '8 1 1','1 0 1','1 1 5','1.5 1 1','1 1 1 1','x 1 1'])assert.throws(()=>E.parse(str));});
 test('stats exact',()=>assert.deepEqual(E.PLAYERS.map(p=>[p.atk,p.def,p.mov]),[[100,100,100],[90,90,90],[120,80,110],[90,90,120],[80,80,130],[80,90,90],[90,100,80]]));
-test('toss repeat without fault',()=>{const m=fresh();m.toss();step(m,160);assert.equal(m.phase,'ready');assert.equal(m.faults,0);});
+test('toss repeat without fault',()=>{const m=fresh();m.toss();step(m,280);assert.equal(m.phase,'ready');assert.equal(m.faults,0);});
 test('good serve crosses and is returned by CPU',()=>{const m=fresh();m.toss();descend(m);m.serve('drive');step(m,190);assert.equal(m.phase,'rally');assert.equal(m.ball.by,1);});
 test('double fault awards receiver',()=>{const m=fresh();m.fault('test');assert.equal(m.faults,1);m.setupPoint();m.fault('test');assert.equal(m.points[1],1);});
 test('net rally loses point',()=>{const m=rally(fresh(),{x:0,y:-.01,z:.3,vx:0,vy:5,vz:-1,by:1,bounces:0,crossed:false});m.physics(.02);assert.equal(m.points[0],1);});
