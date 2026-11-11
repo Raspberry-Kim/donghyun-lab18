@@ -1,0 +1,5 @@
+dist/
+qa/*.png
+qa/output/
+*.gb
+*.state
