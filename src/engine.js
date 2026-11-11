@@ -44,7 +44,12 @@ class Match{
   for(const p of this.people){p.pose='idle';p.swing=0;p.cool=0;p.anim=null;p.walk=false;p.gait=0;p.moveX=0;p.moveY=0;}
   this.message=this.server===0?'X 토스 · X 강한 서브 / Z 약한 서브':'동현AI™ 서브 준비';
  }
- swapEnds(){for(const p of this.people)p.side*=-1;}
+ swapEnds(){
+  for(const p of this.people){
+   p.side*=-1;p.x*=-1;p.y*=-1;p.moveX=-(p.moveX||0);p.moveY=-(p.moveY||0);
+   if(p.anim){p.anim.hand*=-1;if(['forehand','backhand'].includes(p.anim.name))p.anim.name=p.anim.hand<0?'backhand':'forehand';}
+  }
+ }
  animate(i,name,duration,hand=1,height=1){this.people[i].anim={name,time:0,duration,hand,height};}
  finish(w,why){this.phase='match';this.winner=w;this.message=why+' · '+(w===0?'승리':'패배');this.ball=null;this.event('match',this.message);}
  point(w,why){
@@ -88,16 +93,21 @@ class Match{
   // ROM timing sweep: higher contact went wider/deeper; lower contact shorter/central.
   // These are accessible game-tuned coordinates, not claimed ROM physics constants.
   const q=clamp((b.z-1.45)/1.7,0,1),side=-Math.sign(p.x);
-  const tx=side*(1.05+1.9*q)+(aim.x||0)*2.6,ty=-p.side*(2.3+3.3*q-(aim.y||0)*2.0);
-  const target={x:tx,y:ty,height:b.z,quality:q};this.pendingServe=null;
+  // Starting wider changes the diagonal angle; do not aim at one fixed spot.
+  const baseX=side*(1.05+1.9*q)-(p.x+side*1.5)*.24*(.35+.65*q);
+  const tx=baseX+(aim.x||0)*.55,ty=-p.side*(2.3+3.3*q-(aim.y||0)*p.side*2.0);
+  const target={x:tx,y:ty,height:b.z,quality:q,startX:p.x,steer:(aim.x||0)*.55};this.pendingServe=null;
   this.launch(this.server,tx,ty,kind==='lob'?1.26:1.04+.08*(1-q),kind,true);
   this.ball.serviceTarget=target;
-  p.pose='serve';p.swing=0;this.animate(this.server,'serve',.44,1,b.z);this.message=q>.65?'높은 타점 · 바깥쪽 깊게':q<.3?'낮은 타점 · 중앙 쪽 짧게':'중간 타점 · 서비스 박스 안쪽';return true;
+  // Accessible contact extension, not mid-flight steering or a claimed ROM constant.
+  this.ball.serveControl=this.server===0?{remaining:.12,baseX,steer:target.steer}:null;
+  p.pose='serve';p.swing=0;this.animate(this.server,'serve',kind==='lob'?.52:.44,1,b.z);
+  p.anim.soft=kind==='lob';this.message=q>.65?'높은 타점 · 바깥쪽 깊게':q<.3?'낮은 타점 · 중앙 쪽 짧게':'중간 타점 · 서비스 박스 안쪽';return true;
  }
  launch(i,tx,ty,t,kind,serve=false){
   const p=this.people[i],old=this.ball;let z=serve?old.z:clamp(old.z,.25,3.4);
   t=Math.max(.5,t)/this.level.speed;
-  this.ball={x:serve?p.x:old.x,y:serve?p.y:old.y,z,vx:(tx-(serve?p.x:old.x))/t,vy:(ty-(serve?p.y:old.y))/t,vz:(.5*G*t*t-z)/t,by:i,bounces:0,serve,crossed:false,netTouch:false,kind,age:0};
+  this.ball={x:serve?p.x:old.x,y:serve?p.y:old.y,z,vx:(tx-(serve?p.x:old.x))/t,vy:(ty-(serve?p.y:old.y))/t,vz:(.5*G*t*t-z)/t,by:i,bounces:0,serve,crossed:false,netTouch:false,kind,age:0,flightTime:t,serviceOriginX:serve?p.x:null};
   this.phase='rally';this.event('hit',kind);this.totalHits++;this.aiClock=0;
  }
  reachable(i,remote=false){
@@ -109,7 +119,7 @@ class Match{
  stroke(i,kind='drive',aim={}){
   const p=this.people[i];if(p.cool>0)return false;
   p.swing=.19;p.cool=.30;p.pose='swing';p.kind=kind;p.aim={...aim};
-  const hand=this.ball&&this.ball.x<p.x? -1:1;this.animate(i,'windup',.3,hand);
+  const hand=this.ball&&this.ball.x<p.x? -1:1;this.animate(i,kind==='lob'?'lobWindup':'windup',.3,hand);
   if(i===0&&this.armed==='comet'&&this.reachable(0,true)){
    this.fx={type:'comet',x:p.x,y:p.y,toX:this.ball.x,toY:this.ball.y,ttl:.7};
    p.x=this.ball.x;p.y=this.ball.y+.25*p.side;this.armed=null;
@@ -121,24 +131,25 @@ class Match{
   if(p.swing<=0||!this.reachable(i,remote))return false;
   if(i===1&&this.effects.miss){this.effects.miss=false;this.effects.whiff=1.4;p.swing=0;p.pose='whiff';this.event('skill','헛스윙!');return false;}
   if(i===1&&(this.effects.fall>0||this.effects.whiff>0||this.effects.dance))return false;
-  const aim=p.aim||{},kind=p.kind||'drive',isSmash=b.z>2.25,isVolley=b.bounces===0;
-  let tx=(aim.x||0)*3.45,depth=(aim.y||0)<0?11.0:(aim.y||0)>0?3.0:9.3;
+  const aim=p.aim||{},kind=p.kind||'drive',isSmash=kind!=='lob'&&b.z>2.25,isVolley=b.bounces===0;
+  const localY=(aim.y||0)*p.side;
+  let tx=(aim.x||0)*3.45,depth=localY<0?11.0:localY>0?3.0:9.3;
   if(i===1){tx=(this.rand()>.5?1:-1)*(2.6+this.rand()*.8);depth=8.2+this.rand()*2;}
   const off=remote?0:b.x-p.x,hitHand=b.x<p.x?-1:1,hitHeight=b.z;
   tx+=off*.48;
   let ty=-p.side*depth;
   let t=kind==='lob'&&!isVolley?2.20:Math.max(.78,Math.abs(b.y-ty)/(12.5*PLAYERS[p.id].atk/100));
-  if(isVolley)t*=kind==='lob'?1.0:.80;
+  if(isVolley)t*=kind==='lob'?1.18:.80;
   if(isSmash)t*=.74;
   const oldArm=i===0?this.armed:null;
   if(oldArm==='wind'||oldArm==='drop'){ty=-p.side*1.7;tx=oldArm==='drop'?(this.people[1].x>=0?-3.5:3.5):clamp(tx,-3.4,3.4);t=Math.max(1.05,Math.abs(b.y-ty)/10);}
-  this.launch(i,tx,ty,t,isSmash?'smash':isVolley?'volley':kind);
+  this.launch(i,tx,ty,t,isSmash?'smash':isVolley?(kind==='lob'?'softVolley':'volley'):kind);
   this.ball.power=oldArm;this.ball.slow=false;
   if(oldArm&&oldArm!=='serveVanish'){this.armed=null;this.fx={type:oldArm,x:p.x,y:p.y,ttl:1.1};}
   p.swing=0;p.pose=isSmash?'smash':isVolley?'volley':'swing';p.cool=.24;
-  this.animate(i,isSmash?'smash':isVolley?'volley':kind==='lob'?'lob':hitHand<0?'backhand':'forehand',isSmash?.40:.34,hitHand,hitHeight);
+  this.animate(i,isSmash?'smash':isVolley?(kind==='lob'?'softVolley':'volley'):kind==='lob'?'lob':hitHand<0?'backhand':'forehand',isSmash?.40:kind==='lob'?.46:.34,hitHand,hitHeight);
   this.rally++;if(i===0){this.returns++;if(this.returns%4===0){this.energy=clamp(this.energy+1,0,6);this.event('charge','리턴 4회 · 기술 +1');}}
-  this.message=isSmash?'스매시':isVolley?'발리':kind==='lob'?'로브':'스트로크';return true;
+  this.message=isSmash?'스매시':isVolley?(kind==='lob'?'약한 발리':'강한 발리'):kind==='lob'?'로브 · 높게 띄워 치기':'스트로크 · 가로로 밀어 치기';return true;
  }
  skill(slot){
   if(this.paused||['point','fault','match'].includes(this.phase))return {ok:false,why:'공이 살아 있을 때 쓰자.'};
@@ -205,7 +216,7 @@ class Match{
   if(this.phase==='ready'&&this.server===0){
    const oldY=p.y;this.move(0,input.x||0,0,dt);p.y=oldY;
    const sign=((this.points[0]+this.points[1])%2?-1:1)*p.side;p.x=sign*clamp(Math.abs(p.x),.5,3.8);
-  }else if(!(this.phase==='toss'&&this.server===0))this.move(0,input.x||0,input.y||0,dt);
+  }else if(!(this.phase==='toss'&&this.server===0)&&!(this.ball?.serveControl?.remaining>0))this.move(0,input.x||0,input.y||0,dt);
   this.ai(dt);
   if(this.phase==='toss'){
    // Slow only the toss, not rally flight: 1 s up / 1 s down.
@@ -215,8 +226,20 @@ class Match{
    return;
   }
   if(this.phase!=='rally'||!this.ball)return;
+  this.steerServe(dt,input.x||0);
   this.tryHit(0);
   this.physics(dt);
+ }
+ steerServe(dt,axis){
+  const b=this.ball,c=b?.serveControl;
+  if(!c||c.remaining<=0||b.by!==0||b.bounces||b.crossed)return;
+  const span=Math.min(dt,c.remaining);c.remaining=Math.max(0,c.remaining-span);
+  const delta=clamp(axis,-1,1)*span/.12*1.4;
+  if(delta){
+   c.steer+=delta;b.serviceTarget.steer=c.steer;b.serviceTarget.x=c.baseX+c.steer;
+   const remaining=b.flightTime-b.age;
+   if(remaining>0)b.vx=(b.serviceTarget.x-b.x)/remaining;
+  }
  }
  physics(dt){
   const b=this.ball;if(!b)return;
@@ -238,7 +261,7 @@ class Match{
     if(b.bounces===1){
      const legal=Math.abs(b.x)<=W+.035&&Math.abs(b.y)<=L+.035&&b.y*this.people[b.by].side<0;
      if(b.serve){
-      const box=legal&&Math.abs(b.y)<=6.4+.035&&b.x*this.people[b.by].x<=0;
+      const box=legal&&Math.abs(b.y)<=6.4+.035&&b.x*(b.serviceOriginX??this.people[b.by].x)<=0;
       if(!box){this.fault('서비스 아웃');return;}
       if(b.netTouch){this.phase='fault';this.timer=1.0;this.ball=null;this.message='렛 · 같은 서브 다시';this.event('let',this.message);return;}
       if(b.by===0&&this.armed==='serveVanish'){this.fx={type:'vanish',x:b.x,y:b.y,ttl:1.5};this.point(0,'알려고하지마');return;}

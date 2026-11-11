@@ -34,7 +34,8 @@ function sounds(){
   if(ev.type==='toss')tossSound();
   else if(ev.type==='hit'){
    if(tossGain){tossGain.gain.cancelScheduledValues(ctx.currentTime);tossGain.gain.setTargetAtTime(.0001,ctx.currentTime,.015);}
-   tone(ev.text==='smash'?320:460,.055,'square',.025);
+   if(ev.text==='lob'||ev.text==='softVolley'){tone(260,.12,'triangle',.035);tone(390,.12,'triangle',.025,.06);}
+   else tone(ev.text==='smash'?320:460,.055,'square',.025);
   }
   else if(ev.type==='bounce')tone(190,.035,'triangle',.03);
   else if(ev.type==='point'||ev.type==='game'){tone(523,.10);tone(659,.13,'triangle',.035,.12);}
@@ -92,7 +93,7 @@ function full(on){
 $('#fullscreen').onclick=()=>full(!$('#stage').classList.contains('is-full'));$('#full-close').onclick=()=>full(false);
 document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement){$('#stage').classList.remove('is-full');$('#full-close').hidden=true;document.body.style.overflow='';}});
 const isEdit=el=>el&&['TEXTAREA','INPUT','SELECT'].includes(el.tagName);
-function aim(){return {x:keys.has('ArrowLeft')?-1:keys.has('ArrowRight')?1:padAxes.x,y:keys.has('ArrowUp')?-1:keys.has('ArrowDown')?1:padAxes.y};}
+function aim(){const s=match.people[0].side;return {x:s*(keys.has('ArrowLeft')?-1:keys.has('ArrowRight')?1:padAxes.x),y:s*(keys.has('ArrowUp')?-1:keys.has('ArrowDown')?1:padAxes.y)};}
 function command(key){
  if(tab!=='play'||!$('#confirm-panel').hidden)return;
  if(key==='pause'){
@@ -166,7 +167,7 @@ $('#open-code').onchange=async e=>{const f=e.target.files[0];if(!f)return;if(f.s
 $('#court-cards').innerHTML=E.COURTS.map((c,i)=>`<article class="court-card" style="--court:${c.ground}"><h3>${c.name}<small>${c.surface}</small></h3><p>${c.desc}</p><div class="coeff">반발 ${c.bounce.toFixed(2)} · 속도 유지 ${c.retain.toFixed(2)}</div></article>`).join('');
 $('#roster').innerHTML=E.PLAYERS.map((p,i)=>`<article class="player-card"><div class="player-top"><img src="${R.portrait(i)}" alt="${p.name} 테니스 도트"><div><span>PLAYER 0${i+1}</span><h2>${p.name}</h2></div></div><div class="stats"><span>공격 <b>${p.atk}</b></span><span>수비 <b>${p.def}</b></span><span>이동 <b>${p.mov}</b></span></div>${p.skills.map((s,j)=>`<h3>${j?'A':'S'} · ${s[0]} <small>${s[1]}칸</small></h3><p>${s[2]}</p>`).join('')}<button data-player="${i}">이 선수의 출전 코드 불러오기</button></article>`).join('');
 document.querySelectorAll('[data-player]').forEach(b=>b.onclick=()=>{$('#example').value=b.dataset.player;example(Number(b.dataset.player));setTab('play');$('#code').focus();});
-window.render_game_to_text=()=>JSON.stringify({phase:active?match.phase:'setup',paused:match.paused,coordinate:'x right, y near/bottom positive, z height. Camera fixed.',config:match.config,people:match.people,ball:match.ball,score:match.score(),games:match.games,sets:match.sets,server:match.server,energy:match.energy,armed:match.armed,effects:match.effects,fx:match.fx,message:match.message,tab,winner:match.winner});
+window.render_game_to_text=()=>JSON.stringify({phase:active?match.phase:'setup',paused:match.paused,coordinate:'World XYZ; display x/y = world x/y × viewSide. Human always bottom; fixed camera.',viewSide:match.people[0].side,config:match.config,people:match.people,ball:match.ball,score:match.score(),games:match.games,sets:match.sets,server:match.server,energy:match.energy,armed:match.armed,effects:match.effects,fx:match.fx,message:match.message,tab,winner:match.winner});
 window.advanceTime=ms=>{manual=true;for(let i=0;i<Math.round(ms/1000/E.DT);i++)tick(E.DT);draw();};
 window.TeApp={get match(){return match;},begin,setup,makeCode,renderer:R,resumeClock(){manual=false;acc=0;}};
 example(0);requestAnimationFrame(loop);

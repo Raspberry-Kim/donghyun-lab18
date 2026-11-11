@@ -32,7 +32,7 @@
      <div class="skill-strip"><div class="charge"><span>기술 에너지</span><div id="energy-pips" aria-label="에너지 2 / 6"></div></div><div class="skill-label"><kbd>S</kbd><span id="skill1">샤아아즈나블<small>3칸 · 다음 리턴</small></span></div><div class="skill-label"><kbd>A</kbd><span id="skill2">샤아자쿠<small>2칸 · 혜성 이동</small></span></div></div>
     </div>
     <div class="under-court"><span><kbd>↑↓←→</kbd> 이동·방향 <kbd>X</kbd> 타격 <kbd>Z</kbd> 로브 <kbd>Enter</kbd> 메뉴</span><button id="fullscreen">전체 화면 <kbd>F</kbd></button></div>
-    <p class="small-note" id="serve-note">서브: X로 토스, 다시 X/Z로 타격. 너무 높은 공은 타격 준비로 받아 둔다. 높은 타점은 깊게, 낮은 타점은 짧게.</p>
+    <p class="small-note" id="serve-note">GB A = X · GB B = Z. 서브는 좌우 위치와 타점에 따라 달라진다. 타격 직후 ←/→를 짧게 누르면 조금, 길게 누르면 더 꺾인다.</p>
    </section>
    <aside class="editor-column">
     <div class="editor-heading"><span class="eyebrow">MATCH PROGRAM</span><h2>오늘의 출전 코드</h2><p>선수, 난이도, 경기장.<br>정수 세 개로 경기를 열자.</p></div>
@@ -50,11 +50,11 @@
   <section class="court-notes"><div class="section-title"><h2>같은 공, 다른 바운드.</h2><span>FOUR COURTS</span></div><div id="court-cards" class="court-cards"></div></section>
  </section>
  <section id="tab-players" class="tab-panel document" hidden><div class="doc-heading"><span class="eyebrow">SEVEN PLAYERS · FOURTEEN SPECIALS</span><h1>라켓을 쥔 시리즈의 얼굴들.</h1><p>시작 에너지는 2칸, 최대 6칸이다. 포인트가 끝날 때 1칸, 성공한 리턴 네 번마다 1칸을 얻는다. S와 A로 두 기술을 쓴다. 조건이 안 맞으면 에너지를 쓰지 않는다.</p><p>첫 상대는 슈슈다. 동현파의 양쪽 둥근 머리와 리본, 분홍 원피스, 빨간 운동화 도트를 그대로 가져와 작게 그렸다. 상대 동현AI™는 일반 타격만 쓴다. 준비한 기술과 랠리 효과는 포인트 종료 때 풀린다.</p></div><div id="roster" class="roster"></div></section>
- <section id="tab-rules" class="tab-panel document" hidden><div class="doc-heading"><span class="eyebrow">HOW TO PLAY</span><h1>그림자에 발을, 공에 라켓을.</h1><p>단식, 3세트 중 2세트 선승. 시점은 처음부터 끝까지 고정된다. 코트가 바뀌어도 카메라는 돌거나 따라가지 않는다.</p></div>
+ <section id="tab-rules" class="tab-panel document" hidden><div class="doc-heading"><span class="eyebrow">HOW TO PLAY</span><h1>그림자에 발을, 공에 라켓을.</h1><p>단식, 3세트 중 2세트 선승. 코트를 교대해도 내 선수는 항상 하단, 상대는 상단이다. 카메라는 돌거나 따라가지 않고 방향키도 화면 기준을 유지한다.</p></div>
   <div class="rules-grid">
-   <article><h2>키보드</h2><table><tbody><tr><th>방향키</th><td>이동. 타격 순간 좌우로 방향, ↑ 깊게 · ↓ 짧게.</td></tr><tr><th>X</th><td>토스 / 강한 서브 / 스트로크. 공이 높으면 스매시.</td></tr><tr><th>Z</th><td>약한 서브 / 로브. 바운드 전이면 약한 발리.</td></tr><tr><th>S / A</th><td>첫째 / 둘째 특수기술.</td></tr><tr><th>Enter / Esc</th><td>일시정지·계속. 전체 화면에서 Esc는 먼저 닫기.</td></tr><tr><th>F / M</th><td>전체 화면 / 효과음·음악 켜기·끄기.</td></tr></tbody></table><p>코드 편집 중에는 경기 키를 가로채지 않는다. Ctrl+Enter로 코드를 실행한다.</p></article>
+   <article><h2>키보드</h2><table><tbody><tr><th>방향키</th><td>화면 기준 이동. 타격 좌우 방향, ↑ 깊게 · ↓ 짧게. 서브 직후 짧은 구간에도 좌우 입력.</td></tr><tr><th>X · GB A</th><td>토스 / 강한 서브 / 가로로 미는 스트로크. 높은 공은 스매시.</td></tr><tr><th>Z · GB B</th><td>약한 서브 / 아래에서 위로 띄우는 로브. 바운드 전이면 약한 발리.</td></tr><tr><th>S / A</th><td>키보드의 첫째 / 둘째 특수기술. 키보드 A는 GB A와 다르다.</td></tr><tr><th>Enter / Esc</th><td>일시정지·계속. 전체 화면에서 Esc는 먼저 닫기.</td></tr><tr><th>F / M</th><td>전체 화면 / 효과음·음악 켜기·끄기.</td></tr></tbody></table><p>코드 편집 중에는 경기 키를 가로채지 않는다. Ctrl+Enter로 코드를 실행한다.</p></article>
    <article><h2>게임패드</h2><p>십자키·왼 스틱으로 이동한다. 위치 기준 오른쪽 단추(A 위치)는 X 타격, 아래 단추(B 위치)는 Z 로브다. L·R 어깨 단추로 특수기술을 쓴다. Start는 메뉴다.</p><p id="pad-status">연결된 패드 없음</p><p>브라우저 표준 매핑 패드를 대상으로 한다. 실제 패드의 호환성은 기기·브라우저에 따라 다르다.</p><h2>마우스와 모바일</h2><p>메뉴·코드 편집만 마우스로 할 수 있다. 코트를 누르거나 드래그해도 선수는 움직이거나 공을 치지 않는다. 터치 조작판은 없다. 외부 입력 장치 없는 휴대폰에서는 경기 조작이 불가능하다.</p></article>
-   <article><h2>서브와 리턴</h2><p>X로 약 1초 동안 공을 띄우고 X 또는 Z로 친다. 너무 높을 때 누르면 라켓이 닿는 높이까지 기다렸다가 친다. 높은 타점은 바깥쪽 깊게, 낮은 타점은 중앙 쪽 짧게 간다. 공을 안 치고 받으면 폴트 없이 다시 토스한다. 서비스 박스는 대각선이다. 두 번 폴트면 상대 포인트. 네트를 스친 유효 서브는 렛이다.</p><p>그림자는 바닥 위치, 공은 높이다. 공이 라켓 근처에 왔을 때 눌러야 한다. 서브는 한 번 바운드한 뒤 받아야 한다. 일반 랠리에서는 발리와 높은 공의 스매시가 된다.</p></article>
+   <article><h2>서브와 리턴</h2><p>먼저 좌우로 서브 위치를 고른다. X로 약 1초 동안 공을 띄우고 X 또는 Z로 친다. 너무 높을 때 누르면 닿는 높이까지 준비한다. 높은 타점은 깊게, 낮은 타점은 짧게 간다. 타격 직후 0.12초 안의 좌우 입력은 누른 시간·스틱 기울기에 따라 착지를 더 옮긴다. 그 뒤에는 공을 조향하지 않는다. 이 입력 여유는 동현테에서 넓힌 값이다.</p><p>빈 토스는 폴트 없이 다시 한다. 서비스 박스는 대각선이며 두 번 폴트면 상대 포인트, 네트를 스친 유효 서브는 렛이다. 그림자는 바닥 위치, 공은 높이다. 서브는 한 번 바운드한 뒤 받는다. X는 가로 스트로크·강한 발리·높은 공의 스매시, Z는 띄우는 로브·약한 발리다.</p></article>
    <article><h2>점수와 코트 교대</h2><p>0 → 15 → 30 → 40. 듀스에서는 두 점 차로 게임을 딴다. 6게임 이상, 두 게임 차면 세트. 6 대 6에서는 7점 타이브레이크로 두 점 차를 낸다.</p><p>게임마다 서브를 바꾸고 홀수 게임 뒤에는 코트를 바꾼다. 타이브레이크는 첫 1점 뒤부터 두 점마다 서브 교대, 6점마다 코트 교대다. 2세트를 먼저 따면 승리한다.</p></article>
   </div>
  </section>
@@ -332,7 +332,12 @@ class Match{
   for(const p of this.people){p.pose='idle';p.swing=0;p.cool=0;p.anim=null;p.walk=false;p.gait=0;p.moveX=0;p.moveY=0;}
   this.message=this.server===0?'X 토스 · X 강한 서브 / Z 약한 서브':'동현AI™ 서브 준비';
  }
- swapEnds(){for(const p of this.people)p.side*=-1;}
+ swapEnds(){
+  for(const p of this.people){
+   p.side*=-1;p.x*=-1;p.y*=-1;p.moveX=-(p.moveX||0);p.moveY=-(p.moveY||0);
+   if(p.anim){p.anim.hand*=-1;if(['forehand','backhand'].includes(p.anim.name))p.anim.name=p.anim.hand<0?'backhand':'forehand';}
+  }
+ }
  animate(i,name,duration,hand=1,height=1){this.people[i].anim={name,time:0,duration,hand,height};}
  finish(w,why){this.phase='match';this.winner=w;this.message=why+' · '+(w===0?'승리':'패배');this.ball=null;this.event('match',this.message);}
  point(w,why){
@@ -376,16 +381,21 @@ class Match{
   // ROM timing sweep: higher contact went wider/deeper; lower contact shorter/central.
   // These are accessible game-tuned coordinates, not claimed ROM physics constants.
   const q=clamp((b.z-1.45)/1.7,0,1),side=-Math.sign(p.x);
-  const tx=side*(1.05+1.9*q)+(aim.x||0)*2.6,ty=-p.side*(2.3+3.3*q-(aim.y||0)*2.0);
-  const target={x:tx,y:ty,height:b.z,quality:q};this.pendingServe=null;
+  // Starting wider changes the diagonal angle; do not aim at one fixed spot.
+  const baseX=side*(1.05+1.9*q)-(p.x+side*1.5)*.24*(.35+.65*q);
+  const tx=baseX+(aim.x||0)*.55,ty=-p.side*(2.3+3.3*q-(aim.y||0)*p.side*2.0);
+  const target={x:tx,y:ty,height:b.z,quality:q,startX:p.x,steer:(aim.x||0)*.55};this.pendingServe=null;
   this.launch(this.server,tx,ty,kind==='lob'?1.26:1.04+.08*(1-q),kind,true);
   this.ball.serviceTarget=target;
-  p.pose='serve';p.swing=0;this.animate(this.server,'serve',.44,1,b.z);this.message=q>.65?'높은 타점 · 바깥쪽 깊게':q<.3?'낮은 타점 · 중앙 쪽 짧게':'중간 타점 · 서비스 박스 안쪽';return true;
+  // Accessible contact extension, not mid-flight steering or a claimed ROM constant.
+  this.ball.serveControl=this.server===0?{remaining:.12,baseX,steer:target.steer}:null;
+  p.pose='serve';p.swing=0;this.animate(this.server,'serve',kind==='lob'?.52:.44,1,b.z);
+  p.anim.soft=kind==='lob';this.message=q>.65?'높은 타점 · 바깥쪽 깊게':q<.3?'낮은 타점 · 중앙 쪽 짧게':'중간 타점 · 서비스 박스 안쪽';return true;
  }
  launch(i,tx,ty,t,kind,serve=false){
   const p=this.people[i],old=this.ball;let z=serve?old.z:clamp(old.z,.25,3.4);
   t=Math.max(.5,t)/this.level.speed;
-  this.ball={x:serve?p.x:old.x,y:serve?p.y:old.y,z,vx:(tx-(serve?p.x:old.x))/t,vy:(ty-(serve?p.y:old.y))/t,vz:(.5*G*t*t-z)/t,by:i,bounces:0,serve,crossed:false,netTouch:false,kind,age:0};
+  this.ball={x:serve?p.x:old.x,y:serve?p.y:old.y,z,vx:(tx-(serve?p.x:old.x))/t,vy:(ty-(serve?p.y:old.y))/t,vz:(.5*G*t*t-z)/t,by:i,bounces:0,serve,crossed:false,netTouch:false,kind,age:0,flightTime:t,serviceOriginX:serve?p.x:null};
   this.phase='rally';this.event('hit',kind);this.totalHits++;this.aiClock=0;
  }
  reachable(i,remote=false){
@@ -397,7 +407,7 @@ class Match{
  stroke(i,kind='drive',aim={}){
   const p=this.people[i];if(p.cool>0)return false;
   p.swing=.19;p.cool=.30;p.pose='swing';p.kind=kind;p.aim={...aim};
-  const hand=this.ball&&this.ball.x<p.x? -1:1;this.animate(i,'windup',.3,hand);
+  const hand=this.ball&&this.ball.x<p.x? -1:1;this.animate(i,kind==='lob'?'lobWindup':'windup',.3,hand);
   if(i===0&&this.armed==='comet'&&this.reachable(0,true)){
    this.fx={type:'comet',x:p.x,y:p.y,toX:this.ball.x,toY:this.ball.y,ttl:.7};
    p.x=this.ball.x;p.y=this.ball.y+.25*p.side;this.armed=null;
@@ -409,24 +419,25 @@ class Match{
   if(p.swing<=0||!this.reachable(i,remote))return false;
   if(i===1&&this.effects.miss){this.effects.miss=false;this.effects.whiff=1.4;p.swing=0;p.pose='whiff';this.event('skill','헛스윙!');return false;}
   if(i===1&&(this.effects.fall>0||this.effects.whiff>0||this.effects.dance))return false;
-  const aim=p.aim||{},kind=p.kind||'drive',isSmash=b.z>2.25,isVolley=b.bounces===0;
-  let tx=(aim.x||0)*3.45,depth=(aim.y||0)<0?11.0:(aim.y||0)>0?3.0:9.3;
+  const aim=p.aim||{},kind=p.kind||'drive',isSmash=kind!=='lob'&&b.z>2.25,isVolley=b.bounces===0;
+  const localY=(aim.y||0)*p.side;
+  let tx=(aim.x||0)*3.45,depth=localY<0?11.0:localY>0?3.0:9.3;
   if(i===1){tx=(this.rand()>.5?1:-1)*(2.6+this.rand()*.8);depth=8.2+this.rand()*2;}
   const off=remote?0:b.x-p.x,hitHand=b.x<p.x?-1:1,hitHeight=b.z;
   tx+=off*.48;
   let ty=-p.side*depth;
   let t=kind==='lob'&&!isVolley?2.20:Math.max(.78,Math.abs(b.y-ty)/(12.5*PLAYERS[p.id].atk/100));
-  if(isVolley)t*=kind==='lob'?1.0:.80;
+  if(isVolley)t*=kind==='lob'?1.18:.80;
   if(isSmash)t*=.74;
   const oldArm=i===0?this.armed:null;
   if(oldArm==='wind'||oldArm==='drop'){ty=-p.side*1.7;tx=oldArm==='drop'?(this.people[1].x>=0?-3.5:3.5):clamp(tx,-3.4,3.4);t=Math.max(1.05,Math.abs(b.y-ty)/10);}
-  this.launch(i,tx,ty,t,isSmash?'smash':isVolley?'volley':kind);
+  this.launch(i,tx,ty,t,isSmash?'smash':isVolley?(kind==='lob'?'softVolley':'volley'):kind);
   this.ball.power=oldArm;this.ball.slow=false;
   if(oldArm&&oldArm!=='serveVanish'){this.armed=null;this.fx={type:oldArm,x:p.x,y:p.y,ttl:1.1};}
   p.swing=0;p.pose=isSmash?'smash':isVolley?'volley':'swing';p.cool=.24;
-  this.animate(i,isSmash?'smash':isVolley?'volley':kind==='lob'?'lob':hitHand<0?'backhand':'forehand',isSmash?.40:.34,hitHand,hitHeight);
+  this.animate(i,isSmash?'smash':isVolley?(kind==='lob'?'softVolley':'volley'):kind==='lob'?'lob':hitHand<0?'backhand':'forehand',isSmash?.40:kind==='lob'?.46:.34,hitHand,hitHeight);
   this.rally++;if(i===0){this.returns++;if(this.returns%4===0){this.energy=clamp(this.energy+1,0,6);this.event('charge','리턴 4회 · 기술 +1');}}
-  this.message=isSmash?'스매시':isVolley?'발리':kind==='lob'?'로브':'스트로크';return true;
+  this.message=isSmash?'스매시':isVolley?(kind==='lob'?'약한 발리':'강한 발리'):kind==='lob'?'로브 · 높게 띄워 치기':'스트로크 · 가로로 밀어 치기';return true;
  }
  skill(slot){
   if(this.paused||['point','fault','match'].includes(this.phase))return {ok:false,why:'공이 살아 있을 때 쓰자.'};
@@ -493,7 +504,7 @@ class Match{
   if(this.phase==='ready'&&this.server===0){
    const oldY=p.y;this.move(0,input.x||0,0,dt);p.y=oldY;
    const sign=((this.points[0]+this.points[1])%2?-1:1)*p.side;p.x=sign*clamp(Math.abs(p.x),.5,3.8);
-  }else if(!(this.phase==='toss'&&this.server===0))this.move(0,input.x||0,input.y||0,dt);
+  }else if(!(this.phase==='toss'&&this.server===0)&&!(this.ball?.serveControl?.remaining>0))this.move(0,input.x||0,input.y||0,dt);
   this.ai(dt);
   if(this.phase==='toss'){
    // Slow only the toss, not rally flight: 1 s up / 1 s down.
@@ -503,8 +514,20 @@ class Match{
    return;
   }
   if(this.phase!=='rally'||!this.ball)return;
+  this.steerServe(dt,input.x||0);
   this.tryHit(0);
   this.physics(dt);
+ }
+ steerServe(dt,axis){
+  const b=this.ball,c=b?.serveControl;
+  if(!c||c.remaining<=0||b.by!==0||b.bounces||b.crossed)return;
+  const span=Math.min(dt,c.remaining);c.remaining=Math.max(0,c.remaining-span);
+  const delta=clamp(axis,-1,1)*span/.12*1.4;
+  if(delta){
+   c.steer+=delta;b.serviceTarget.steer=c.steer;b.serviceTarget.x=c.baseX+c.steer;
+   const remaining=b.flightTime-b.age;
+   if(remaining>0)b.vx=(b.serviceTarget.x-b.x)/remaining;
+  }
  }
  physics(dt){
   const b=this.ball;if(!b)return;
@@ -526,7 +549,7 @@ class Match{
     if(b.bounces===1){
      const legal=Math.abs(b.x)<=W+.035&&Math.abs(b.y)<=L+.035&&b.y*this.people[b.by].side<0;
      if(b.serve){
-      const box=legal&&Math.abs(b.y)<=6.4+.035&&b.x*this.people[b.by].x<=0;
+      const box=legal&&Math.abs(b.y)<=6.4+.035&&b.x*(b.serviceOriginX??this.people[b.by].x)<=0;
       if(!box){this.fault('서비스 아웃');return;}
       if(b.netTouch){this.phase='fault';this.timer=1.0;this.ball=null;this.message='렛 · 같은 서브 다시';this.event('let',this.message);return;}
       if(b.by===0&&this.armed==='serveVanish'){this.fx={type:'vanish',x:b.x,y:b.y,ttl:1.5};this.point(0,'알려고하지마');return;}
@@ -583,6 +606,26 @@ function project(x,y,z=0){const sy=158+y*7.8,scale=1+y*.006;return {x:150+x*20*s
 function unproject(x,y){const wy=(y-158)/7.8;return{x:(x-150)/(20*(1+wy*.006)),y:wy};}
 // Cartoon scale is visual only: collision, landing and rally trajectory stay in XYZ.
 function ballVisual(ball){return {...project(ball.x,ball.y,ball.z),radius:3+Math.min(3.6,Math.max(0,ball.z))*1.1};}
+// Display-only half-turn at an end change. Court art/camera never moves.
+function viewMatch(m){
+ const s=m.people[0].side;if(s===1)return m;
+ const xy=o=>o?{...o,x:o.x*s,y:o.y*s}:o;
+ const view=Object.create(m);
+ view.people=m.people.map(p=>{
+  const a=p.anim?{...p.anim,hand:p.anim.hand*s}:null;
+  if(a&&['forehand','backhand'].includes(a.name))a.name=a.hand<0?'backhand':'forehand';
+  return {...xy(p),side:p.side*s,moveX:(p.moveX||0)*s,moveY:(p.moveY||0)*s,anim:a};
+ });
+ view.ball=m.ball?{...xy(m.ball),vx:m.ball.vx*s,vy:m.ball.vy*s}:null;
+ view.fx=m.fx?{...xy(m.fx),toX:m.fx.toX*s,toY:m.fx.toY*s}:null;
+ view.predict=()=>xy(m.predict());return view;
+}
+function racketFrame(v){
+ const [x,y]=v.racket,hand={x:v.right[2],y:v.right[3]};
+ const dx=x-hand.x,dy=y-hand.y,length=Math.hypot(dx,dy)||1;
+ // The oval's long axis continues the shaft, rather than leaning against it.
+ return {x,y,hand,ux:dx/length,uy:dy/length,angle:Math.atan2(dx,-dy),minor:3.7*(v.face??.85),major:5.8};
+}
 const gait=[
  [-4,0,-3,-3,3,-1,1,-3],[-2,-1,-3,-3,3,0,2,-4],[-1,0,-1,-3,1,-2,3,-3],
  [3,-1,1,-3,-4,0,-2,-3],[3,0,2,-3,-2,-1,-3,-3],[1,-2,3,-3,-1,0,-1,-3]
@@ -592,31 +635,41 @@ function poseFrame(p,override){
  const a=p.anim,t=a?.time||0,kind=override||(['fall','dance','whiff'].includes(p.pose)?p.pose:a?.name)||'idle';
  const walk=p.walk&&kind!=='serve'&&kind!=='toss',f=Math.floor(p.gait||0)%6;
  const v={kind,frame:0,lean:0,lift:0,bob:walk&&[1,4].includes(f)?-1:0,
-  left:[-4,-12,-4,-9],right:[4,-12,5,-10],racket:[8,-14,'tilt'],
+  left:[-4,-12,-4,-9],right:[4,-12,4,-10],racket:[10,-17,'tilt'],face:.85,
   feet:walk?gait[f]:[-2,0,-2,-3,2,0,2,-3]};
  if(walk){const sway=[-1,-2,-1,1,2,1][f];v.frame=f;v.lean=p.moveX||0;
-  v.left=[-4,-12,-4+sway,-9-sway];v.right=[4,-12,5,-10+sway];v.racket=[8,-14+sway,'tilt'];}
+  v.left=[-4,-12,-4+sway,-9-sway];v.right=[4,-12,4,-10+sway];v.racket=[10,-17+sway,'tilt'];v.face=.65+.2*Math.abs(sway)/2;}
  if(kind==='toss'){
   const n=Math.min(3,Math.floor(t*10));v.frame=n;
   v.left=[[-4,-11,-4,-9],[-5,-17,-3,-22],[-5,-18,-2,-24],[-5,-16,-3,-21]][n];
   v.right=[[5,-12,5,-10],[5,-12,7,-10],[5,-15,6,-18],[5,-15,6,-18]][n];
-  v.racket=[[8,-14,'tilt'],[10,-12,'wide'],[6,-22,'upright'],[7,-22,'tilt']][n];v.lean=n>1?-1:0;v.bob=n===0?1:0;
+  v.racket=[[10,-17,'tilt'],[15,-12,'wide'],[6,-26,'upright'],[10,-25,'tilt']][n];v.face=[.85,.5,.22,.35][n];v.lean=n>1?-1:0;v.bob=n===0?1:0;
  }else if(kind==='serve'||kind==='smash'){
-  const n=t<.07?0:t<.15?1:t<.28?2:3;v.frame=n;v.lean=[1,2,2,0][n];v.bob=[-1,0,1,0][n];
+  const st=a?.soft?t*.78:t,n=st<.07?0:st<.15?1:st<.28?2:3;v.frame=n;v.lean=[1,2,2,0][n];v.bob=[-1,0,1,0][n];v.face=a?.soft?[.95,.85,.65,.85][n]:[.95,.28,.18,.85][n];
   const contactHeight=(a?.height||2.1)*Z_SCALE,hitY=-Math.round(Math.max(18,Math.min(31,contactHeight)));
   if(kind==='serve'&&n<3)v.lift=-Math.round(Math.max(0,contactHeight-31)*[1,.65,.2][n]);
-  v.right=[[3,-19,0,hitY+4],[5,-17,3,-17],[1,-11,-5,-10],[4,-12,5,-10]][n];
-  v.racket=[[0,hitY,'upright'],[4,-21,'tilt'],[-8,-11,'wide'],[8,-14,'tilt']][n];
+  v.right=[[3,-19,0,hitY+8],[5,-17,3,-17],[1,-11,-3,-10],[4,-12,4,-10]][n];
+  v.racket=[[0,hitY,'upright'],[9,-23,'tilt'],[-11,-10,'wide'],[10,-17,'tilt']][n];
   v.left=[[-4,-14,-5,-16],[-5,-12,-6,-10],[-4,-11,-3,-8],[-4,-12,-4,-9]][n];
   if(n<3)v.feet=[-3,0,-2,-3,3,-1,1,-4];
- }else if(['forehand','backhand','lob','volley','windup','whiff'].includes(kind)){
+ }else if(['lob','lobWindup','softVolley'].includes(kind)){
+  const n=Math.min(3,Math.floor(t/((a?.duration||.46)/4))),hand=a?.hand||1;v.frame=n;
+  // B: open face beneath the ball, lift, then hold the high follow-through.
+  v.racket=[[10*hand,-7,'wide'],[10*hand,-17,'tilt'],[4*hand,-26,'upright'],[10,-17,'tilt']][n];
+  v.right=[[4*hand,-12,3*hand,-8],[4*hand,-15,4*hand,-12],[3*hand,-17,2*hand,-18],[4,-12,4,-10]][n];
+  v.left=[-4,-12,-6,-10];v.lean=[hand,hand,0,0][n];v.bob=[2,0,-1,0][n];v.face=[.95,.85,.58,.85][n];
+  if(n<3)v.feet=[-3,0,-2,-2,3,0,2,-2];
+ }else if(['forehand','backhand','volley','windup','whiff'].includes(kind)){
   const n=Math.min(3,Math.floor(t/.085));v.frame=n;
   const hand=kind==='backhand'?-1:a?.hand||1;
-  const rack=kind==='lob'?[[8,-9,'wide'],[8,-16,'tilt'],[2,-22,'upright'],[8,-14,'tilt']]
-   :kind==='volley'?[[7*hand,-18,'upright'],[9*hand,-16,'upright'],[4*hand,-14,'tilt'],[8,-14,'tilt']]
-   :kind==='windup'?[[9*hand,-19,'tilt'],[12*hand,-13,'wide'],[-6*hand,-13,'tilt'],[8,-14,'tilt']]
-   :[[12*hand,-13,'wide'],[3*hand,-18,'tilt'],[-7*hand,-12,'wide'],[8,-14,'tilt']];
-  v.racket=rack[n];v.right=[4*hand,-13,v.racket[0]-2*hand,v.racket[1]+3];v.left=[-4,-13,-5,-15];
+  const rack=kind==='volley'?[[9*hand,-19,'upright'],[12*hand,-17,'upright'],[6*hand,-16,'tilt'],[10,-17,'tilt']]
+   :kind==='windup'?[[10*hand,-22,'tilt'],[14*hand,-13,'wide'],[-9*hand,-13,'tilt'],[10,-17,'tilt']]
+   :[[14*hand,-13,'wide'],[1*hand,-20,'tilt'],[-11*hand,-12,'wide'],[10,-17,'tilt']];
+  v.racket=rack[n];
+  const wrists=kind==='volley'?[[6*hand,-12],[5*hand,-14],[1*hand,-10],[4,-10]]
+   :kind==='windup'?[[5*hand,-15],[6*hand,-12],[-2*hand,-13],[4,-10]]
+   :[[6*hand,-12],[4*hand,-13],[-3*hand,-12],[4,-10]];
+  v.right=[4*hand,-13,...wrists[n]];v.left=[-4,-13,-5,-15];v.face=kind==='windup'?[.22,.4,.9,.85][n]:[.95,.25,.18,.85][n];
   v.lean=n===3?0:hand*(n===0?1:2);v.bob=n===2?1:0;
   if(!walk&&n<3)v.feet=[-3,0,-2,-3,3,0,2,-4];
  }else if(kind==='dance'){
@@ -670,13 +723,15 @@ class Renderer{
   }
   limb(2,shoulder,...R);
   if(v.kind!=='broken'){
-   const [rx,ry,orient]=v.racket;
-   this.pixelLine(R[2],R[3],rx,ry+5,'#cdb87b',2);
-   g.save();g.translate(rx,ry);g.rotate(orient==='tilt'?-.55:orient==='wide'?Math.PI/2:0);
-   g.beginPath();g.ellipse(0,0,3.6,5.2,0,0,Math.PI*2);g.fillStyle='#45695c';g.fill();
+   const rack=racketFrame(v),{x:rx,y:ry,minor,major}=rack;
+   this.pixelLine(R[2],R[3],rx-rack.ux*6,ry-rack.uy*6,'#cdb87b',2);
+   this.pixelLine(R[2],R[3],R[2]+rack.ux*2,R[3]+rack.uy*2,'#463f32',2);
+   g.save();g.translate(rx,ry);g.rotate(rack.angle);
+   g.beginPath();g.moveTo(-minor*.5,4.5);g.lineTo(0,7.8);g.lineTo(minor*.5,4.5);g.strokeStyle='#eadab3';g.lineWidth=1;g.stroke();
+   g.beginPath();g.ellipse(0,0,minor,major,0,0,Math.PI*2);g.fillStyle='#45695c';g.fill();
    g.save();g.clip();g.strokeStyle='#b2c5a5';g.lineWidth=.55;g.beginPath();
    for(let q=-5;q<=5;q+=2){g.moveTo(q,-6);g.lineTo(q,6);g.moveTo(-4,q);g.lineTo(4,q);}g.stroke();g.restore();
-   g.beginPath();g.ellipse(0,0,3.6,5.2,0,0,Math.PI*2);g.strokeStyle='#f5ecd2';g.lineWidth=1.5;g.stroke();g.restore();
+   g.beginPath();g.ellipse(0,0,minor,major,0,0,Math.PI*2);g.strokeStyle='#f5ecd2';g.lineWidth=1.25;g.stroke();g.restore();
   }
   g.restore();
   if(role)this.rect(-1,(id===0?-28:-26)+v.bob,2,1,role==='P'?'#f3d884':'#e9e9dc');
@@ -693,6 +748,7 @@ class Renderer{
   this.rect(9,-24,1,25,'#ae9870');this.rect(10,-23,8,9,'#e5d4a8');this.rect(13,-21,1,5,'#597c9b');this.rect(11,-19,5,1,'#597c9b');g.restore();
  }
  draw(m){
+  m=viewMatch(m);
   const g=this.g,c=m.court;
   this.rect(0,0,W,H,c.outer);
   // Low-contrast gallery and stone coping; fixed camera, including all skill effects.
@@ -744,7 +800,7 @@ class Renderer{
   this.g.translate(-134,-130);this.player({id,x:0,y:0,side:-1,pose:'idle',cool:0},0,'',null,1);this.g=old;return cv.toDataURL();
  }
 }
-window.TeRender={Renderer,project,unproject,poseFrame,ballVisual};
+window.TeRender={Renderer,project,unproject,poseFrame,ballVisual,racketFrame,viewMatch};
 })();
 </script><script>(function(){
 'use strict';
@@ -782,7 +838,8 @@ function sounds(){
   if(ev.type==='toss')tossSound();
   else if(ev.type==='hit'){
    if(tossGain){tossGain.gain.cancelScheduledValues(ctx.currentTime);tossGain.gain.setTargetAtTime(.0001,ctx.currentTime,.015);}
-   tone(ev.text==='smash'?320:460,.055,'square',.025);
+   if(ev.text==='lob'||ev.text==='softVolley'){tone(260,.12,'triangle',.035);tone(390,.12,'triangle',.025,.06);}
+   else tone(ev.text==='smash'?320:460,.055,'square',.025);
   }
   else if(ev.type==='bounce')tone(190,.035,'triangle',.03);
   else if(ev.type==='point'||ev.type==='game'){tone(523,.10);tone(659,.13,'triangle',.035,.12);}
@@ -840,7 +897,7 @@ function full(on){
 $('#fullscreen').onclick=()=>full(!$('#stage').classList.contains('is-full'));$('#full-close').onclick=()=>full(false);
 document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement){$('#stage').classList.remove('is-full');$('#full-close').hidden=true;document.body.style.overflow='';}});
 const isEdit=el=>el&&['TEXTAREA','INPUT','SELECT'].includes(el.tagName);
-function aim(){return {x:keys.has('ArrowLeft')?-1:keys.has('ArrowRight')?1:padAxes.x,y:keys.has('ArrowUp')?-1:keys.has('ArrowDown')?1:padAxes.y};}
+function aim(){const s=match.people[0].side;return {x:s*(keys.has('ArrowLeft')?-1:keys.has('ArrowRight')?1:padAxes.x),y:s*(keys.has('ArrowUp')?-1:keys.has('ArrowDown')?1:padAxes.y)};}
 function command(key){
  if(tab!=='play'||!$('#confirm-panel').hidden)return;
  if(key==='pause'){
@@ -914,7 +971,7 @@ $('#open-code').onchange=async e=>{const f=e.target.files[0];if(!f)return;if(f.s
 $('#court-cards').innerHTML=E.COURTS.map((c,i)=>`<article class="court-card" style="--court:${c.ground}"><h3>${c.name}<small>${c.surface}</small></h3><p>${c.desc}</p><div class="coeff">반발 ${c.bounce.toFixed(2)} · 속도 유지 ${c.retain.toFixed(2)}</div></article>`).join('');
 $('#roster').innerHTML=E.PLAYERS.map((p,i)=>`<article class="player-card"><div class="player-top"><img src="${R.portrait(i)}" alt="${p.name} 테니스 도트"><div><span>PLAYER 0${i+1}</span><h2>${p.name}</h2></div></div><div class="stats"><span>공격 <b>${p.atk}</b></span><span>수비 <b>${p.def}</b></span><span>이동 <b>${p.mov}</b></span></div>${p.skills.map((s,j)=>`<h3>${j?'A':'S'} · ${s[0]} <small>${s[1]}칸</small></h3><p>${s[2]}</p>`).join('')}<button data-player="${i}">이 선수의 출전 코드 불러오기</button></article>`).join('');
 document.querySelectorAll('[data-player]').forEach(b=>b.onclick=()=>{$('#example').value=b.dataset.player;example(Number(b.dataset.player));setTab('play');$('#code').focus();});
-window.render_game_to_text=()=>JSON.stringify({phase:active?match.phase:'setup',paused:match.paused,coordinate:'x right, y near/bottom positive, z height. Camera fixed.',config:match.config,people:match.people,ball:match.ball,score:match.score(),games:match.games,sets:match.sets,server:match.server,energy:match.energy,armed:match.armed,effects:match.effects,fx:match.fx,message:match.message,tab,winner:match.winner});
+window.render_game_to_text=()=>JSON.stringify({phase:active?match.phase:'setup',paused:match.paused,coordinate:'World XYZ; display x/y = world x/y × viewSide. Human always bottom; fixed camera.',viewSide:match.people[0].side,config:match.config,people:match.people,ball:match.ball,score:match.score(),games:match.games,sets:match.sets,server:match.server,energy:match.energy,armed:match.armed,effects:match.effects,fx:match.fx,message:match.message,tab,winner:match.winner});
 window.advanceTime=ms=>{manual=true;for(let i=0;i<Math.round(ms/1000/E.DT);i++)tick(E.DT);draw();};
 window.TeApp={get match(){return match;},begin,setup,makeCode,renderer:R,resumeClock(){manual=false;acc=0;}};
 example(0);requestAnimationFrame(loop);

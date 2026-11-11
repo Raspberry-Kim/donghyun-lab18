@@ -15,6 +15,26 @@ function project(x,y,z=0){const sy=158+y*7.8,scale=1+y*.006;return {x:150+x*20*s
 function unproject(x,y){const wy=(y-158)/7.8;return{x:(x-150)/(20*(1+wy*.006)),y:wy};}
 // Cartoon scale is visual only: collision, landing and rally trajectory stay in XYZ.
 function ballVisual(ball){return {...project(ball.x,ball.y,ball.z),radius:3+Math.min(3.6,Math.max(0,ball.z))*1.1};}
+// Display-only half-turn at an end change. Court art/camera never moves.
+function viewMatch(m){
+ const s=m.people[0].side;if(s===1)return m;
+ const xy=o=>o?{...o,x:o.x*s,y:o.y*s}:o;
+ const view=Object.create(m);
+ view.people=m.people.map(p=>{
+  const a=p.anim?{...p.anim,hand:p.anim.hand*s}:null;
+  if(a&&['forehand','backhand'].includes(a.name))a.name=a.hand<0?'backhand':'forehand';
+  return {...xy(p),side:p.side*s,moveX:(p.moveX||0)*s,moveY:(p.moveY||0)*s,anim:a};
+ });
+ view.ball=m.ball?{...xy(m.ball),vx:m.ball.vx*s,vy:m.ball.vy*s}:null;
+ view.fx=m.fx?{...xy(m.fx),toX:m.fx.toX*s,toY:m.fx.toY*s}:null;
+ view.predict=()=>xy(m.predict());return view;
+}
+function racketFrame(v){
+ const [x,y]=v.racket,hand={x:v.right[2],y:v.right[3]};
+ const dx=x-hand.x,dy=y-hand.y,length=Math.hypot(dx,dy)||1;
+ // The oval's long axis continues the shaft, rather than leaning against it.
+ return {x,y,hand,ux:dx/length,uy:dy/length,angle:Math.atan2(dx,-dy),minor:3.7*(v.face??.85),major:5.8};
+}
 const gait=[
  [-4,0,-3,-3,3,-1,1,-3],[-2,-1,-3,-3,3,0,2,-4],[-1,0,-1,-3,1,-2,3,-3],
  [3,-1,1,-3,-4,0,-2,-3],[3,0,2,-3,-2,-1,-3,-3],[1,-2,3,-3,-1,0,-1,-3]
@@ -24,31 +44,41 @@ function poseFrame(p,override){
  const a=p.anim,t=a?.time||0,kind=override||(['fall','dance','whiff'].includes(p.pose)?p.pose:a?.name)||'idle';
  const walk=p.walk&&kind!=='serve'&&kind!=='toss',f=Math.floor(p.gait||0)%6;
  const v={kind,frame:0,lean:0,lift:0,bob:walk&&[1,4].includes(f)?-1:0,
-  left:[-4,-12,-4,-9],right:[4,-12,5,-10],racket:[8,-14,'tilt'],
+  left:[-4,-12,-4,-9],right:[4,-12,4,-10],racket:[10,-17,'tilt'],face:.85,
   feet:walk?gait[f]:[-2,0,-2,-3,2,0,2,-3]};
  if(walk){const sway=[-1,-2,-1,1,2,1][f];v.frame=f;v.lean=p.moveX||0;
-  v.left=[-4,-12,-4+sway,-9-sway];v.right=[4,-12,5,-10+sway];v.racket=[8,-14+sway,'tilt'];}
+  v.left=[-4,-12,-4+sway,-9-sway];v.right=[4,-12,4,-10+sway];v.racket=[10,-17+sway,'tilt'];v.face=.65+.2*Math.abs(sway)/2;}
  if(kind==='toss'){
   const n=Math.min(3,Math.floor(t*10));v.frame=n;
   v.left=[[-4,-11,-4,-9],[-5,-17,-3,-22],[-5,-18,-2,-24],[-5,-16,-3,-21]][n];
   v.right=[[5,-12,5,-10],[5,-12,7,-10],[5,-15,6,-18],[5,-15,6,-18]][n];
-  v.racket=[[8,-14,'tilt'],[10,-12,'wide'],[6,-22,'upright'],[7,-22,'tilt']][n];v.lean=n>1?-1:0;v.bob=n===0?1:0;
+  v.racket=[[10,-17,'tilt'],[15,-12,'wide'],[6,-26,'upright'],[10,-25,'tilt']][n];v.face=[.85,.5,.22,.35][n];v.lean=n>1?-1:0;v.bob=n===0?1:0;
  }else if(kind==='serve'||kind==='smash'){
-  const n=t<.07?0:t<.15?1:t<.28?2:3;v.frame=n;v.lean=[1,2,2,0][n];v.bob=[-1,0,1,0][n];
+  const st=a?.soft?t*.78:t,n=st<.07?0:st<.15?1:st<.28?2:3;v.frame=n;v.lean=[1,2,2,0][n];v.bob=[-1,0,1,0][n];v.face=a?.soft?[.95,.85,.65,.85][n]:[.95,.28,.18,.85][n];
   const contactHeight=(a?.height||2.1)*Z_SCALE,hitY=-Math.round(Math.max(18,Math.min(31,contactHeight)));
   if(kind==='serve'&&n<3)v.lift=-Math.round(Math.max(0,contactHeight-31)*[1,.65,.2][n]);
-  v.right=[[3,-19,0,hitY+4],[5,-17,3,-17],[1,-11,-5,-10],[4,-12,5,-10]][n];
-  v.racket=[[0,hitY,'upright'],[4,-21,'tilt'],[-8,-11,'wide'],[8,-14,'tilt']][n];
+  v.right=[[3,-19,0,hitY+8],[5,-17,3,-17],[1,-11,-3,-10],[4,-12,4,-10]][n];
+  v.racket=[[0,hitY,'upright'],[9,-23,'tilt'],[-11,-10,'wide'],[10,-17,'tilt']][n];
   v.left=[[-4,-14,-5,-16],[-5,-12,-6,-10],[-4,-11,-3,-8],[-4,-12,-4,-9]][n];
   if(n<3)v.feet=[-3,0,-2,-3,3,-1,1,-4];
- }else if(['forehand','backhand','lob','volley','windup','whiff'].includes(kind)){
+ }else if(['lob','lobWindup','softVolley'].includes(kind)){
+  const n=Math.min(3,Math.floor(t/((a?.duration||.46)/4))),hand=a?.hand||1;v.frame=n;
+  // B: open face beneath the ball, lift, then hold the high follow-through.
+  v.racket=[[10*hand,-7,'wide'],[10*hand,-17,'tilt'],[4*hand,-26,'upright'],[10,-17,'tilt']][n];
+  v.right=[[4*hand,-12,3*hand,-8],[4*hand,-15,4*hand,-12],[3*hand,-17,2*hand,-18],[4,-12,4,-10]][n];
+  v.left=[-4,-12,-6,-10];v.lean=[hand,hand,0,0][n];v.bob=[2,0,-1,0][n];v.face=[.95,.85,.58,.85][n];
+  if(n<3)v.feet=[-3,0,-2,-2,3,0,2,-2];
+ }else if(['forehand','backhand','volley','windup','whiff'].includes(kind)){
   const n=Math.min(3,Math.floor(t/.085));v.frame=n;
   const hand=kind==='backhand'?-1:a?.hand||1;
-  const rack=kind==='lob'?[[8,-9,'wide'],[8,-16,'tilt'],[2,-22,'upright'],[8,-14,'tilt']]
-   :kind==='volley'?[[7*hand,-18,'upright'],[9*hand,-16,'upright'],[4*hand,-14,'tilt'],[8,-14,'tilt']]
-   :kind==='windup'?[[9*hand,-19,'tilt'],[12*hand,-13,'wide'],[-6*hand,-13,'tilt'],[8,-14,'tilt']]
-   :[[12*hand,-13,'wide'],[3*hand,-18,'tilt'],[-7*hand,-12,'wide'],[8,-14,'tilt']];
-  v.racket=rack[n];v.right=[4*hand,-13,v.racket[0]-2*hand,v.racket[1]+3];v.left=[-4,-13,-5,-15];
+  const rack=kind==='volley'?[[9*hand,-19,'upright'],[12*hand,-17,'upright'],[6*hand,-16,'tilt'],[10,-17,'tilt']]
+   :kind==='windup'?[[10*hand,-22,'tilt'],[14*hand,-13,'wide'],[-9*hand,-13,'tilt'],[10,-17,'tilt']]
+   :[[14*hand,-13,'wide'],[1*hand,-20,'tilt'],[-11*hand,-12,'wide'],[10,-17,'tilt']];
+  v.racket=rack[n];
+  const wrists=kind==='volley'?[[6*hand,-12],[5*hand,-14],[1*hand,-10],[4,-10]]
+   :kind==='windup'?[[5*hand,-15],[6*hand,-12],[-2*hand,-13],[4,-10]]
+   :[[6*hand,-12],[4*hand,-13],[-3*hand,-12],[4,-10]];
+  v.right=[4*hand,-13,...wrists[n]];v.left=[-4,-13,-5,-15];v.face=kind==='windup'?[.22,.4,.9,.85][n]:[.95,.25,.18,.85][n];
   v.lean=n===3?0:hand*(n===0?1:2);v.bob=n===2?1:0;
   if(!walk&&n<3)v.feet=[-3,0,-2,-3,3,0,2,-4];
  }else if(kind==='dance'){
@@ -102,13 +132,15 @@ class Renderer{
   }
   limb(2,shoulder,...R);
   if(v.kind!=='broken'){
-   const [rx,ry,orient]=v.racket;
-   this.pixelLine(R[2],R[3],rx,ry+5,'#cdb87b',2);
-   g.save();g.translate(rx,ry);g.rotate(orient==='tilt'?-.55:orient==='wide'?Math.PI/2:0);
-   g.beginPath();g.ellipse(0,0,3.6,5.2,0,0,Math.PI*2);g.fillStyle='#45695c';g.fill();
+   const rack=racketFrame(v),{x:rx,y:ry,minor,major}=rack;
+   this.pixelLine(R[2],R[3],rx-rack.ux*6,ry-rack.uy*6,'#cdb87b',2);
+   this.pixelLine(R[2],R[3],R[2]+rack.ux*2,R[3]+rack.uy*2,'#463f32',2);
+   g.save();g.translate(rx,ry);g.rotate(rack.angle);
+   g.beginPath();g.moveTo(-minor*.5,4.5);g.lineTo(0,7.8);g.lineTo(minor*.5,4.5);g.strokeStyle='#eadab3';g.lineWidth=1;g.stroke();
+   g.beginPath();g.ellipse(0,0,minor,major,0,0,Math.PI*2);g.fillStyle='#45695c';g.fill();
    g.save();g.clip();g.strokeStyle='#b2c5a5';g.lineWidth=.55;g.beginPath();
    for(let q=-5;q<=5;q+=2){g.moveTo(q,-6);g.lineTo(q,6);g.moveTo(-4,q);g.lineTo(4,q);}g.stroke();g.restore();
-   g.beginPath();g.ellipse(0,0,3.6,5.2,0,0,Math.PI*2);g.strokeStyle='#f5ecd2';g.lineWidth=1.5;g.stroke();g.restore();
+   g.beginPath();g.ellipse(0,0,minor,major,0,0,Math.PI*2);g.strokeStyle='#f5ecd2';g.lineWidth=1.25;g.stroke();g.restore();
   }
   g.restore();
   if(role)this.rect(-1,(id===0?-28:-26)+v.bob,2,1,role==='P'?'#f3d884':'#e9e9dc');
@@ -125,6 +157,7 @@ class Renderer{
   this.rect(9,-24,1,25,'#ae9870');this.rect(10,-23,8,9,'#e5d4a8');this.rect(13,-21,1,5,'#597c9b');this.rect(11,-19,5,1,'#597c9b');g.restore();
  }
  draw(m){
+  m=viewMatch(m);
   const g=this.g,c=m.court;
   this.rect(0,0,W,H,c.outer);
   // Low-contrast gallery and stone coping; fixed camera, including all skill effects.
@@ -176,5 +209,5 @@ class Renderer{
   this.g.translate(-134,-130);this.player({id,x:0,y:0,side:-1,pose:'idle',cool:0},0,'',null,1);this.g=old;return cv.toDataURL();
  }
 }
-window.TeRender={Renderer,project,unproject,poseFrame,ballVisual};
+window.TeRender={Renderer,project,unproject,poseFrame,ballVisual,racketFrame,viewMatch};
 })();
