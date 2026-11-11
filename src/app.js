@@ -7,8 +7,25 @@ let tossGain=null;
 const captions=['WIMBLEDON / GRASS','AUSTRALIA / HARD','US / HARD','FRANCE / CLAY'];
 const encode=n=>'도'+'오'.repeat(n-1)+'옹';
 const makeCode=(p=0,l=0,c=0)=>`나는 동현이냐?\n   ㅋㅋ 선수 ${p+1} · ${E.PLAYERS[p].name}\n  뿡뿡 ${encode(p+1)}~뿡뿡뿡\n   ㅋㅋ 난이도 ${l+1} · ${E.LEVELS[l].name}\n  뿡뿡 ${encode(l+1)}~뿡뿡뿡\n   ㅋㅋ 경기장 ${c+1} · ${E.COURTS[c].name}\n  뿡뿡 ${encode(c+1)}~뿡뿡뿡\n동현이구나`;
-const examples=E.PLAYERS.map((p,i)=>({name:`${String(i+1).padStart(2,'0')} · ${p.name} · 초보 · 윔블던`,p:i,l:0,c:0,note:p.skills.map(s=>s[0]).join(' / ')})).concat(E.COURTS.slice(1).map((c,i)=>({name:`0${i+8} · ${c.name} 코트 · 통상`,p:0,l:1,c:i+1,note:c.desc})),[{name:'11 · 프로 · 동현 · US',p:0,l:2,c:2,note:'빠른 공과 빨라진 상대 반응.'}]);
-$('#example').innerHTML=examples.map((e,i)=>`<option value="${i}">${e.name}</option>`).join('');
+// Example groups. 01-07 keep their indices: the roster "코드 불러오기" buttons point at them.
+const ex=(group,name,p,l,c,note)=>({group,name,p,l,c,note});
+const examples=E.PLAYERS.map((p,i)=>ex('선수 고르기',`${String(i+1).padStart(2,'0')} · ${p.name} · 초보 · 윔블던`,i,0,0,p.skills.map(s=>s[0]).join(' / '))).concat(
+ E.COURTS.slice(1).map((c,i)=>ex('코트 고르기',`0${i+8} · ${c.name} 코트 · 통상`,0,1,i+1,c.desc)),
+ [ex('코트 고르기','11 · 프로 · 동현 · US',0,2,2,'빠른 공과 빨라진 상대 반응.'),
+  ex('난이도 조정','12 · 난이도 2 · 동현 · 윔블던',0,1,0,'01에서 난이도만 1→2로 바꾼다. 공과 두 선수의 속도 0.88배→1.00배, 슈슈가 자리를 다시 정하는 간격 0.24초→0.14초, 자리 오차 ±0.33m→±0.16m.'),
+  ex('난이도 조정','13 · 난이도 3 · 동현 · 윔블던',0,2,0,'같은 코트에서 난이도 3. 속도 1.13배, 슈슈는 0.07초마다 자리를 다시 정하고 오차는 ±0.07m다. 낮게 미끄러지는 잔디라 반응할 시간이 가장 짧다.'),
+  ex('난이도 조정','14 · 난이도 3 · 동현 · 프랑스',0,2,3,'13과 난이도는 같고 코트만 클레이다. 바운드 뒤 수평 속도가 72%만 남아 프로의 빠른 공이 한 박자 늦어진다. 13과 번갈아 해 보자.'),
+  ex('난이도 조정','15 · 난이도 1 · 슈슈 · 프랑스',6,0,3,'가장 너그러운 조합. 초보의 느린 공에 높이 튀는 클레이가 겹쳐 공을 기다릴 여유가 크다. 슈슈의 리만가설로 바운드 위치를 미리 보며 연습하자.'),
+  ex('코트 조정','16 · 초보 · 동현 · 호주',0,0,1,'01과 선수·난이도는 같고 코트만 2로 바꾼다. 반발 0.56→0.73, 바운드 뒤 속도 유지 94%→85%. 공이 더 높고 조금 느리게 온다.'),
+  ex('코트 조정','17 · 초보 · 동현 · US',0,0,2,'코트 3. 반발 0.69, 속도 유지 90%. 호주보다 낮고 빠르며 윔블던보다는 덜 미끄러진다.'),
+  ex('코트 조정','18 · 초보 · 동현 · 프랑스',0,0,3,'코트 4. 반발 0.83, 속도 유지 72%. 가장 높이 튀고 가장 느려진다. 16·17과 같은 난이도에서 차이를 느껴 보자.'),
+  ex('코트 조정','19 · 프로 · 동현 · 호주',0,2,1,'프로에서 코트만 바꿔 보는 묶음. 11(US)·13(윔블던)·14(프랑스)와 함께 네 코트를 같은 난이도로 비교한다.'),
+  ex('선수와 코트','20 · 포동이 · 통상 · 윔블던',4,1,0,'이동 130으로 가장 빠르지만 공격·수비 80. 낮게 깔리는 잔디에서 발로 따라잡는 연습이다.'),
+  ex('선수와 코트','21 · 뚱띠 · 통상 · 프랑스',2,1,3,'공격 120·수비 80. 클레이가 강한 공을 늦추지만 높게 튄 공을 받을 시간도 함께 준다.'),
+  ex('선수와 코트','22 · 또치 · 프로 · US',3,2,2,'이동 120. 빠른 하드 코트와 프로 상대에서 넓게 뛰며 버티는 조합이다.'),
+  ex('선수와 코트','23 · 뭉치 · 통상 · 호주',1,1,1,'능력치가 모두 90인 균형형. 중간 높이 반발의 호주에서 기본기를 확인하자.'),
+  ex('선수와 코트','24 · 꽥꽥 · 프로 · 윔블던',5,2,0,'공격 80·수비 90. 가장 빠른 조합에서 비밀이야·알려고하지마로 포인트를 노린다.')]);
+{const sel=$('#example');let html='',group='';examples.forEach((e,i)=>{if(e.group!==group){if(group)html+='</optgroup>';group=e.group;html+=`<optgroup label="${group}">`;}html+=`<option value="${i}">${e.name}</option>`;});sel.innerHTML=html+'</optgroup>';}
 function lineNumbers(){const code=$('#code');$('#lines').textContent=Array.from({length:code.value.split('\n').length},(_,i)=>i+1).join('\n');$('#lines').scrollTop=code.scrollTop;}
 function parsed(){const result=Donghyun.run($('#code').value,{maxSteps:100000});return {config:E.parse(result.output),output:result.output.trim().split(/\s+/).join('  ')};}
 function validate(){
