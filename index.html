@@ -32,7 +32,7 @@
      <div class="skill-strip"><div class="charge"><span>기술 에너지</span><div id="energy-pips" aria-label="에너지 2 / 6"></div></div><div class="skill-label"><kbd>S</kbd><span id="skill1">샤아아즈나블<small>3칸 · 다음 리턴</small></span></div><div class="skill-label"><kbd>A</kbd><span id="skill2">샤아자쿠<small>2칸 · 혜성 이동</small></span></div></div>
     </div>
     <div class="under-court"><span><kbd>↑↓←→</kbd> 이동·방향 <kbd>X</kbd> 타격 <kbd>Z</kbd> 로브 <kbd>Enter</kbd> 메뉴</span><button id="fullscreen">전체 화면 <kbd>F</kbd></button></div>
-    <p class="small-note" id="serve-note">서브: X로 토스한 뒤, 머리 위의 공에 X 또는 Z. 빈 토스는 다시 할 수 있다.</p>
+    <p class="small-note" id="serve-note">서브: X로 높이 띄운 뒤, 공이 내려와 머리 위에 닿을 때 X 또는 Z. 빈 토스는 다시 할 수 있다.</p>
    </section>
    <aside class="editor-column">
     <div class="editor-heading"><span class="eyebrow">MATCH PROGRAM</span><h2>오늘의 출전 코드</h2><p>선수, 난이도, 경기장.<br>정수 세 개로 경기를 열자.</p></div>
@@ -54,7 +54,7 @@
   <div class="rules-grid">
    <article><h2>키보드</h2><table><tbody><tr><th>방향키</th><td>이동. 타격 순간 좌우로 방향, ↑ 깊게 · ↓ 짧게.</td></tr><tr><th>X</th><td>토스 / 강한 서브 / 스트로크. 공이 높으면 스매시.</td></tr><tr><th>Z</th><td>약한 서브 / 로브. 바운드 전이면 약한 발리.</td></tr><tr><th>S / A</th><td>첫째 / 둘째 특수기술.</td></tr><tr><th>Enter / Esc</th><td>일시정지·계속. 전체 화면에서 Esc는 먼저 닫기.</td></tr><tr><th>F / M</th><td>전체 화면 / 효과음·음악 켜기·끄기.</td></tr></tbody></table><p>코드 편집 중에는 경기 키를 가로채지 않는다. Ctrl+Enter로 코드를 실행한다.</p></article>
    <article><h2>게임패드</h2><p>십자키·왼 스틱으로 이동한다. 위치 기준 오른쪽 단추(A 위치)는 X 타격, 아래 단추(B 위치)는 Z 로브다. L·R 어깨 단추로 특수기술을 쓴다. Start는 메뉴다.</p><p id="pad-status">연결된 패드 없음</p><p>브라우저 표준 매핑 패드를 대상으로 한다. 실제 패드의 호환성은 기기·브라우저에 따라 다르다.</p><h2>마우스와 모바일</h2><p>메뉴·코드 편집만 마우스로 할 수 있다. 코트를 누르거나 드래그해도 선수는 움직이거나 공을 치지 않는다. 터치 조작판은 없다. 외부 입력 장치 없는 휴대폰에서는 경기 조작이 불가능하다.</p></article>
-   <article><h2>서브와 리턴</h2><p>X로 공을 띄우고 머리 위에서 X 또는 Z를 다시 누른다. 공을 안 치고 받으면 폴트 없이 다시 토스한다. 서비스 박스는 대각선이다. 두 번 폴트면 상대 포인트. 네트를 스친 유효 서브는 렛이다.</p><p>그림자는 바닥 위치, 공은 높이다. 공이 라켓 근처에 왔을 때 눌러야 한다. 서브는 한 번 바운드한 뒤 받아야 한다. 일반 랠리에서는 발리와 높은 공의 스매시가 된다.</p></article>
+   <article><h2>서브와 리턴</h2><p>X로 공을 높이 띄운 뒤, 커졌다가 내려오는 공이 머리 위에 닿을 때 X 또는 Z를 다시 누른다. 공을 안 치고 받으면 폴트 없이 다시 토스한다. 서비스 박스는 대각선이다. 두 번 폴트면 상대 포인트. 네트를 스친 유효 서브는 렛이다.</p><p>그림자는 바닥 위치, 공은 높이다. 공이 라켓 근처에 왔을 때 눌러야 한다. 서브는 한 번 바운드한 뒤 받아야 한다. 일반 랠리에서는 발리와 높은 공의 스매시가 된다.</p></article>
    <article><h2>점수와 코트 교대</h2><p>0 → 15 → 30 → 40. 듀스에서는 두 점 차로 게임을 딴다. 6게임 이상, 두 게임 차면 세트. 6 대 6에서는 7점 타이브레이크로 두 점 차를 낸다.</p><p>게임마다 서브를 바꾸고 홀수 게임 뒤에는 코트를 바꾼다. 타이브레이크는 첫 1점 뒤부터 두 점마다 서브 교대, 6점마다 코트 교대다. 2세트를 먼저 따면 승리한다.</p></article>
   </div>
  </section>
@@ -364,8 +364,8 @@ class Match{
  }
  toss(){
   if(this.phase!=='ready')return false;
-  const p=this.people[this.server];this.ball={x:p.x,y:p.y,z:1.1,vx:0,vy:0,vz:5.1,by:this.server,bounces:0,serve:true,crossed:false};
-  this.phase='toss';this.timer=0;this.animate(this.server,'toss',.9);p.walk=false;p.pose='toss';this.message=this.server===0?'토스 · 공이 머리 위일 때 X 또는 Z':'동현AI™ 토스';this.event('toss','토스');return true;
+  const p=this.people[this.server];this.ball={x:p.x,y:p.y,z:1.1,vx:0,vy:0,vz:7.8,by:this.server,bounces:0,serve:true,crossed:false};
+  this.phase='toss';this.timer=0;this.animate(this.server,'toss',1.3);p.walk=false;p.pose='toss';this.message=this.server===0?'토스 · 내려오는 공이 머리 위일 때 X 또는 Z':'동현AI™ 토스';this.event('toss','토스');return true;
  }
  serve(kind,aim={}){
   const b=this.ball,p=this.people[this.server];if(this.phase!=='toss'||!b)return false;
@@ -455,7 +455,7 @@ class Match{
   if(this.effects.fall>0){p.pose='fall';return;}
   if(this.effects.whiff>0){p.pose='whiff';return;}
   if(this.phase==='ready'&&this.server===1){this.timer+=dt;if(this.timer>.7)this.toss();return;}
-  if(this.phase==='toss'&&this.server===1){if(b.vz<1.6&&b.z>1.5)this.serve(this.rand()<.16?'lob':'drive');return;}
+  if(this.phase==='toss'&&this.server===1){if(b.vz<0&&b.z<=2.35&&b.z>1.5)this.serve(this.rand()<.16?'lob':'drive');return;}
   if(this.phase!=='rally')return;
   this.aiClock-=dt;
   if(this.aiClock<=0){
@@ -571,6 +571,8 @@ const palette={h:'#342e2c',s:'#e3b797',k:'#292e2b',w:'#f5efdd',n:'#ab725c',y:'#e
 const W=320,H=288,Z_SCALE=12;
 function project(x,y,z=0){const sy=158+y*7.8,scale=1+y*.006;return {x:150+x*20*scale,y:sy-z*Z_SCALE,scale};}
 function unproject(x,y){const wy=(y-158)/7.8;return{x:(x-150)/(20*(1+wy*.006)),y:wy};}
+// Cartoon scale is visual only: collision, landing and rally trajectory stay in XYZ.
+function ballVisual(ball){return {...project(ball.x,ball.y,ball.z),radius:3+Math.min(3.6,Math.max(0,ball.z))*1.1};}
 const gait=[
  [-4,0,-3,-3,3,-1,1,-3],[-2,-1,-3,-3,3,0,2,-4],[-1,0,-1,-3,1,-2,3,-3],
  [3,-1,1,-3,-4,0,-2,-3],[3,0,2,-3,-2,-1,-3,-3],[1,-2,3,-3,-1,0,-1,-3]
@@ -656,11 +658,13 @@ class Renderer{
   }
   limb(2,shoulder,...R);
   if(v.kind!=='broken'){
-   const [rx,ry,orient]=v.racket,patterns={
-    upright:['.ooo.','ow.wo','o.w.o','ow.wo','o.w.o','ow.wo','.ooo.'],
-    wide:['.ooooo.','ow.w.wo','o.w.w.o','ow.w.wo','.ooooo.'],
-    tilt:['...oo.','..owwo','.ow.wo','ow.wo.','owwo..','.oo...']},rows=patterns[orient];
-   this.pixelLine(R[2],R[3],rx,ry+2,'#b4a16c');this.pixels(rows,rx-Math.floor(rows[0].length/2),ry-Math.floor(rows.length/2),{o:'#e7e4cb',w:'#899c81'});
+   const [rx,ry,orient]=v.racket;
+   this.pixelLine(R[2],R[3],rx,ry+4,'#cdb87b',2);
+   g.save();g.translate(rx,ry);g.rotate(orient==='tilt'?-.55:orient==='wide'?Math.PI/2:0);
+   g.beginPath();g.arc(0,0,4.5,0,Math.PI*2);g.fillStyle='#45695c';g.fill();
+   g.save();g.clip();g.strokeStyle='#b2c5a5';g.lineWidth=.55;g.beginPath();
+   for(let q=-3;q<=3;q+=2){g.moveTo(q,-5);g.lineTo(q,5);g.moveTo(-5,q);g.lineTo(5,q);}g.stroke();g.restore();
+   g.beginPath();g.arc(0,0,4.5,0,Math.PI*2);g.strokeStyle='#f5ecd2';g.lineWidth=1.5;g.stroke();g.restore();
   }
   g.restore();
   if(role)this.rect(-1,-26,2,1,role==='P'?'#f3d884':'#e9e9dc');
@@ -702,11 +706,13 @@ class Renderer{
   if(m.effects.predict){const pr=m.predict();if(pr){const a=project(pr.x,pr.y);g.strokeStyle='#f9d880';g.lineWidth=1;g.beginPath();g.ellipse(a.x,a.y,5,2,0,0,7);g.stroke();this.rect(a.x-1,a.y-5,2,2,'#fff0b9');}}
   if(m.effects.long&&m.ball&&m.ball.by===1){const p=project(m.people[0].x,m.people[0].y,1),b=project(m.ball.x,m.ball.y,1);this.line(p,b,'#bdce8f',2);}
   if(m.ball){
-   const ball=m.ball,shadow=project(ball.x,ball.y),pos=project(ball.x,ball.y,ball.z);
-   this.rect(shadow.x-2,shadow.y,5,1,'#203832a8');
+   const ball=m.ball,shadow=project(ball.x,ball.y),pos=ballVisual(ball),r=pos.radius;
+   g.fillStyle='#203832a8';g.beginPath();g.ellipse(shadow.x,shadow.y,3.5,1.3,0,0,Math.PI*2);g.fill();
    if(ball.power==='fire'){for(let i=1;i<7;i++)this.rect(pos.x-ball.vx*i*.018-2,pos.y-ball.vy*i*.12-2,4-i*.4,4-i*.4,i%2?'#e7a94a':'#ce6244');}
-   if(ball.slow){g.strokeStyle='#d6b7e0';g.beginPath();g.arc(pos.x,pos.y,6,0,7);g.stroke();}
-   this.rect(pos.x-1,pos.y-1,3,3,'#394b32');this.rect(pos.x-1,pos.y-1,2,2,'#f5e69d');this.rect(pos.x-1,pos.y-1,1,1,'#ffffe3');
+   if(ball.slow){g.strokeStyle='#d6b7e0';g.beginPath();g.arc(pos.x,pos.y,r+3,0,Math.PI*2);g.stroke();}
+   g.beginPath();g.arc(pos.x,pos.y,r,0,Math.PI*2);g.fillStyle='#f6db72';g.fill();g.strokeStyle='#394b32';g.lineWidth=1;g.stroke();
+   g.save();g.clip();g.beginPath();g.arc(pos.x-r*.65,pos.y,r*.85,-1.25,1.25);g.strokeStyle='#fff8cf';g.lineWidth=1;g.stroke();
+   g.beginPath();g.arc(pos.x-r*.3,pos.y-r*.35,Math.max(.8,r*.2),0,Math.PI*2);g.fillStyle='#ffffe3';g.fill();g.restore();
   }
   const fx=m.fx;
   if(fx){
@@ -726,13 +732,14 @@ class Renderer{
   this.g.translate(-134,-130);this.player({id,x:0,y:0,side:-1,pose:'idle',cool:0},0,'',null,1);this.g=old;return cv.toDataURL();
  }
 }
-window.TeRender={Renderer,project,unproject,poseFrame};
+window.TeRender={Renderer,project,unproject,poseFrame,ballVisual};
 })();
 </script><script>(function(){
 'use strict';
 const $=s=>document.querySelector(s),E=Te,R=new TeRender.Renderer($('#court')),keys=new Set();
 let match=new E.Match(),active=false,tab='play',manual=false,pending=null,sound=true,ctx=null,last=0,acc=0,notice='',noticeTime=0;
 let oldPad=[],padAxes={x:0,y:0},fps=60,frames=0,fpsLast=0,musicNext=0,musicStep=0,hudKey='',fullRequest=Promise.resolve();
+let tossGain=null;
 const captions=['WIMBLEDON / GRASS','AUSTRALIA / HARD','US / HARD','FRANCE / CLAY'];
 const encode=n=>'도'+'오'.repeat(n-1)+'옹';
 const makeCode=(p=0,l=0,c=0)=>`나는 동현이냐?\n   ㅋㅋ 선수 ${p+1} · ${E.PLAYERS[p].name}\n  뿡뿡 ${encode(p+1)}~뿡뿡뿡\n   ㅋㅋ 난이도 ${l+1} · ${E.LEVELS[l].name}\n  뿡뿡 ${encode(l+1)}~뿡뿡뿡\n   ㅋㅋ 경기장 ${c+1} · ${E.COURTS[c].name}\n  뿡뿡 ${encode(c+1)}~뿡뿡뿡\n동현이구나`;
@@ -760,7 +767,8 @@ function tone(freq=.0,dur=.08,type='triangle',vol=.035,delay=0){
 }
 function sounds(){
  for(const ev of match.events.splice(0)){
-  if(ev.type==='hit')tone(ev.text==='smash'?320:460,.055,'square',.025);
+  if(ev.type==='toss')tossSound();
+  else if(ev.type==='hit')tone(ev.text==='smash'?320:460,.055,'square',.025);
   else if(ev.type==='bounce')tone(190,.035,'triangle',.03);
   else if(ev.type==='point'||ev.type==='game'){tone(523,.10);tone(659,.13,'triangle',.035,.12);}
   else if(ev.type==='skill'){[440,660,880,1047].forEach((f,i)=>tone(f,.10,'square',.02,i*.07));notice=ev.text;noticeTime=1.4;}
@@ -773,7 +781,18 @@ function sounds(){
   const f=melody[musicStep++%melody.length];if(f)tone(f,.12,'triangle',.008);musicNext=ctx.currentTime+.34;
  }
 }
-function toggleSound(){audio();sound=!sound;$('#sound').textContent=sound?'소리 켬':'소리 끔';$('#sound').setAttribute('aria-pressed',String(sound));}
+function tossSound(){
+ if(!ctx||!sound)return;
+ const t=ctx.currentTime,g=ctx.createGain();tossGain=g;g.connect(ctx.destination);
+ g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.065,t+.045);
+ g.gain.setValueAtTime(.065,t+.40);g.gain.exponentialRampToValueAtTime(.0001,t+.64);
+ for(const [type,f] of [['triangle',110],['sine',55]]){
+  const o=ctx.createOscillator();o.type=type;o.frequency.setValueAtTime(f,t);
+  o.frequency.exponentialRampToValueAtTime(f*3.6,t+.60);o.connect(g);o.start(t);o.stop(t+.66);
+ }
+ setTimeout(()=>{g.disconnect();if(tossGain===g)tossGain=null;},800);
+}
+function toggleSound(){audio();sound=!sound;if(!sound&&tossGain){tossGain.gain.cancelScheduledValues(ctx.currentTime);tossGain.gain.setValueAtTime(0,ctx.currentTime);}$('#sound').textContent=sound?'소리 켬':'소리 끔';$('#sound').setAttribute('aria-pressed',String(sound));}
 $('#sound').onclick=toggleSound;
 $('#theme').onclick=()=>{const on=document.documentElement.dataset.theme!=='dark';document.documentElement.dataset.theme=on?'dark':'light';$('#theme').textContent=on?'밝게':'어둡게';$('#theme').setAttribute('aria-pressed',String(on));};
 function begin(config){

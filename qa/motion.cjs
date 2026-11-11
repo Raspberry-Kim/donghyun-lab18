@@ -4,6 +4,7 @@ const sandbox={window:{}};vm.runInNewContext(fs.readFileSync(require.resolve('..
 const pose=sandbox.window.TeRender.poseFrame;
 let count=0;function check(name,fn){fn();count++;console.log('ok',name);}
 const step=(m,n)=>{for(let i=0;i<n;i++)m.step(E.DT);};
+const descend=m=>{for(let i=0;i<200;i++){if(m.ball.vz<0&&m.ball.z<=2.3&&m.ball.z>=1.5)return;m.step(E.DT);}throw Error('descending service window missing');};
 check('first opponent is Shushu for all 84 settings',()=>{for(let p=0;p<7;p++)for(let l=0;l<3;l++)for(let c=0;c<4;c++)assert.equal(new E.Match({player:p,level:l,court:c}).people[1].id,6);});
 check('Donghyun-pa original sprite arrays unchanged',()=>{
  assert.equal(crypto.createHash('sha256').update(JSON.stringify(Shu)).digest('hex'),'e5bdb108167349f21617f49b6e78b525572d0e19780fbb8a683ec4e31ac858bb');
@@ -15,11 +16,11 @@ check('toss has four distinct arm and racket preparations',()=>{
  assert.equal(frames.size,4);
 });
 check('serve pose survives the first physics tick and movement',()=>{
- const m=new E.Match();m.toss();step(m,33);m.serve('drive');m.step(E.DT,{x:1});
+ const m=new E.Match();m.toss();descend(m);m.serve('drive');m.step(E.DT,{x:1});
  assert.equal(m.people[0].anim.name,'serve');assert.equal(m.people[0].pose,'serve');assert.equal(m.ball.by,0);
 });
 check('serve contact and follow-through have four distinct frames',()=>{
- const m=new E.Match();m.toss();step(m,33);m.serve('drive');const frames=new Set();
+ const m=new E.Match();m.toss();descend(m);m.serve('drive');const frames=new Set();
  for(let n=0;n<52;n++){frames.add(JSON.stringify(pose(m.people[0]).racket));m.step(E.DT);}
  assert.equal(frames.size,4);step(m,4);assert.equal(m.people[0].anim,null);assert.equal(m.people[0].pose,'idle');
 });
@@ -42,6 +43,6 @@ check('pause freezes the animation clock and gait',()=>{
  const m=new E.Match();m.toss();step(m,20);m.paused=true;const prior=JSON.stringify(m);step(m,100);assert.equal(JSON.stringify(m),prior);
 });
 check('empty toss returns to ready without a stuck animation',()=>{
- const m=new E.Match();m.toss();step(m,110);assert.equal(m.phase,'ready');assert.equal(m.people[0].anim,null);assert.equal(m.faults,0);
+ const m=new E.Match();m.toss();step(m,160);assert.equal(m.phase,'ready');assert.equal(m.people[0].anim,null);assert.equal(m.faults,0);
 });
 console.log(`${count} animation/opponent checks passed`);

@@ -5,7 +5,7 @@ for(let player=0;player<7;player++)for(let level=0;level<3;level++)for(let court
  for(let t=0;t<120000&&pts<12&&m.phase!=='match';t++){
   let input={x:0,y:0};const p=m.people[0],b=m.ball;
   if(m.phase==='ready'&&m.server===0)m.toss();
-  else if(m.phase==='toss'&&m.server===0&&b.vz<1.5&&b.z>1.6)m.serve('drive');
+  else if(m.phase==='toss'&&m.server===0&&b.vz<0&&b.z<=2.3&&b.z>1.6)m.serve('drive');
   else if(m.phase==='rally'){
    if(b.by===1){
     const q=m.predict(),x=b.bounces?b.x:q.x,y=b.bounces?b.y:q.y+p.side*.8;

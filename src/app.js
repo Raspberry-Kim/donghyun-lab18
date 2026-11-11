@@ -3,6 +3,7 @@
 const $=s=>document.querySelector(s),E=Te,R=new TeRender.Renderer($('#court')),keys=new Set();
 let match=new E.Match(),active=false,tab='play',manual=false,pending=null,sound=true,ctx=null,last=0,acc=0,notice='',noticeTime=0;
 let oldPad=[],padAxes={x:0,y:0},fps=60,frames=0,fpsLast=0,musicNext=0,musicStep=0,hudKey='',fullRequest=Promise.resolve();
+let tossGain=null;
 const captions=['WIMBLEDON / GRASS','AUSTRALIA / HARD','US / HARD','FRANCE / CLAY'];
 const encode=n=>'도'+'오'.repeat(n-1)+'옹';
 const makeCode=(p=0,l=0,c=0)=>`나는 동현이냐?\n   ㅋㅋ 선수 ${p+1} · ${E.PLAYERS[p].name}\n  뿡뿡 ${encode(p+1)}~뿡뿡뿡\n   ㅋㅋ 난이도 ${l+1} · ${E.LEVELS[l].name}\n  뿡뿡 ${encode(l+1)}~뿡뿡뿡\n   ㅋㅋ 경기장 ${c+1} · ${E.COURTS[c].name}\n  뿡뿡 ${encode(c+1)}~뿡뿡뿡\n동현이구나`;
@@ -30,7 +31,8 @@ function tone(freq=.0,dur=.08,type='triangle',vol=.035,delay=0){
 }
 function sounds(){
  for(const ev of match.events.splice(0)){
-  if(ev.type==='hit')tone(ev.text==='smash'?320:460,.055,'square',.025);
+  if(ev.type==='toss')tossSound();
+  else if(ev.type==='hit')tone(ev.text==='smash'?320:460,.055,'square',.025);
   else if(ev.type==='bounce')tone(190,.035,'triangle',.03);
   else if(ev.type==='point'||ev.type==='game'){tone(523,.10);tone(659,.13,'triangle',.035,.12);}
   else if(ev.type==='skill'){[440,660,880,1047].forEach((f,i)=>tone(f,.10,'square',.02,i*.07));notice=ev.text;noticeTime=1.4;}
@@ -43,7 +45,18 @@ function sounds(){
   const f=melody[musicStep++%melody.length];if(f)tone(f,.12,'triangle',.008);musicNext=ctx.currentTime+.34;
  }
 }
-function toggleSound(){audio();sound=!sound;$('#sound').textContent=sound?'소리 켬':'소리 끔';$('#sound').setAttribute('aria-pressed',String(sound));}
+function tossSound(){
+ if(!ctx||!sound)return;
+ const t=ctx.currentTime,g=ctx.createGain();tossGain=g;g.connect(ctx.destination);
+ g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.065,t+.045);
+ g.gain.setValueAtTime(.065,t+.40);g.gain.exponentialRampToValueAtTime(.0001,t+.64);
+ for(const [type,f] of [['triangle',110],['sine',55]]){
+  const o=ctx.createOscillator();o.type=type;o.frequency.setValueAtTime(f,t);
+  o.frequency.exponentialRampToValueAtTime(f*3.6,t+.60);o.connect(g);o.start(t);o.stop(t+.66);
+ }
+ setTimeout(()=>{g.disconnect();if(tossGain===g)tossGain=null;},800);
+}
+function toggleSound(){audio();sound=!sound;if(!sound&&tossGain){tossGain.gain.cancelScheduledValues(ctx.currentTime);tossGain.gain.setValueAtTime(0,ctx.currentTime);}$('#sound').textContent=sound?'소리 켬':'소리 끔';$('#sound').setAttribute('aria-pressed',String(sound));}
 $('#sound').onclick=toggleSound;
 $('#theme').onclick=()=>{const on=document.documentElement.dataset.theme!=='dark';document.documentElement.dataset.theme=on?'dark':'light';$('#theme').textContent=on?'밝게':'어둡게';$('#theme').setAttribute('aria-pressed',String(on));};
 function begin(config){
