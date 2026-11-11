@@ -1,6 +1,8 @@
-# 동현테
+# 동현테 v0.01
 
-동현랭 코드로 선수·난이도·경기장을 정하는 1인용 단식 테니스다. 현재는 독립 개발 미리보기이며 정식 버전·태그·DOI는 발행하지 않았다.
+동현랭 코드로 선수·난이도·경기장을 정하는 1인용 단식 테니스다. Game Boy Tennis의 조작을 참고한 독립 구현이며, 카메라는 움직이지 않는다.
+
+[바로 하기](https://raspberry-kim.github.io/donghyun-lab18/) · [GitHub](https://github.com/Raspberry-Kim/donghyun-lab18)
 
 ## 시작과 조작
 
@@ -56,4 +58,8 @@ node build.cjs
 
 `src/engine.js`는 화면과 독립적인 120 Hz 엔진이다. `render.js`는 도트·코트, `app.js`는 동현랭·입력·메뉴·소리를 담당한다. `build.cjs`는 원본 실행기와 글꼴을 포함한 단일 HTML을 `dist`에 만든다.
 
-배포 대상은 `dist`뿐이다. 롬·에뮬레이터 상태·원작 캡처·비공개 분석 자료는 배포에 포함하지 않는다.
+웹 배포 대상은 `dist`뿐이다. 롬·에뮬레이터 상태·원작 캡처·비공개 분석 자료는 저장소·릴리스·Zenodo 보관본에 포함하지 않는다.
+
+## 시리즈 연결
+
+[동현랭](https://raspberry-kim.github.io/donghyun-lang/)과 열여덟 실험실을 상단 메뉴로 오간다. [동현테](https://raspberry-kim.github.io/donghyun-lab18/)는 고정 시점의 1인용 단식 테니스다. 데스크톱 메뉴는 동현랭이 두 줄 높이, 나머지는 9열×2줄이다. 모바일은 두 열이며 홀수 개일 때 동현랭만 두 칸 너비를 쓴다.

@@ -50,15 +50,16 @@ function poseFrame(p,override){
   v.left=[-4,-12,-4+sway,-9-sway];v.right=[4,-12,4,-10+sway];v.racket=[10,-17+sway,'tilt'];v.face=.65+.2*Math.abs(sway)/2;}
  if(kind==='toss'){
   const n=Math.min(3,Math.floor(t*10));v.frame=n;
-  v.left=[[-4,-11,-4,-9],[-5,-17,-3,-22],[-5,-18,-2,-24],[-5,-16,-3,-21]][n];
+  v.left=[[-8,-13,-13,-16],[-9,-18,-13,-23],[-8,-19,-12,-25],[-8,-17,-12,-22]][n];
   v.right=[[5,-12,5,-10],[5,-12,7,-10],[5,-15,6,-18],[5,-15,6,-18]][n];
   v.racket=[[10,-17,'tilt'],[15,-12,'wide'],[6,-26,'upright'],[10,-25,'tilt']][n];v.face=[.85,.5,.22,.35][n];v.lean=n>1?-1:0;v.bob=n===0?1:0;
  }else if(kind==='serve'||kind==='smash'){
   const st=a?.soft?t*.78:t,n=st<.07?0:st<.15?1:st<.28?2:3;v.frame=n;v.lean=[1,2,2,0][n];v.bob=[-1,0,1,0][n];v.face=a?.soft?[.95,.85,.65,.85][n]:[.95,.28,.18,.85][n];
   const contactHeight=(a?.height||2.1)*Z_SCALE,hitY=-Math.round(Math.max(18,Math.min(31,contactHeight)));
   if(kind==='serve'&&n<3)v.lift=-Math.round(Math.max(0,contactHeight-31)*[1,.65,.2][n]);
-  v.right=[[3,-19,0,hitY+8],[5,-17,3,-17],[1,-11,-3,-10],[4,-12,4,-10]][n];
-  v.racket=[[0,hitY,'upright'],[9,-23,'tilt'],[-11,-10,'wide'],[10,-17,'tilt']][n];
+  const hitX=kind==='serve'?-Math.round(.65*20*(1+(p.y||0)*.006)):0;
+  v.right=[[-3,-19,hitX,hitY+8],[5,-17,3,-17],[1,-11,-3,-10],[4,-12,4,-10]][n];
+  v.racket=[[hitX,hitY,'upright'],[9,-23,'tilt'],[-11,-10,'wide'],[10,-17,'tilt']][n];
   v.left=[[-4,-14,-5,-16],[-5,-12,-6,-10],[-4,-11,-3,-8],[-4,-12,-4,-9]][n];
   if(n<3)v.feet=[-3,0,-2,-3,3,-1,1,-4];
  }else if(['lob','lobWindup','softVolley'].includes(kind)){
@@ -83,6 +84,10 @@ function poseFrame(p,override){
   if(!walk&&n<3)v.feet=[-3,0,-2,-3,3,0,2,-4];
  }else if(kind==='dance'){
   v.frame=f;v.lean=f<3?-2:2;v.left=[-5,-16,-7,-20];v.right=[5,-17,7,-21];v.racket=[9,-24,'tilt'];v.feet=gait[f];
+ }
+ if((kind==='toss'||kind==='serve')&&p.side===-1){
+  for(const arm of [v.left,v.right]){arm[0]*=-1;arm[2]*=-1;}
+  v.racket[0]*=-1;v.lean*=-1;
  }
  return v;
 }
