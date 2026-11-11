@@ -28,14 +28,19 @@ check('above-reach input waits for reachable contact instead of faulting',()=>{
  for(let i=0;i<60&&m.phase==='toss';i++)m.step(E.DT);
  assert.equal(m.phase,'rally');assert.ok(m.ball.serviceTarget.height<=3.15);
 });
-check('toss clears the head and contact preserves its lateral origin after end changes',()=>{
+check('left hand tosses over right racket, clear of head, at both ends without a contact jump',()=>{
  for(const end of [1,-1])for(const server of [0,1]){
   const m=new E.Match();if(end===-1)m.swapEnds();m.server=server;m.setupPoint();m.toss();
   const v=R.viewMatch(m),p=v.people[server],b=R.ballVisual(v.ball),base=R.project(p.x,p.y);
   assert.ok(Math.abs(b.x-base.x)-b.radius>5,'ball overlaps large head at release');
+  assert.ok((b.x-base.x)*p.side>0,'toss is not above the right-hand hitting side');
+  const release=R.poseFrame(p);
+  assert.ok(Math.abs(release.left[2]-(b.x-base.x))<1,'left wrist must release the ball');
+  assert.ok(release.right[2]*p.side>0,'right hand must retain the racket');
   const startX=m.ball.x,startY=m.ball.y;m.ball.z=2.3;m.ball.vz=-3;m.serve('drive');
   assert.equal(m.ball.x,startX);assert.equal(m.ball.y,startY);
   const hit=R.viewMatch(m),pose=R.poseFrame(hit.people[server]);
+  assert.ok(pose.racket[0]*p.side>0,'serve must contact above the right-hand racket');
   assert.ok(Math.abs(pose.racket[0]-(R.ballVisual(hit.ball).x-R.project(hit.people[server].x,hit.people[server].y).x))<2);
  }
 });
