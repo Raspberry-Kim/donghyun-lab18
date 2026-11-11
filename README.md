@@ -1,4 +1,4 @@
-# 동현테 v0.02
+# 동현테 v0.03
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24133576.svg)](https://doi.org/10.5281/zenodo.24133576)
 
@@ -6,13 +6,11 @@
 
 [바로 하기](https://raspberry-kim.github.io/donghyun-lab18/) · [GitHub](https://github.com/Raspberry-Kim/donghyun-lab18)
 
-v0.02는 [v0.02 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.02)와 [Zenodo 보관본](https://zenodo.org/records/24134430)(DOI `10.5281/zenodo.24134430`)에서 받을 수 있다. DOI 표기는 발행 후 별도 커밋으로 추가했으며 발행된 태그와 보관 파일은 변경하지 않았다. 첫 공개판은 [v0.01 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.01)와 [Zenodo 보관본](https://zenodo.org/records/24133577)(DOI `10.5281/zenodo.24133577`)에 남아 있다. 머리글 배지와 인용 파일은 모든 판을 가리키는 개념 DOI `10.5281/zenodo.24133576`을 쓴다.
+v0.03은 [v0.03 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.03)에서 받을 수 있다. 이전 판은 [v0.02 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.02)·[Zenodo 보관본](https://zenodo.org/records/24134430)(DOI `10.5281/zenodo.24134430`)과 [v0.01 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.01)·[Zenodo 보관본](https://zenodo.org/records/24133577)(DOI `10.5281/zenodo.24133577`)에 남아 있다. 머리글 배지와 인용 파일은 모든 판을 가리키는 개념 DOI `10.5281/zenodo.24133576`을 쓴다.
 
-v0.02에서는 라켓 머리를 원작처럼 약간 통통한 타원으로 바꾸었다. 좌우로 달릴 때는 라켓 머리가 달리는 방향의 반대쪽 어깨 위, 머리 높이에 들린다. 위아래로만 움직일 때와 서 있을 때의 자세, v0.01 후속 수정의 왼손 토스·오른손 서브는 그대로다.
+v0.03에서는 특수기술을 쓸 때 코트 위에 선수·기술명·준비/발동 표지가 잠깐 뜨고, 선수 곁에 기술마다 다른 작은 상징과 입자가 퍼진다. 예제는 24개로 늘었고, 모든 이름을 번호·선수·난이도·코트 순서로 맞추었다. 예제와 직접 고친 코드 모두 난이도와 코트의 차이를 함께 설명한다. 공·선수·코트 그림과 경기 물리는 v0.02와 같다.
 
 ## 시작과 조작
-
-공개 웹판에는 v0.02 발행 뒤 추가한 예제·기술 연출이 포함되어 있다. 기존 v0.02 태그와 Zenodo 보관 ZIP에는 소급 반영하지 않았다.
 
 데스크톱을 권장한다. 경기에서는 키보드와 표준 매핑 게임패드를 사용하고, 마우스·터치 이동이나 타격은 제공하지 않는다. 휴대폰에서 경기하려면 별도의 키보드를 연결하자.
 
