@@ -36,16 +36,25 @@ function explainConfig(cfg){
  $('#example-court').textContent=`코트 ${cfg.court+1} · ${c.name} / ${c.surface}: ${c.desc}. 같은 입사 조건에서 수직 속도 반발 ${c.bounce.toFixed(2)}, 수평 속도 유지 ${Math.round(c.retain*100)}%. ${['네 코트 중 가장 낮게 튀고 수평 속도를 가장 많이 유지한다.','US보다 높게 튀고 수평 속도는 더 줄어든다.','호주보다 낮게 튀고 수평 속도를 더 많이 유지한다.','네 코트 중 가장 높게 튀고 수평 속도가 가장 많이 줄어든다.'][cfg.court]}`;
  $('.example-comparison').hidden=false;
 }
-function lineNumbers(){const code=$('#code');$('#lines').textContent=Array.from({length:code.value.split('\n').length},(_,i)=>i+1).join('\n');$('#lines').scrollTop=code.scrollTop;}
+const esc=t=>t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const DH_TOKEN=/(ㅋㅋ.*$)|(나는 동현이냐\?|동현이구나)|(오겡끼데스까)|(신중동역|신중동|뭉치)|(뿡뿡뿡|뿡뿡|포동이)|(꽥꽥)|(동+현아)|(동+현)|(도오*옹)|(ㅠ+)|(뚱띠|또치)/g;
+const DH_CLS=[null,'t-cmt','t-frame','t-halt','t-ctl','t-out','t-in','t-assign','t-var','t-num','t-minus','t-op'];
+function dhLine(line){let html='',last=0;line.replace(DH_TOKEN,(m,...gr)=>{const idx=gr[gr.length-2];html+=esc(line.slice(last,idx));const k=gr.slice(0,11).findIndex(x=>x!==undefined)+1;html+=`<span class="${DH_CLS[k]}">${esc(m)}</span>`;last=idx+m.length;return m;});return html+esc(line.slice(last));}
+const codeEl=$('#code'),hlArea=document.createElement('div'),hl=document.createElement('div');
+hlArea.className='code-area';hl.id='hl';hl.setAttribute('aria-hidden','true');codeEl.parentNode.insertBefore(hlArea,codeEl);hlArea.append(hl,codeEl);
+function hlSync(){hl.scrollTop=codeEl.scrollTop;hl.scrollLeft=codeEl.scrollLeft;}
+function highlight(){const cs=getComputedStyle(codeEl);for(const k of ['paddingTop','paddingRight','paddingBottom','paddingLeft','fontFamily','fontSize','lineHeight','tabSize','letterSpacing'])hl.style[k]=cs[k];hl.innerHTML=codeEl.value.split('\n').map(l=>`<span class="ln">${dhLine(l)||' '}</span>`).join('')+'<span class="ln"> </span>';hlSync();}
+addEventListener('resize',highlight);
+function lineNumbers(){const code=$('#code');$('#lines').textContent=Array.from({length:code.value.split('\n').length},(_,i)=>i+1).join('\n');$('#lines').scrollTop=code.scrollTop;highlight();}
 function parsed(){const result=Donghyun.run($('#code').value,{maxSteps:100000});return {config:E.parse(result.output),output:result.output.trim().split(/\s+/).join('  ')};}
 function validate(){
  lineNumbers();
- try{const r=parsed();$('#error').hidden=true;$('#output').textContent=r.output;$('#config-description').textContent=`${E.PLAYERS[r.config.player].name} · ${E.LEVELS[r.config.level].name} · ${E.COURTS[r.config.court].name}`;explainConfig(r.config);if(!active){match=new E.Match(r.config);draw();}return r.config;}
+ try{const r=parsed();$('#error').hidden=true;$('#output').textContent=r.output;$('#config-description').textContent=`${E.PLAYERS[r.config.player].name} · ${E.LEVELS[r.config.level].name} · ${E.COURTS[r.config.court].name}`;$('#stamp-player').firstChild.nodeValue=E.PLAYERS[r.config.player].name+' ';explainConfig(r.config);if(!active){match=new E.Match(r.config);draw();}return r.config;}
  catch(e){$('#error').hidden=false;$('#error').textContent=e.message;$('#output').textContent='실행 오류';$('.example-comparison').hidden=true;return null;}
 }
 function example(i){const e=examples[i];$('#code').value=makeCode(e.p,e.l,e.c);$('#example-note').textContent=e.note;validate();}
 $('#example').onchange=()=>example(Number($('#example').value));
-$('#code').oninput=validate;$('#code').onscroll=lineNumbers;
+$('#code').oninput=validate;$('#code').onscroll=()=>{hlSync();$('#lines').scrollTop=$('#code').scrollTop;};
 $('#code').onfocus=()=>{if(active&&!match.paused&&match.phase!=='match'){match.paused=true;keys.clear();draw();}};
 function audio(){
  if(!ctx)try{ctx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){return;}
@@ -87,9 +96,9 @@ function tossSound(){
  }
  setTimeout(()=>{g.disconnect();if(tossGain===g)tossGain=null;},1250);
 }
-function toggleSound(){audio();sound=!sound;if(!sound&&tossGain){tossGain.gain.cancelScheduledValues(ctx.currentTime);tossGain.gain.setValueAtTime(0,ctx.currentTime);}$('#sound').textContent=sound?'소리 켬':'소리 끔';$('#sound').setAttribute('aria-pressed',String(sound));}
+function toggleSound(){audio();sound=!sound;if(!sound&&tossGain){tossGain.gain.cancelScheduledValues(ctx.currentTime);tossGain.gain.setValueAtTime(0,ctx.currentTime);}$('#sound').classList.toggle('muted',!sound);$('#sound').setAttribute('aria-pressed',String(sound));}
 $('#sound').onclick=toggleSound;
-$('#theme').onclick=()=>{const on=document.documentElement.dataset.theme!=='dark';document.documentElement.dataset.theme=on?'dark':'light';$('#theme').textContent=on?'밝게':'어둡게';$('#theme').setAttribute('aria-pressed',String(on));};
+$('#theme').onclick=()=>{const on=document.documentElement.dataset.theme!=='dark';document.documentElement.dataset.theme=on?'dark':'light';$('#theme').setAttribute('aria-pressed',String(on));};
 function begin(config){
  match=new E.Match(config,Math.floor(Math.random()*2147483646)+1);active=true;manual=false;keys.clear();audio();acc=0;notice='';
  $('#stage').focus({preventScroll:true});draw();
@@ -109,7 +118,7 @@ $('#resume').onclick=()=>{match.paused=false;$('#stage').focus({preventScroll:tr
 function setTab(name){
  if(active&&!match.paused&&name!=='play'){match.paused=true;keys.clear();}
  tab=name;document.querySelectorAll('.tab-panel').forEach(e=>e.hidden=e.id!=='tab-'+name);
- document.querySelectorAll('[data-tab]').forEach(e=>e.setAttribute('aria-selected',String(e.dataset.tab===name)));draw();
+ document.querySelectorAll('[data-tab]').forEach(e=>{const on=e.dataset.tab===name;e.setAttribute('aria-selected',String(on));e.classList.toggle('active',on);on?e.setAttribute('aria-current','page'):e.removeAttribute('aria-current');});draw();
 }
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
 function full(on){
@@ -210,5 +219,6 @@ document.querySelectorAll('[data-player]').forEach(b=>b.onclick=()=>{$('#example
 window.render_game_to_text=()=>JSON.stringify({phase:active?match.phase:'setup',paused:match.paused,coordinate:'World XYZ; display x/y = world x/y × viewSide. Human always bottom; fixed camera.',viewSide:match.people[0].side,config:match.config,people:match.people,ball:match.ball,score:match.score(),games:match.games,sets:match.sets,server:match.server,energy:match.energy,armed:match.armed,effects:match.effects,fx:match.fx,skillCue:match.skillCue,message:match.message,tab,winner:match.winner});
 window.advanceTime=ms=>{manual=true;for(let i=0;i<Math.round(ms/1000/E.DT);i++)tick(E.DT);draw();};
 window.TeApp={get match(){return match;},begin,setup,makeCode,renderer:R,resumeClock(){manual=false;acc=0;}};
+$('.brand').onclick=e=>{e.preventDefault();setTab('play');scrollTo({top:0,behavior:'smooth'});};
 example(0);requestAnimationFrame(loop);
 })();

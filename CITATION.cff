@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it using the metadata below."
 title: "Donghyunte (동현테): a fixed-view single-player tennis laboratory configured through Donghyun-lang"
 type: software
-version: "0.03"
+version: "0.04"
 doi: "10.5281/zenodo.24133576"
 date-released: "2026-11-12"
 authors:
