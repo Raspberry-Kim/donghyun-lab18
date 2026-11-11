@@ -1,4 +1,4 @@
-# 동현테 v0.03
+# 동현테 v0.04
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24133576.svg)](https://doi.org/10.5281/zenodo.24133576)
 
@@ -6,7 +6,9 @@
 
 [바로 하기](https://raspberry-kim.github.io/donghyun-lab18/) · [GitHub](https://github.com/Raspberry-Kim/donghyun-lab18)
 
-v0.03은 [v0.03 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.03)와 [Zenodo 보관본](https://zenodo.org/records/24147292)(DOI `10.5281/zenodo.24147292`)에서 받을 수 있다. 이전 판은 [v0.02 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.02)·[Zenodo 보관본](https://zenodo.org/records/24134430)(DOI `10.5281/zenodo.24134430`)과 [v0.01 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.01)·[Zenodo 보관본](https://zenodo.org/records/24133577)(DOI `10.5281/zenodo.24133577`)에 남아 있다. 머리글 배지와 인용 파일은 모든 판을 가리키는 개념 DOI `10.5281/zenodo.24133576`을 쓴다.
+v0.04는 [v0.04 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.04)에서 받을 수 있다. 이전 판은 [v0.03 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.03)·[Zenodo 보관본](https://zenodo.org/records/24147292)(DOI `10.5281/zenodo.24147292`), [v0.02 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.02)·[Zenodo 보관본](https://zenodo.org/records/24134430)(DOI `10.5281/zenodo.24134430`), [v0.01 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.01)·[Zenodo 보관본](https://zenodo.org/records/24133577)(DOI `10.5281/zenodo.24133577`)에 남아 있다. 머리글 배지와 인용 파일은 모든 판을 가리키는 개념 DOI `10.5281/zenodo.24133576`을 쓴다.
+
+v0.04에서는 페이지의 색과 큰 틀을 동현큐·동현심 등 시리즈의 다른 실험실과 맞추었다. 종이색 바탕과 노란 강조, 포동이 머리글, 소개와 입력 표식, 노란 밑줄 탭, “처음이라면?” 상자, A 코트 · B 동현랭 출전 코드의 두 칸 배치, 구문 강조 편집기가 같은 모양이다. 코트 그림과 경기 화면 안의 점수판·기술 띠, 선수·공·물리 규칙은 v0.03과 같다.
 
 v0.03에서는 특수기술을 쓸 때 코트 위에 선수·기술명·준비/발동 표지가 잠깐 뜨고, 선수 곁에 기술마다 다른 작은 상징과 입자가 퍼진다. 예제는 24개로 늘었고, 모든 이름을 번호·선수·난이도·코트 순서로 맞추었다. 예제와 직접 고친 코드 모두 난이도와 코트의 차이를 함께 설명한다. 공·선수·코트 그림과 경기 물리는 v0.02와 같다.
 
