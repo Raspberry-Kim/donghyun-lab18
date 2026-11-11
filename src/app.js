@@ -32,7 +32,10 @@ function tone(freq=.0,dur=.08,type='triangle',vol=.035,delay=0){
 function sounds(){
  for(const ev of match.events.splice(0)){
   if(ev.type==='toss')tossSound();
-  else if(ev.type==='hit')tone(ev.text==='smash'?320:460,.055,'square',.025);
+  else if(ev.type==='hit'){
+   if(tossGain){tossGain.gain.cancelScheduledValues(ctx.currentTime);tossGain.gain.setTargetAtTime(.0001,ctx.currentTime,.015);}
+   tone(ev.text==='smash'?320:460,.055,'square',.025);
+  }
   else if(ev.type==='bounce')tone(190,.035,'triangle',.03);
   else if(ev.type==='point'||ev.type==='game'){tone(523,.10);tone(659,.13,'triangle',.035,.12);}
   else if(ev.type==='skill'){[440,660,880,1047].forEach((f,i)=>tone(f,.10,'square',.02,i*.07));notice=ev.text;noticeTime=1.4;}
@@ -49,12 +52,12 @@ function tossSound(){
  if(!ctx||!sound)return;
  const t=ctx.currentTime,g=ctx.createGain();tossGain=g;g.connect(ctx.destination);
  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.065,t+.045);
- g.gain.setValueAtTime(.065,t+.40);g.gain.exponentialRampToValueAtTime(.0001,t+.64);
+ g.gain.setValueAtTime(.065,t+.76);g.gain.exponentialRampToValueAtTime(.0001,t+1.05);
  for(const [type,f] of [['triangle',110],['sine',55]]){
   const o=ctx.createOscillator();o.type=type;o.frequency.setValueAtTime(f,t);
-  o.frequency.exponentialRampToValueAtTime(f*3.6,t+.60);o.connect(g);o.start(t);o.stop(t+.66);
+  o.frequency.exponentialRampToValueAtTime(f*3.6,t+1.0);o.connect(g);o.start(t);o.stop(t+1.08);
  }
- setTimeout(()=>{g.disconnect();if(tossGain===g)tossGain=null;},800);
+ setTimeout(()=>{g.disconnect();if(tossGain===g)tossGain=null;},1250);
 }
 function toggleSound(){audio();sound=!sound;if(!sound&&tossGain){tossGain.gain.cancelScheduledValues(ctx.currentTime);tossGain.gain.setValueAtTime(0,ctx.currentTime);}$('#sound').textContent=sound?'소리 켬':'소리 끔';$('#sound').setAttribute('aria-pressed',String(sound));}
 $('#sound').onclick=toggleSound;

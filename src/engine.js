@@ -38,7 +38,7 @@ class Match{
  event(type,text){this.events.push({type,text});if(this.events.length>30)this.events.shift();}
  score(){if(this.tb)return this.points.map(String);if(this.points[0]>=3&&this.points[1]>=3)return this.points[0]===this.points[1]?['40','40']:this.points[0]>this.points[1]?['AD','40']:['40','AD'];return this.points.map(p=>['0','15','30','40'][p]||'40');}
  setupPoint(){
-  this.phase='ready';this.timer=0;this.ball=null;this.armed=null;this.effects={};this.fx=null;this.rally=0;
+  this.phase='ready';this.timer=0;this.ball=null;this.pendingServe=null;this.armed=null;this.effects={};this.fx=null;this.rally=0;
   const s=this.people[this.server],r=this.people[1-this.server],parity=(this.points[0]+this.points[1])%2;
   s.x=(parity? -1:1)*s.side*1.5;s.y=s.side*12.3;r.x=-s.x;r.y=r.side*10.8;
   for(const p of this.people){p.pose='idle';p.swing=0;p.cool=0;p.anim=null;p.walk=false;p.gait=0;p.moveX=0;p.moveY=0;}
@@ -77,14 +77,22 @@ class Match{
  toss(){
   if(this.phase!=='ready')return false;
   const p=this.people[this.server];this.ball={x:p.x,y:p.y,z:1.1,vx:0,vy:0,vz:7.8,by:this.server,bounces:0,serve:true,crossed:false};
-  this.phase='toss';this.timer=0;this.animate(this.server,'toss',1.3);p.walk=false;p.pose='toss';this.message=this.server===0?'토스 · 내려오는 공이 머리 위일 때 X 또는 Z':'동현AI™ 토스';this.event('toss','토스');return true;
+  this.phase='toss';this.timer=0;this.pendingServe=null;this.animate(this.server,'toss',2.1);p.walk=false;p.pose='toss';this.message=this.server===0?'토스 · X/Z로 타격, 높은 공은 준비 후 자동 타격':'동현AI™ 토스';this.event('toss','토스');return true;
  }
  serve(kind,aim={}){
   const b=this.ball,p=this.people[this.server];if(this.phase!=='toss'||!b)return false;
-  if(b.z<1.5||b.z>2.45){this.fault('타점이 맞지 않았다');return false;}
-  const side=-Math.sign(p.x),tx=side*2+(aim.x||0)*2.6,ty=-p.side*(4.1-(aim.y||0)*2.0);
-  this.launch(this.server,tx,ty,kind==='lob'?1.22:1.0,kind,true);
-  p.pose='serve';p.swing=0;this.animate(this.server,'serve',.44,1,b.z);this.message='서브';return true;
+  if(b.z>3.15||(b.z<1.45&&b.vz>=0)){
+   this.pendingServe={kind,aim:{x:aim.x||0,y:aim.y||0}};this.message='타격 준비 · 닿는 높이에 오면 친다';return true;
+  }
+  if(b.z<1.45){this.pendingServe=null;this.message='헛스윙 · 공을 받고 다시 X로 토스';return false;}
+  // ROM timing sweep: higher contact went wider/deeper; lower contact shorter/central.
+  // These are accessible game-tuned coordinates, not claimed ROM physics constants.
+  const q=clamp((b.z-1.45)/1.7,0,1),side=-Math.sign(p.x);
+  const tx=side*(1.05+1.9*q)+(aim.x||0)*2.6,ty=-p.side*(2.3+3.3*q-(aim.y||0)*2.0);
+  const target={x:tx,y:ty,height:b.z,quality:q};this.pendingServe=null;
+  this.launch(this.server,tx,ty,kind==='lob'?1.26:1.04+.08*(1-q),kind,true);
+  this.ball.serviceTarget=target;
+  p.pose='serve';p.swing=0;this.animate(this.server,'serve',.44,1,b.z);this.message=q>.65?'높은 타점 · 바깥쪽 깊게':q<.3?'낮은 타점 · 중앙 쪽 짧게':'중간 타점 · 서비스 박스 안쪽';return true;
  }
  launch(i,tx,ty,t,kind,serve=false){
   const p=this.people[i],old=this.ball;let z=serve?old.z:clamp(old.z,.25,3.4);
@@ -200,8 +208,10 @@ class Match{
   }else if(!(this.phase==='toss'&&this.server===0))this.move(0,input.x||0,input.y||0,dt);
   this.ai(dt);
   if(this.phase==='toss'){
-   const b=this.ball;b.z+=b.vz*dt-.5*G*dt*dt;b.vz-=G*dt;
-   if(b.z<=1.1&&b.vz<0){this.people[this.server].anim=null;this.people[this.server].pose='idle';this.ball=null;this.phase='ready';this.timer=0;this.message='다시 X로 토스';}
+   // Slow only the toss, not rally flight: 1 s up / 1 s down.
+   const b=this.ball,tossDt=dt*.6;b.z+=b.vz*tossDt-.5*G*tossDt*tossDt;b.vz-=G*tossDt;
+   if(this.pendingServe&&b.z>=1.45&&b.z<=3.15){const s=this.pendingServe;this.serve(s.kind,s.aim);return;}
+   if(b.z<=1.1&&b.vz<0){this.pendingServe=null;this.people[this.server].anim=null;this.people[this.server].pose='idle';this.ball=null;this.phase='ready';this.timer=0;this.message='다시 X로 토스';}
    return;
   }
   if(this.phase!=='rally'||!this.ball)return;

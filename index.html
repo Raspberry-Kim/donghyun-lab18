@@ -32,7 +32,7 @@
      <div class="skill-strip"><div class="charge"><span>기술 에너지</span><div id="energy-pips" aria-label="에너지 2 / 6"></div></div><div class="skill-label"><kbd>S</kbd><span id="skill1">샤아아즈나블<small>3칸 · 다음 리턴</small></span></div><div class="skill-label"><kbd>A</kbd><span id="skill2">샤아자쿠<small>2칸 · 혜성 이동</small></span></div></div>
     </div>
     <div class="under-court"><span><kbd>↑↓←→</kbd> 이동·방향 <kbd>X</kbd> 타격 <kbd>Z</kbd> 로브 <kbd>Enter</kbd> 메뉴</span><button id="fullscreen">전체 화면 <kbd>F</kbd></button></div>
-    <p class="small-note" id="serve-note">서브: X로 높이 띄운 뒤, 공이 내려와 머리 위에 닿을 때 X 또는 Z. 빈 토스는 다시 할 수 있다.</p>
+    <p class="small-note" id="serve-note">서브: X로 토스, 다시 X/Z로 타격. 너무 높은 공은 타격 준비로 받아 둔다. 높은 타점은 깊게, 낮은 타점은 짧게.</p>
    </section>
    <aside class="editor-column">
     <div class="editor-heading"><span class="eyebrow">MATCH PROGRAM</span><h2>오늘의 출전 코드</h2><p>선수, 난이도, 경기장.<br>정수 세 개로 경기를 열자.</p></div>
@@ -54,7 +54,7 @@
   <div class="rules-grid">
    <article><h2>키보드</h2><table><tbody><tr><th>방향키</th><td>이동. 타격 순간 좌우로 방향, ↑ 깊게 · ↓ 짧게.</td></tr><tr><th>X</th><td>토스 / 강한 서브 / 스트로크. 공이 높으면 스매시.</td></tr><tr><th>Z</th><td>약한 서브 / 로브. 바운드 전이면 약한 발리.</td></tr><tr><th>S / A</th><td>첫째 / 둘째 특수기술.</td></tr><tr><th>Enter / Esc</th><td>일시정지·계속. 전체 화면에서 Esc는 먼저 닫기.</td></tr><tr><th>F / M</th><td>전체 화면 / 효과음·음악 켜기·끄기.</td></tr></tbody></table><p>코드 편집 중에는 경기 키를 가로채지 않는다. Ctrl+Enter로 코드를 실행한다.</p></article>
    <article><h2>게임패드</h2><p>십자키·왼 스틱으로 이동한다. 위치 기준 오른쪽 단추(A 위치)는 X 타격, 아래 단추(B 위치)는 Z 로브다. L·R 어깨 단추로 특수기술을 쓴다. Start는 메뉴다.</p><p id="pad-status">연결된 패드 없음</p><p>브라우저 표준 매핑 패드를 대상으로 한다. 실제 패드의 호환성은 기기·브라우저에 따라 다르다.</p><h2>마우스와 모바일</h2><p>메뉴·코드 편집만 마우스로 할 수 있다. 코트를 누르거나 드래그해도 선수는 움직이거나 공을 치지 않는다. 터치 조작판은 없다. 외부 입력 장치 없는 휴대폰에서는 경기 조작이 불가능하다.</p></article>
-   <article><h2>서브와 리턴</h2><p>X로 공을 높이 띄운 뒤, 커졌다가 내려오는 공이 머리 위에 닿을 때 X 또는 Z를 다시 누른다. 공을 안 치고 받으면 폴트 없이 다시 토스한다. 서비스 박스는 대각선이다. 두 번 폴트면 상대 포인트. 네트를 스친 유효 서브는 렛이다.</p><p>그림자는 바닥 위치, 공은 높이다. 공이 라켓 근처에 왔을 때 눌러야 한다. 서브는 한 번 바운드한 뒤 받아야 한다. 일반 랠리에서는 발리와 높은 공의 스매시가 된다.</p></article>
+   <article><h2>서브와 리턴</h2><p>X로 약 1초 동안 공을 띄우고 X 또는 Z로 친다. 너무 높을 때 누르면 라켓이 닿는 높이까지 기다렸다가 친다. 높은 타점은 바깥쪽 깊게, 낮은 타점은 중앙 쪽 짧게 간다. 공을 안 치고 받으면 폴트 없이 다시 토스한다. 서비스 박스는 대각선이다. 두 번 폴트면 상대 포인트. 네트를 스친 유효 서브는 렛이다.</p><p>그림자는 바닥 위치, 공은 높이다. 공이 라켓 근처에 왔을 때 눌러야 한다. 서브는 한 번 바운드한 뒤 받아야 한다. 일반 랠리에서는 발리와 높은 공의 스매시가 된다.</p></article>
    <article><h2>점수와 코트 교대</h2><p>0 → 15 → 30 → 40. 듀스에서는 두 점 차로 게임을 딴다. 6게임 이상, 두 게임 차면 세트. 6 대 6에서는 7점 타이브레이크로 두 점 차를 낸다.</p><p>게임마다 서브를 바꾸고 홀수 게임 뒤에는 코트를 바꾼다. 타이브레이크는 첫 1점 뒤부터 두 점마다 서브 교대, 6점마다 코트 교대다. 2세트를 먼저 따면 승리한다.</p></article>
   </div>
  </section>
@@ -326,7 +326,7 @@ class Match{
  event(type,text){this.events.push({type,text});if(this.events.length>30)this.events.shift();}
  score(){if(this.tb)return this.points.map(String);if(this.points[0]>=3&&this.points[1]>=3)return this.points[0]===this.points[1]?['40','40']:this.points[0]>this.points[1]?['AD','40']:['40','AD'];return this.points.map(p=>['0','15','30','40'][p]||'40');}
  setupPoint(){
-  this.phase='ready';this.timer=0;this.ball=null;this.armed=null;this.effects={};this.fx=null;this.rally=0;
+  this.phase='ready';this.timer=0;this.ball=null;this.pendingServe=null;this.armed=null;this.effects={};this.fx=null;this.rally=0;
   const s=this.people[this.server],r=this.people[1-this.server],parity=(this.points[0]+this.points[1])%2;
   s.x=(parity? -1:1)*s.side*1.5;s.y=s.side*12.3;r.x=-s.x;r.y=r.side*10.8;
   for(const p of this.people){p.pose='idle';p.swing=0;p.cool=0;p.anim=null;p.walk=false;p.gait=0;p.moveX=0;p.moveY=0;}
@@ -365,14 +365,22 @@ class Match{
  toss(){
   if(this.phase!=='ready')return false;
   const p=this.people[this.server];this.ball={x:p.x,y:p.y,z:1.1,vx:0,vy:0,vz:7.8,by:this.server,bounces:0,serve:true,crossed:false};
-  this.phase='toss';this.timer=0;this.animate(this.server,'toss',1.3);p.walk=false;p.pose='toss';this.message=this.server===0?'토스 · 내려오는 공이 머리 위일 때 X 또는 Z':'동현AI™ 토스';this.event('toss','토스');return true;
+  this.phase='toss';this.timer=0;this.pendingServe=null;this.animate(this.server,'toss',2.1);p.walk=false;p.pose='toss';this.message=this.server===0?'토스 · X/Z로 타격, 높은 공은 준비 후 자동 타격':'동현AI™ 토스';this.event('toss','토스');return true;
  }
  serve(kind,aim={}){
   const b=this.ball,p=this.people[this.server];if(this.phase!=='toss'||!b)return false;
-  if(b.z<1.5||b.z>2.45){this.fault('타점이 맞지 않았다');return false;}
-  const side=-Math.sign(p.x),tx=side*2+(aim.x||0)*2.6,ty=-p.side*(4.1-(aim.y||0)*2.0);
-  this.launch(this.server,tx,ty,kind==='lob'?1.22:1.0,kind,true);
-  p.pose='serve';p.swing=0;this.animate(this.server,'serve',.44,1,b.z);this.message='서브';return true;
+  if(b.z>3.15||(b.z<1.45&&b.vz>=0)){
+   this.pendingServe={kind,aim:{x:aim.x||0,y:aim.y||0}};this.message='타격 준비 · 닿는 높이에 오면 친다';return true;
+  }
+  if(b.z<1.45){this.pendingServe=null;this.message='헛스윙 · 공을 받고 다시 X로 토스';return false;}
+  // ROM timing sweep: higher contact went wider/deeper; lower contact shorter/central.
+  // These are accessible game-tuned coordinates, not claimed ROM physics constants.
+  const q=clamp((b.z-1.45)/1.7,0,1),side=-Math.sign(p.x);
+  const tx=side*(1.05+1.9*q)+(aim.x||0)*2.6,ty=-p.side*(2.3+3.3*q-(aim.y||0)*2.0);
+  const target={x:tx,y:ty,height:b.z,quality:q};this.pendingServe=null;
+  this.launch(this.server,tx,ty,kind==='lob'?1.26:1.04+.08*(1-q),kind,true);
+  this.ball.serviceTarget=target;
+  p.pose='serve';p.swing=0;this.animate(this.server,'serve',.44,1,b.z);this.message=q>.65?'높은 타점 · 바깥쪽 깊게':q<.3?'낮은 타점 · 중앙 쪽 짧게':'중간 타점 · 서비스 박스 안쪽';return true;
  }
  launch(i,tx,ty,t,kind,serve=false){
   const p=this.people[i],old=this.ball;let z=serve?old.z:clamp(old.z,.25,3.4);
@@ -488,8 +496,10 @@ class Match{
   }else if(!(this.phase==='toss'&&this.server===0))this.move(0,input.x||0,input.y||0,dt);
   this.ai(dt);
   if(this.phase==='toss'){
-   const b=this.ball;b.z+=b.vz*dt-.5*G*dt*dt;b.vz-=G*dt;
-   if(b.z<=1.1&&b.vz<0){this.people[this.server].anim=null;this.people[this.server].pose='idle';this.ball=null;this.phase='ready';this.timer=0;this.message='다시 X로 토스';}
+   // Slow only the toss, not rally flight: 1 s up / 1 s down.
+   const b=this.ball,tossDt=dt*.6;b.z+=b.vz*tossDt-.5*G*tossDt*tossDt;b.vz-=G*tossDt;
+   if(this.pendingServe&&b.z>=1.45&&b.z<=3.15){const s=this.pendingServe;this.serve(s.kind,s.aim);return;}
+   if(b.z<=1.1&&b.vz<0){this.pendingServe=null;this.people[this.server].anim=null;this.people[this.server].pose='idle';this.ball=null;this.phase='ready';this.timer=0;this.message='다시 X로 토스';}
    return;
   }
   if(this.phase!=='rally'||!this.ball)return;
@@ -560,7 +570,7 @@ if(typeof module==='object'&&module.exports)module.exports=api;else root.TeShush
 (function(){
 'use strict';
 const heads=[
- ['.hhhhh.','hhhhhhh','hsssssh','skkskks','swwswws','.ssnss.','..sss..'],
+ ['.hhhhhhh.','hhhhhhhhh','hhssssshh','hsssssssh','skkssskks','swwssswws','.sssnsss.','..sssss..','...sss...'],
  ['..hhh..','.hhhhh.','hhssssh','.skssk.','.sssss.','..sns..','..sss..'],
  ['.hhhhh.','hhhhhhh','hsssssh','sskssks','sssssss','.snnns.','..sss..'],
  ['...hh..','..hhhh.','.hssss.','.skssk.','.sssss.','..sns..','..sss..'],
@@ -581,7 +591,7 @@ const gait=[
 function poseFrame(p,override){
  const a=p.anim,t=a?.time||0,kind=override||(['fall','dance','whiff'].includes(p.pose)?p.pose:a?.name)||'idle';
  const walk=p.walk&&kind!=='serve'&&kind!=='toss',f=Math.floor(p.gait||0)%6;
- const v={kind,frame:0,lean:0,bob:walk&&[1,4].includes(f)?-1:0,
+ const v={kind,frame:0,lean:0,lift:0,bob:walk&&[1,4].includes(f)?-1:0,
   left:[-4,-12,-4,-9],right:[4,-12,5,-10],racket:[8,-14,'tilt'],
   feet:walk?gait[f]:[-2,0,-2,-3,2,0,2,-3]};
  if(walk){const sway=[-1,-2,-1,1,2,1][f];v.frame=f;v.lean=p.moveX||0;
@@ -593,7 +603,8 @@ function poseFrame(p,override){
   v.racket=[[8,-14,'tilt'],[10,-12,'wide'],[6,-22,'upright'],[7,-22,'tilt']][n];v.lean=n>1?-1:0;v.bob=n===0?1:0;
  }else if(kind==='serve'||kind==='smash'){
   const n=t<.07?0:t<.15?1:t<.28?2:3;v.frame=n;v.lean=[1,2,2,0][n];v.bob=[-1,0,1,0][n];
-  const hitY=-Math.round(Math.max(24,Math.min(31,(a?.height||2.1)*Z_SCALE)));
+  const contactHeight=(a?.height||2.1)*Z_SCALE,hitY=-Math.round(Math.max(18,Math.min(31,contactHeight)));
+  if(kind==='serve'&&n<3)v.lift=-Math.round(Math.max(0,contactHeight-31)*[1,.65,.2][n]);
   v.right=[[3,-19,0,hitY+4],[5,-17,3,-17],[1,-11,-5,-10],[4,-12,5,-10]][n];
   v.racket=[[0,hitY,'upright'],[4,-21,'tilt'],[-8,-11,'wide'],[8,-14,'tilt']][n];
   v.left=[[-4,-14,-5,-16],[-5,-12,-6,-10],[-4,-11,-3,-8],[-4,-12,-4,-9]][n];
@@ -632,6 +643,7 @@ class Renderer{
   const g=this.g,pos=project(p.x,p.y),id=p.id,v=poseFrame(p,poseOverride),rear=p.walk&&p.moveY? p.moveY<0:p.side===1,ink=id===6?TeShushu.colors.o:'#343c32',skin=id===4?'#f5efdd':id===5?'#e6be62':id===6?TeShushu.colors.s:'#e3b797';
   g.save();g.translate(Math.round(pos.x),Math.round(pos.y));g.scale(size,size);g.imageSmoothingEnabled=false;
   this.rect(-4,0,9,1,'#172e3055');
+  g.translate(0,v.lift);
   if(v.kind==='fall'){g.rotate(Math.PI/2);g.translate(-6,0);}
   const feet=v.feet,lean=v.lean,bob=v.bob;
   const limb=(sx,sy,ex,ey,hx,hy,c=skin)=>{this.pixelLine(sx,sy,ex,ey,ink,2);this.pixelLine(ex,ey,hx,hy,ink,2);this.pixelLine(sx,sy,ex,ey,c);this.pixelLine(ex,ey,hx,hy,c);};
@@ -651,7 +663,7 @@ class Renderer{
    this.rect(-3,-15,6,8,ink);this.rect(-2,-14,4,6,id===4?'#f5efdd':Te.PLAYERS[id].color);
    this.rect(-3,-8,6,2,'#eee8d4');if(!rear)this.rect(-1,-14,2,1,'#eee8d4');
    const rows=heads[id].map((row,y)=>[...row].map(ch=>rear&&ch!=='.'?(id<4?(y<5?'h':'s'):id===4?'w':'y'):ch).join(''));
-   this.pixels(rows,-Math.floor(rows[0].length/2),-22,palette);
+   this.pixels(rows,-Math.floor(rows[0].length/2),id===0?-24:-22,palette);
    if(['toss','serve','forehand','backhand'].includes(v.kind)&&id<4){ // turning profile, rather than a rigid front/back stamp
     this.rect(v.lean<0?-4:3,-18,1,2,palette.s);
    }
@@ -659,15 +671,15 @@ class Renderer{
   limb(2,shoulder,...R);
   if(v.kind!=='broken'){
    const [rx,ry,orient]=v.racket;
-   this.pixelLine(R[2],R[3],rx,ry+4,'#cdb87b',2);
+   this.pixelLine(R[2],R[3],rx,ry+5,'#cdb87b',2);
    g.save();g.translate(rx,ry);g.rotate(orient==='tilt'?-.55:orient==='wide'?Math.PI/2:0);
-   g.beginPath();g.arc(0,0,4.5,0,Math.PI*2);g.fillStyle='#45695c';g.fill();
+   g.beginPath();g.ellipse(0,0,3.6,5.2,0,0,Math.PI*2);g.fillStyle='#45695c';g.fill();
    g.save();g.clip();g.strokeStyle='#b2c5a5';g.lineWidth=.55;g.beginPath();
-   for(let q=-3;q<=3;q+=2){g.moveTo(q,-5);g.lineTo(q,5);g.moveTo(-5,q);g.lineTo(5,q);}g.stroke();g.restore();
-   g.beginPath();g.arc(0,0,4.5,0,Math.PI*2);g.strokeStyle='#f5ecd2';g.lineWidth=1.5;g.stroke();g.restore();
+   for(let q=-5;q<=5;q+=2){g.moveTo(q,-6);g.lineTo(q,6);g.moveTo(-4,q);g.lineTo(4,q);}g.stroke();g.restore();
+   g.beginPath();g.ellipse(0,0,3.6,5.2,0,0,Math.PI*2);g.strokeStyle='#f5ecd2';g.lineWidth=1.5;g.stroke();g.restore();
   }
   g.restore();
-  if(role)this.rect(-1,-26,2,1,role==='P'?'#f3d884':'#e9e9dc');
+  if(role)this.rect(-1,(id===0?-28:-26)+v.bob,2,1,role==='P'?'#f3d884':'#e9e9dc');
   g.restore();
  }
  umpire(time){
@@ -768,7 +780,10 @@ function tone(freq=.0,dur=.08,type='triangle',vol=.035,delay=0){
 function sounds(){
  for(const ev of match.events.splice(0)){
   if(ev.type==='toss')tossSound();
-  else if(ev.type==='hit')tone(ev.text==='smash'?320:460,.055,'square',.025);
+  else if(ev.type==='hit'){
+   if(tossGain){tossGain.gain.cancelScheduledValues(ctx.currentTime);tossGain.gain.setTargetAtTime(.0001,ctx.currentTime,.015);}
+   tone(ev.text==='smash'?320:460,.055,'square',.025);
+  }
   else if(ev.type==='bounce')tone(190,.035,'triangle',.03);
   else if(ev.type==='point'||ev.type==='game'){tone(523,.10);tone(659,.13,'triangle',.035,.12);}
   else if(ev.type==='skill'){[440,660,880,1047].forEach((f,i)=>tone(f,.10,'square',.02,i*.07));notice=ev.text;noticeTime=1.4;}
@@ -785,12 +800,12 @@ function tossSound(){
  if(!ctx||!sound)return;
  const t=ctx.currentTime,g=ctx.createGain();tossGain=g;g.connect(ctx.destination);
  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.065,t+.045);
- g.gain.setValueAtTime(.065,t+.40);g.gain.exponentialRampToValueAtTime(.0001,t+.64);
+ g.gain.setValueAtTime(.065,t+.76);g.gain.exponentialRampToValueAtTime(.0001,t+1.05);
  for(const [type,f] of [['triangle',110],['sine',55]]){
   const o=ctx.createOscillator();o.type=type;o.frequency.setValueAtTime(f,t);
-  o.frequency.exponentialRampToValueAtTime(f*3.6,t+.60);o.connect(g);o.start(t);o.stop(t+.66);
+  o.frequency.exponentialRampToValueAtTime(f*3.6,t+1.0);o.connect(g);o.start(t);o.stop(t+1.08);
  }
- setTimeout(()=>{g.disconnect();if(tossGain===g)tossGain=null;},800);
+ setTimeout(()=>{g.disconnect();if(tossGain===g)tossGain=null;},1250);
 }
 function toggleSound(){audio();sound=!sound;if(!sound&&tossGain){tossGain.gain.cancelScheduledValues(ctx.currentTime);tossGain.gain.setValueAtTime(0,ctx.currentTime);}$('#sound').textContent=sound?'소리 켬':'소리 끔';$('#sound').setAttribute('aria-pressed',String(sound));}
 $('#sound').onclick=toggleSound;

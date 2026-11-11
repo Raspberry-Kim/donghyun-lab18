@@ -4,7 +4,7 @@ const sandbox={window:{}};vm.runInNewContext(fs.readFileSync(require.resolve('..
 const pose=sandbox.window.TeRender.poseFrame;
 let count=0;function check(name,fn){fn();count++;console.log('ok',name);}
 const step=(m,n)=>{for(let i=0;i<n;i++)m.step(E.DT);};
-const descend=m=>{for(let i=0;i<200;i++){if(m.ball.vz<0&&m.ball.z<=2.3&&m.ball.z>=1.5)return;m.step(E.DT);}throw Error('descending service window missing');};
+const descend=m=>{for(let i=0;i<280;i++){if(m.ball.vz<0&&m.ball.z<=2.3&&m.ball.z>=1.5)return;m.step(E.DT);}throw Error('descending service window missing');};
 check('first opponent is Shushu for all 84 settings',()=>{for(let p=0;p<7;p++)for(let l=0;l<3;l++)for(let c=0;c<4;c++)assert.equal(new E.Match({player:p,level:l,court:c}).people[1].id,6);});
 check('Donghyun-pa original sprite arrays unchanged',()=>{
  assert.equal(crypto.createHash('sha256').update(JSON.stringify(Shu)).digest('hex'),'e5bdb108167349f21617f49b6e78b525572d0e19780fbb8a683ec4e31ac858bb');
@@ -43,6 +43,6 @@ check('pause freezes the animation clock and gait',()=>{
  const m=new E.Match();m.toss();step(m,20);m.paused=true;const prior=JSON.stringify(m);step(m,100);assert.equal(JSON.stringify(m),prior);
 });
 check('empty toss returns to ready without a stuck animation',()=>{
- const m=new E.Match();m.toss();step(m,160);assert.equal(m.phase,'ready');assert.equal(m.people[0].anim,null);assert.equal(m.faults,0);
+ const m=new E.Match();m.toss();step(m,280);assert.equal(m.phase,'ready');assert.equal(m.people[0].anim,null);assert.equal(m.faults,0);
 });
 console.log(`${count} animation/opponent checks passed`);

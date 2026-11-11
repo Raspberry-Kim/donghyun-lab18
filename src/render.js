@@ -2,7 +2,7 @@
 (function(){
 'use strict';
 const heads=[
- ['.hhhhh.','hhhhhhh','hsssssh','skkskks','swwswws','.ssnss.','..sss..'],
+ ['.hhhhhhh.','hhhhhhhhh','hhssssshh','hsssssssh','skkssskks','swwssswws','.sssnsss.','..sssss..','...sss...'],
  ['..hhh..','.hhhhh.','hhssssh','.skssk.','.sssss.','..sns..','..sss..'],
  ['.hhhhh.','hhhhhhh','hsssssh','sskssks','sssssss','.snnns.','..sss..'],
  ['...hh..','..hhhh.','.hssss.','.skssk.','.sssss.','..sns..','..sss..'],
@@ -23,7 +23,7 @@ const gait=[
 function poseFrame(p,override){
  const a=p.anim,t=a?.time||0,kind=override||(['fall','dance','whiff'].includes(p.pose)?p.pose:a?.name)||'idle';
  const walk=p.walk&&kind!=='serve'&&kind!=='toss',f=Math.floor(p.gait||0)%6;
- const v={kind,frame:0,lean:0,bob:walk&&[1,4].includes(f)?-1:0,
+ const v={kind,frame:0,lean:0,lift:0,bob:walk&&[1,4].includes(f)?-1:0,
   left:[-4,-12,-4,-9],right:[4,-12,5,-10],racket:[8,-14,'tilt'],
   feet:walk?gait[f]:[-2,0,-2,-3,2,0,2,-3]};
  if(walk){const sway=[-1,-2,-1,1,2,1][f];v.frame=f;v.lean=p.moveX||0;
@@ -35,7 +35,8 @@ function poseFrame(p,override){
   v.racket=[[8,-14,'tilt'],[10,-12,'wide'],[6,-22,'upright'],[7,-22,'tilt']][n];v.lean=n>1?-1:0;v.bob=n===0?1:0;
  }else if(kind==='serve'||kind==='smash'){
   const n=t<.07?0:t<.15?1:t<.28?2:3;v.frame=n;v.lean=[1,2,2,0][n];v.bob=[-1,0,1,0][n];
-  const hitY=-Math.round(Math.max(24,Math.min(31,(a?.height||2.1)*Z_SCALE)));
+  const contactHeight=(a?.height||2.1)*Z_SCALE,hitY=-Math.round(Math.max(18,Math.min(31,contactHeight)));
+  if(kind==='serve'&&n<3)v.lift=-Math.round(Math.max(0,contactHeight-31)*[1,.65,.2][n]);
   v.right=[[3,-19,0,hitY+4],[5,-17,3,-17],[1,-11,-5,-10],[4,-12,5,-10]][n];
   v.racket=[[0,hitY,'upright'],[4,-21,'tilt'],[-8,-11,'wide'],[8,-14,'tilt']][n];
   v.left=[[-4,-14,-5,-16],[-5,-12,-6,-10],[-4,-11,-3,-8],[-4,-12,-4,-9]][n];
@@ -74,6 +75,7 @@ class Renderer{
   const g=this.g,pos=project(p.x,p.y),id=p.id,v=poseFrame(p,poseOverride),rear=p.walk&&p.moveY? p.moveY<0:p.side===1,ink=id===6?TeShushu.colors.o:'#343c32',skin=id===4?'#f5efdd':id===5?'#e6be62':id===6?TeShushu.colors.s:'#e3b797';
   g.save();g.translate(Math.round(pos.x),Math.round(pos.y));g.scale(size,size);g.imageSmoothingEnabled=false;
   this.rect(-4,0,9,1,'#172e3055');
+  g.translate(0,v.lift);
   if(v.kind==='fall'){g.rotate(Math.PI/2);g.translate(-6,0);}
   const feet=v.feet,lean=v.lean,bob=v.bob;
   const limb=(sx,sy,ex,ey,hx,hy,c=skin)=>{this.pixelLine(sx,sy,ex,ey,ink,2);this.pixelLine(ex,ey,hx,hy,ink,2);this.pixelLine(sx,sy,ex,ey,c);this.pixelLine(ex,ey,hx,hy,c);};
@@ -93,7 +95,7 @@ class Renderer{
    this.rect(-3,-15,6,8,ink);this.rect(-2,-14,4,6,id===4?'#f5efdd':Te.PLAYERS[id].color);
    this.rect(-3,-8,6,2,'#eee8d4');if(!rear)this.rect(-1,-14,2,1,'#eee8d4');
    const rows=heads[id].map((row,y)=>[...row].map(ch=>rear&&ch!=='.'?(id<4?(y<5?'h':'s'):id===4?'w':'y'):ch).join(''));
-   this.pixels(rows,-Math.floor(rows[0].length/2),-22,palette);
+   this.pixels(rows,-Math.floor(rows[0].length/2),id===0?-24:-22,palette);
    if(['toss','serve','forehand','backhand'].includes(v.kind)&&id<4){ // turning profile, rather than a rigid front/back stamp
     this.rect(v.lean<0?-4:3,-18,1,2,palette.s);
    }
@@ -101,15 +103,15 @@ class Renderer{
   limb(2,shoulder,...R);
   if(v.kind!=='broken'){
    const [rx,ry,orient]=v.racket;
-   this.pixelLine(R[2],R[3],rx,ry+4,'#cdb87b',2);
+   this.pixelLine(R[2],R[3],rx,ry+5,'#cdb87b',2);
    g.save();g.translate(rx,ry);g.rotate(orient==='tilt'?-.55:orient==='wide'?Math.PI/2:0);
-   g.beginPath();g.arc(0,0,4.5,0,Math.PI*2);g.fillStyle='#45695c';g.fill();
+   g.beginPath();g.ellipse(0,0,3.6,5.2,0,0,Math.PI*2);g.fillStyle='#45695c';g.fill();
    g.save();g.clip();g.strokeStyle='#b2c5a5';g.lineWidth=.55;g.beginPath();
-   for(let q=-3;q<=3;q+=2){g.moveTo(q,-5);g.lineTo(q,5);g.moveTo(-5,q);g.lineTo(5,q);}g.stroke();g.restore();
-   g.beginPath();g.arc(0,0,4.5,0,Math.PI*2);g.strokeStyle='#f5ecd2';g.lineWidth=1.5;g.stroke();g.restore();
+   for(let q=-5;q<=5;q+=2){g.moveTo(q,-6);g.lineTo(q,6);g.moveTo(-4,q);g.lineTo(4,q);}g.stroke();g.restore();
+   g.beginPath();g.ellipse(0,0,3.6,5.2,0,0,Math.PI*2);g.strokeStyle='#f5ecd2';g.lineWidth=1.5;g.stroke();g.restore();
   }
   g.restore();
-  if(role)this.rect(-1,-26,2,1,role==='P'?'#f3d884':'#e9e9dc');
+  if(role)this.rect(-1,(id===0?-28:-26)+v.bob,2,1,role==='P'?'#f3d884':'#e9e9dc');
   g.restore();
  }
  umpire(time){
