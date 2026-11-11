@@ -7,13 +7,36 @@
 @media(min-width:761px){.canvas-shell{max-height:clamp(300px,calc(100dvh - 530px),520px)}}
 @media(max-width:1000px){.header{padding:18px 22px}.brand-sub{display:none}.play-layout{grid-template-columns:minmax(0,1.3fr) minmax(280px,1fr);gap:22px}.editor-column{padding-left:20px}.skill-strip{gap:8px}.skill-label{font-size:10px}.skill-label small{font-size:8px}.under-court{flex-wrap:wrap}.roster{grid-template-columns:repeat(2,1fr)}.scoreboard{gap:10px}.section-title>span{font-size:8px}}
 @media(max-width:760px){main{padding:0 16px}.header{padding:16px;gap:10px}.brand>span:first-child{font-size:32px}.brand i,.edition{display:none}.header-right{gap:5px}.icon-button{font-size:10px;padding:5px 6px}.input-badges{font-size:6px;gap:2px 5px}.tabs{gap:16px;overflow-x:auto}.tabs button{font-size:12px;white-space:nowrap}.intro-line{font-size:8px;letter-spacing:.8px;padding:13px 0}.intro-line a{font-size:9px}.desktop-note{font-size:10px;gap:8px;line-height:1.7;padding:9px 0 13px}.play-layout{grid-template-columns:1fr;gap:24px}.section-title h1{font-size:20px}.canvas-shell{max-height:520px}.scoreboard{min-height:51px;gap:13px;padding:0 6px}.score-names{font-size:11px}.score-names small{font-size:8px}.score-column{min-width:30px}.score-column>span{font-size:12px}.stage{padding:6px}.skill-strip{gap:10px;padding:8px 5px}.skill-label{font-size:9px}.skill-label small{font-size:8px}.charge>span{font-size:8px}.charge{min-width:60px}#energy-pips{gap:2px}#energy-pips i{width:9px;height:7px}.match-status{padding:6px 3px;font-size:10px}#perf{font-size:7px}.under-court{font-size:9px}.small-note{font-size:10px}.editor-column{padding:20px 0 0;border:0;border-top:1px solid var(--line)}.editor-heading p br{display:none}.code-shell,textarea{min-height:230px}textarea{font-size:13px}.court-cards{grid-template-columns:repeat(2,1fr);gap:24px}.court-notes{margin-top:28px}.rules-grid,.roster{grid-template-columns:1fr;gap:22px}.doc-heading h1{font-size:29px}.doc-heading p,.rules-grid p{font-size:13px}footer{flex-wrap:wrap;padding:22px 16px;gap:12px}footer>span:last-child{margin:0}.start-inner{padding:20px 18px}.start-inner h2{font-size:21px}.start-inner p{font-size:12px}.start-meta{font-size:9px}.start-inner .eyebrow{font-size:8px}.start-inner>small{font-size:9px}.stage.is-full{padding:6px}.stage.is-full .canvas-shell{max-height:calc(100dvh - 150px);height:calc(100dvh - 150px)}}
+
+
+/* 시리즈 공통 메뉴: 동현테의 종이·녹색 팔레트에 맞춤 */
+.series-strip{display:flex;align-items:center;gap:20px;padding:16px 0 18px;border-bottom:1px solid var(--line);margin-bottom:20px}
+.series-context{flex:0 1 150px;font-size:11px;line-height:1.65;color:var(--muted)}.series-context strong{display:block;font-size:13px;color:var(--ink)}
+.series-links{display:grid;flex:1;gap:5px;min-width:0}.series-item{display:flex;flex-direction:column;justify-content:center;gap:3px;min-height:54px;padding:8px 5px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);text-decoration:none}
+.series-name{font:15px/1.1 BlackHan,sans-serif;white-space:nowrap}.series-name sup{font:9px var(--body);vertical-align:top;margin-left:2px}.series-note{font-size:10px;line-height:1.3;color:var(--muted)}
+.series-item.is-current{background:#f2b705;border-color:#f2b705;color:#26211c}.series-item.is-current .series-note{color:#554018}.series-item:hover{border-color:#8b9c83}
+@media(max-width:1180px){.series-strip{flex-wrap:wrap}.series-context{flex-basis:100%}.series-links{flex-basis:100%}}
+@media(max-width:780px){.series-strip{display:block}.series-context{margin-bottom:10px}.series-context strong{display:inline;margin-right:8px}.series-links{gap:6px}.series-item{padding:10px 9px}}
+
+/* SERIES-19: 데스크톱은 동현랭 두 줄 높이 + 18실험실 9열×2줄. 모바일은 기존 홀수 규칙. */
+@media(min-width:781px){
+ .series-strip .series-links:has(.series-item:nth-child(19):last-child){grid-template-columns:repeat(10,minmax(0,1fr));grid-template-rows:repeat(2,1fr);grid-auto-flow:row;min-width:0}
+ .series-strip .series-links:has(.series-item:nth-child(19):last-child) .series-item[data-series="lang"]{grid-column:auto;grid-row:span 2;align-items:center;text-align:center}
+ .series-strip .series-links:has(.series-item:nth-child(19):last-child) .series-item[data-series="lang"] .series-name{font-size:19px}
+ .series-strip .series-links:has(.series-item:nth-child(19):last-child) .series-note{white-space:normal}
+}
+@media(max-width:780px){
+ .series-strip .series-links:has(.series-item:nth-child(19):last-child){grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none}
+ .series-strip .series-links:has(.series-item:nth-child(19):last-child) .series-item[data-series="lang"]{grid-column:span 2;grid-row:auto}
+}
 </style></head>
 <body>
 <header class="header">
  <a href="#" class="brand" aria-label="동현테 첫 화면"><span>동현<span class="green">테</span><sup>TM</sup></span><i></i><span class="brand-sub">TENNIS LAB<small>코드로 여는 작은 센터 코트</small></span></a>
- <div class="header-right"><span class="edition">개발 미리보기</span><div class="input-badges"><span title="방향키 · X · Z · S · A · Enter">KEYBOARD</span><span title="십자키/왼 스틱 · 오른쪽/아래 단추 · 어깨 단추">GAMEPAD</span><span class="off" title="마우스로 선수 이동·타격 불가">MOUSE OFF</span><span title="F · 전체 화면 단추">FULL</span></div><button id="sound" class="icon-button" aria-pressed="true">소리 켬</button><button id="theme" class="icon-button" aria-pressed="false">어둡게</button></div>
+ <div class="header-right"><span class="edition">v0.01</span><div class="input-badges"><span title="방향키 · X · Z · S · A · Enter">KEYBOARD</span><span title="십자키/왼 스틱 · 오른쪽/아래 단추 · 어깨 단추">GAMEPAD</span><span class="off" title="마우스로 선수 이동·타격 불가">MOUSE OFF</span><span title="F · 전체 화면 단추">FULL</span></div><button id="sound" class="icon-button" aria-pressed="true">소리 켬</button><button id="theme" class="icon-button" aria-pressed="false">어둡게</button></div>
 </header>
 <main>
+<nav class="series-strip" aria-label="동현 프로젝트 이동"><p class="series-context"><strong>동현의 작은 실험들</strong>하나의 언어, 열여덟 개의 작은 세계</p><div class="series-links"><a class="series-item" data-series="lang" href="https://raspberry-kim.github.io/donghyun-lang/" aria-label="동현랭™ 언어 플레이그라운드로 이동"><span class="series-name">동현랭<sup>™</sup></span><span class="series-note">언어</span></a><a class="series-item" data-series="fly" href="https://raspberry-kim.github.io/donghyun-lab1/" aria-label="동현초™ 초파리 회로실험실로 이동"><span class="series-name">동현초<sup>™</sup></span><span class="series-note">초파리</span></a><a class="series-item" data-series="worm" href="https://raspberry-kim.github.io/donghyun-lab2/" aria-label="동현파™ 선충 회로실험실로 이동"><span class="series-name">동현파<sup>™</sup></span><span class="series-note">선충</span></a><a class="series-item" data-series="village" href="https://raspberry-kim.github.io/donghyun-lab3/" aria-label="동현빌™ 마을 유행 실험실로 이동"><span class="series-name">동현빌<sup>™</sup></span><span class="series-note">마을</span></a><a class="series-item" data-series="tactics" href="https://raspberry-kim.github.io/donghyun-lab4/" aria-label="동현전™ 전략 시뮬레이션 실험실로 이동"><span class="series-name">동현전<sup>™</sup></span><span class="series-note">전략</span></a><a class="series-item" data-series="copter" href="https://raspberry-kim.github.io/donghyun-lab5/" aria-label="동현콥™ 원버튼 비행 실험실로 이동"><span class="series-name">동현콥<sup>™</sup></span><span class="series-note">비행</span></a><a class="series-item" data-series="ten" href="https://raspberry-kim.github.io/donghyun-lab6/" aria-label="동현텐™ 숫자 짝 실험실로 이동"><span class="series-name">동현텐<sup>™</sup></span><span class="series-note">숫자</span></a><a class="series-item" data-series="war" href="https://raspberry-kim.github.io/donghyun-lab7/" aria-label="동현워™ 중세 전술 실험실로 이동"><span class="series-name">동현워<sup>™</sup></span><span class="series-note">중세</span></a><a class="series-item" data-series="doom" href="https://raspberry-kim.github.io/donghyun-lab8/" aria-label="동현둠™ 1인칭 슈팅 실험실로 이동"><span class="series-name">동현둠<sup>™</sup></span><span class="series-note">1인칭</span></a><a class="series-item" data-series="cr" href="https://raspberry-kim.github.io/donghyun-lab9/" aria-label="동현크™ 플랫폼 액션 실험실로 이동"><span class="series-name">동현크<sup>™</sup></span><span class="series-note">플랫폼</span></a><a class="series-item" data-series="mon" href="https://raspberry-kim.github.io/donghyun-lab10/" aria-label="동현몬™ 동현몬스터 실험실로 이동"><span class="series-name">동현몬<sup>™</sup></span><span class="series-note">모험</span></a><a class="series-item" data-series="zooo" href="https://raspberry-kim.github.io/donghyun-lab11/" aria-label="동현주™ 얼굴 퍼즐 실험실로 이동"><span class="series-name">동현주<sup>™</sup></span><span class="series-note">퍼즐</span></a><a class="series-item" data-series="sim" href="https://raspberry-kim.github.io/donghyun-lab12/"><span class="series-name">동현심<sup>™</sup></span><span class="series-note">도시</span></a><a class="series-item" data-series="ram" href="https://raspberry-kim.github.io/donghyun-lab13/" aria-label="동현램™ 도시 파괴 실험실로 이동"><span class="series-name">동현램<sup>™</sup></span><span class="series-note">몬스터</span></a><a class="series-item" data-series="q" href="https://raspberry-kim.github.io/donghyun-lab14/" aria-label="동현큐™ 선 긋기 실험실로 이동"><span class="series-name">동현큐<sup>™</sup></span><span class="series-note">선 긋기</span></a><a class="series-item" data-series="doc" href="https://raspberry-kim.github.io/donghyun-lab15/" aria-label="동현닥™ 알약 실험실로 이동"><span class="series-name">동현닥<sup>™</sup></span><span class="series-note">알약</span></a><a class="series-item" data-series="sam" href="https://raspberry-kim.github.io/donghyun-lab16/" aria-label="동현삼™ 삼국 전략 실험실로 이동"><span class="series-name">동현삼<sup>™</sup></span><span class="series-note">삼국</span></a><a class="series-item" data-series="hang" href="https://raspberry-kim.github.io/donghyun-lab17/" aria-label="동현항™ 항해 교역 실험실로 이동"><span class="series-name">동현항<sup>™</sup></span><span class="series-note">항해</span></a><span class="series-item is-current" data-series="te" aria-current="page"><span class="series-name">동현테<sup>™</sup></span><span class="series-note">테니스 · 지금 여기</span></span></div></nav>
  <div class="intro-line"><span>동현랭 실험실 / DONGHYUNTE</span><a href="https://raspberry-kim.github.io/donghyun-lang/" target="_blank" rel="noopener">동현랭으로 돌아가기 ↗</a></div>
  <nav class="tabs" aria-label="실험실 메뉴"><button data-tab="play" aria-selected="true">플레이그라운드</button><button data-tab="players" aria-selected="false">선수와 특수기술</button><button data-tab="rules" aria-selected="false">경기 규칙 · 조작</button><button data-tab="reference" aria-selected="false">원작과 구현 범위</button></nav>
  <aside class="desktop-note"><strong>데스크톱 권장</strong><span>경기는 키보드·게임패드로만 한다. 마우스·화면 터치로는 조작할 수 없다. 모바일에서 경기하려면 별도의 키보드를 연결하자.</span></aside>
@@ -63,7 +86,7 @@
  </section>
  <div id="confirm-panel" class="confirm-panel" hidden role="dialog" aria-modal="true" aria-labelledby="confirm-title"><div><h2 id="confirm-title">진행 중인 경기를 끝낼까?</h2><p>지금 경기는 사라지고 새 출전 코드로 시작한다.</p><button id="confirm-no">계속 경기</button><button id="confirm-yes" class="primary">새 경기 시작</button></div></div>
 </main>
-<footer><span>동현테 · 개발 미리보기</span><p>인하대학교 의과대학 김동현 교수는 백신학·감염학을 연구한다. 명랑하고 따뜻한 개발을 지향한다.</p><span>1인용 / 단식 / 고정 시점</span></footer>
+<footer><span>동현테 v0.01</span><p>인하대학교 의과대학 김동현 교수는 백신학·감염학을 연구한다. 명랑하고 따뜻한 개발을 지향한다.</p><span>1인용 / 단식 / 고정 시점 · <a href="https://github.com/Raspberry-Kim/donghyun-lab18" target="_blank" rel="noopener">GitHub ↗</a></span><span><a href="https://raspberry-kim.github.io/donghyun-lab18/" target="_blank" rel="noopener">동현테</a></span></footer>
 <script>/*! 동현랭 (Donghyun-lang) runtime — 브라우저와 Node 양쪽에서 동작한다.
  *  <script src="donghyun.js"><\/script>
  *  <script type="text/donghyun" data-input="5" data-output="html"> ... <\/script>
@@ -369,7 +392,8 @@ class Match{
  }
  toss(){
   if(this.phase!=='ready')return false;
-  const p=this.people[this.server];this.ball={x:p.x,y:p.y,z:1.1,vx:0,vy:0,vz:7.8,by:this.server,bounces:0,serve:true,crossed:false};
+  // Toss from the free-hand side, not through the player's head.
+  const p=this.people[this.server];this.ball={x:p.x-.65*p.side,y:p.y,z:1.1,vx:0,vy:0,vz:7.8,by:this.server,bounces:0,serve:true,crossed:false};
   this.phase='toss';this.timer=0;this.pendingServe=null;this.animate(this.server,'toss',2.1);p.walk=false;p.pose='toss';this.message=this.server===0?'토스 · X/Z로 타격, 높은 공은 준비 후 자동 타격':'동현AI™ 토스';this.event('toss','토스');return true;
  }
  serve(kind,aim={}){
@@ -395,7 +419,7 @@ class Match{
  launch(i,tx,ty,t,kind,serve=false){
   const p=this.people[i],old=this.ball;let z=serve?old.z:clamp(old.z,.25,3.4);
   t=Math.max(.5,t)/this.level.speed;
-  this.ball={x:serve?p.x:old.x,y:serve?p.y:old.y,z,vx:(tx-(serve?p.x:old.x))/t,vy:(ty-(serve?p.y:old.y))/t,vz:(.5*G*t*t-z)/t,by:i,bounces:0,serve,crossed:false,netTouch:false,kind,age:0,flightTime:t,serviceOriginX:serve?p.x:null};
+  this.ball={x:old.x,y:old.y,z,vx:(tx-old.x)/t,vy:(ty-old.y)/t,vz:(.5*G*t*t-z)/t,by:i,bounces:0,serve,crossed:false,netTouch:false,kind,age:0,flightTime:t,serviceOriginX:serve?p.x:null};
   this.phase='rally';this.event('hit',kind);this.totalHits++;this.aiClock=0;
  }
  reachable(i,remote=false){
@@ -641,15 +665,16 @@ function poseFrame(p,override){
   v.left=[-4,-12,-4+sway,-9-sway];v.right=[4,-12,4,-10+sway];v.racket=[10,-17+sway,'tilt'];v.face=.65+.2*Math.abs(sway)/2;}
  if(kind==='toss'){
   const n=Math.min(3,Math.floor(t*10));v.frame=n;
-  v.left=[[-4,-11,-4,-9],[-5,-17,-3,-22],[-5,-18,-2,-24],[-5,-16,-3,-21]][n];
+  v.left=[[-8,-13,-13,-16],[-9,-18,-13,-23],[-8,-19,-12,-25],[-8,-17,-12,-22]][n];
   v.right=[[5,-12,5,-10],[5,-12,7,-10],[5,-15,6,-18],[5,-15,6,-18]][n];
   v.racket=[[10,-17,'tilt'],[15,-12,'wide'],[6,-26,'upright'],[10,-25,'tilt']][n];v.face=[.85,.5,.22,.35][n];v.lean=n>1?-1:0;v.bob=n===0?1:0;
  }else if(kind==='serve'||kind==='smash'){
   const st=a?.soft?t*.78:t,n=st<.07?0:st<.15?1:st<.28?2:3;v.frame=n;v.lean=[1,2,2,0][n];v.bob=[-1,0,1,0][n];v.face=a?.soft?[.95,.85,.65,.85][n]:[.95,.28,.18,.85][n];
   const contactHeight=(a?.height||2.1)*Z_SCALE,hitY=-Math.round(Math.max(18,Math.min(31,contactHeight)));
   if(kind==='serve'&&n<3)v.lift=-Math.round(Math.max(0,contactHeight-31)*[1,.65,.2][n]);
-  v.right=[[3,-19,0,hitY+8],[5,-17,3,-17],[1,-11,-3,-10],[4,-12,4,-10]][n];
-  v.racket=[[0,hitY,'upright'],[9,-23,'tilt'],[-11,-10,'wide'],[10,-17,'tilt']][n];
+  const hitX=kind==='serve'?-Math.round(.65*20*(1+(p.y||0)*.006)):0;
+  v.right=[[-3,-19,hitX,hitY+8],[5,-17,3,-17],[1,-11,-3,-10],[4,-12,4,-10]][n];
+  v.racket=[[hitX,hitY,'upright'],[9,-23,'tilt'],[-11,-10,'wide'],[10,-17,'tilt']][n];
   v.left=[[-4,-14,-5,-16],[-5,-12,-6,-10],[-4,-11,-3,-8],[-4,-12,-4,-9]][n];
   if(n<3)v.feet=[-3,0,-2,-3,3,-1,1,-4];
  }else if(['lob','lobWindup','softVolley'].includes(kind)){
@@ -674,6 +699,10 @@ function poseFrame(p,override){
   if(!walk&&n<3)v.feet=[-3,0,-2,-3,3,0,2,-4];
  }else if(kind==='dance'){
   v.frame=f;v.lean=f<3?-2:2;v.left=[-5,-16,-7,-20];v.right=[5,-17,7,-21];v.racket=[9,-24,'tilt'];v.feet=gait[f];
+ }
+ if((kind==='toss'||kind==='serve')&&p.side===-1){
+  for(const arm of [v.left,v.right]){arm[0]*=-1;arm[2]*=-1;}
+  v.racket[0]*=-1;v.lean*=-1;
  }
  return v;
 }

@@ -81,7 +81,8 @@ class Match{
  }
  toss(){
   if(this.phase!=='ready')return false;
-  const p=this.people[this.server];this.ball={x:p.x,y:p.y,z:1.1,vx:0,vy:0,vz:7.8,by:this.server,bounces:0,serve:true,crossed:false};
+  // Toss from the free-hand side, not through the player's head.
+  const p=this.people[this.server];this.ball={x:p.x-.65*p.side,y:p.y,z:1.1,vx:0,vy:0,vz:7.8,by:this.server,bounces:0,serve:true,crossed:false};
   this.phase='toss';this.timer=0;this.pendingServe=null;this.animate(this.server,'toss',2.1);p.walk=false;p.pose='toss';this.message=this.server===0?'토스 · X/Z로 타격, 높은 공은 준비 후 자동 타격':'동현AI™ 토스';this.event('toss','토스');return true;
  }
  serve(kind,aim={}){
@@ -107,7 +108,7 @@ class Match{
  launch(i,tx,ty,t,kind,serve=false){
   const p=this.people[i],old=this.ball;let z=serve?old.z:clamp(old.z,.25,3.4);
   t=Math.max(.5,t)/this.level.speed;
-  this.ball={x:serve?p.x:old.x,y:serve?p.y:old.y,z,vx:(tx-(serve?p.x:old.x))/t,vy:(ty-(serve?p.y:old.y))/t,vz:(.5*G*t*t-z)/t,by:i,bounces:0,serve,crossed:false,netTouch:false,kind,age:0,flightTime:t,serviceOriginX:serve?p.x:null};
+  this.ball={x:old.x,y:old.y,z,vx:(tx-old.x)/t,vy:(ty-old.y)/t,vz:(.5*G*t*t-z)/t,by:i,bounces:0,serve,crossed:false,netTouch:false,kind,age:0,flightTime:t,serviceOriginX:serve?p.x:null};
   this.phase='rally';this.event('hit',kind);this.totalHits++;this.aiClock=0;
  }
  reachable(i,remote=false){

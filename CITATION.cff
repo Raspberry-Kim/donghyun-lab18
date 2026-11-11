@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+title: "Donghyunte (동현테): a fixed-view single-player tennis laboratory configured through Donghyun-lang"
+type: software
+version: "0.01"
+date-released: "2026-11-11"
+authors:
+  - family-names: Kim
+    given-names: Dong Hyun
+    orcid: "https://orcid.org/0000-0001-9883-0229"
+    affiliation: "Inha University College of Medicine"
+license: MIT
+repository-code: "https://github.com/Raspberry-Kim/donghyun-lab18"
+url: "https://raspberry-kim.github.io/donghyun-lab18/"
+abstract: >-
+  Donghyunte is a browser-based single-player singles tennis game. Programs
+  written in Donghyun-lang select one of seven players, three difficulties,
+  and four courts. Keyboard and standard-mapped gamepads control play; mouse
+  and touch do not control the match. The fixed camera keeps the player at
+  the bottom even after a change of ends. The game includes a two-stage serve,
+  differentiated strokes and lobs, fourteen special abilities, deuce,
+  tiebreaks, and best-of-three sets. Game Boy Tennis was privately observed
+  as a reference, but this independent implementation does not claim numerical
+  equivalence to the original physics. The 0.12-second post-hit serve input
+  window and court coefficients are original gameplay adjustments. No ROM,
+  emulator state, original-game screenshot, extracted art, or original audio
+  is distributed. Code and documentation are MIT; bundled fonts are OFL.
+keywords:
+  - tennis
+  - browser game
+  - esoteric programming language
+  - JavaScript
+  - gamepad
