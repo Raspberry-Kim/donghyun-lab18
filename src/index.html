@@ -25,7 +25,7 @@
      <div class="skill-strip"><div class="charge"><span>기술 에너지</span><div id="energy-pips" aria-label="에너지 2 / 6"></div></div><div class="skill-label"><kbd>S</kbd><span id="skill1">샤아아즈나블<small>3칸 · 다음 리턴</small></span></div><div class="skill-label"><kbd>A</kbd><span id="skill2">샤아자쿠<small>2칸 · 혜성 이동</small></span></div></div>
     </div>
     <div class="under-court"><span><kbd>↑↓←→</kbd> 이동·방향 <kbd>X</kbd> 타격 <kbd>Z</kbd> 로브 <kbd>Enter</kbd> 메뉴</span><button id="fullscreen">전체 화면 <kbd>F</kbd></button></div>
-    <p class="small-note" id="serve-note">서브: X로 토스, 다시 X/Z로 타격. 너무 높은 공은 타격 준비로 받아 둔다. 높은 타점은 깊게, 낮은 타점은 짧게.</p>
+    <p class="small-note" id="serve-note">GB A = X · GB B = Z. 서브는 좌우 위치와 타점에 따라 달라진다. 타격 직후 ←/→를 짧게 누르면 조금, 길게 누르면 더 꺾인다.</p>
    </section>
    <aside class="editor-column">
     <div class="editor-heading"><span class="eyebrow">MATCH PROGRAM</span><h2>오늘의 출전 코드</h2><p>선수, 난이도, 경기장.<br>정수 세 개로 경기를 열자.</p></div>
@@ -43,11 +43,11 @@
   <section class="court-notes"><div class="section-title"><h2>같은 공, 다른 바운드.</h2><span>FOUR COURTS</span></div><div id="court-cards" class="court-cards"></div></section>
  </section>
  <section id="tab-players" class="tab-panel document" hidden><div class="doc-heading"><span class="eyebrow">SEVEN PLAYERS · FOURTEEN SPECIALS</span><h1>라켓을 쥔 시리즈의 얼굴들.</h1><p>시작 에너지는 2칸, 최대 6칸이다. 포인트가 끝날 때 1칸, 성공한 리턴 네 번마다 1칸을 얻는다. S와 A로 두 기술을 쓴다. 조건이 안 맞으면 에너지를 쓰지 않는다.</p><p>첫 상대는 슈슈다. 동현파의 양쪽 둥근 머리와 리본, 분홍 원피스, 빨간 운동화 도트를 그대로 가져와 작게 그렸다. 상대 동현AI™는 일반 타격만 쓴다. 준비한 기술과 랠리 효과는 포인트 종료 때 풀린다.</p></div><div id="roster" class="roster"></div></section>
- <section id="tab-rules" class="tab-panel document" hidden><div class="doc-heading"><span class="eyebrow">HOW TO PLAY</span><h1>그림자에 발을, 공에 라켓을.</h1><p>단식, 3세트 중 2세트 선승. 시점은 처음부터 끝까지 고정된다. 코트가 바뀌어도 카메라는 돌거나 따라가지 않는다.</p></div>
+ <section id="tab-rules" class="tab-panel document" hidden><div class="doc-heading"><span class="eyebrow">HOW TO PLAY</span><h1>그림자에 발을, 공에 라켓을.</h1><p>단식, 3세트 중 2세트 선승. 코트를 교대해도 내 선수는 항상 하단, 상대는 상단이다. 카메라는 돌거나 따라가지 않고 방향키도 화면 기준을 유지한다.</p></div>
   <div class="rules-grid">
-   <article><h2>키보드</h2><table><tbody><tr><th>방향키</th><td>이동. 타격 순간 좌우로 방향, ↑ 깊게 · ↓ 짧게.</td></tr><tr><th>X</th><td>토스 / 강한 서브 / 스트로크. 공이 높으면 스매시.</td></tr><tr><th>Z</th><td>약한 서브 / 로브. 바운드 전이면 약한 발리.</td></tr><tr><th>S / A</th><td>첫째 / 둘째 특수기술.</td></tr><tr><th>Enter / Esc</th><td>일시정지·계속. 전체 화면에서 Esc는 먼저 닫기.</td></tr><tr><th>F / M</th><td>전체 화면 / 효과음·음악 켜기·끄기.</td></tr></tbody></table><p>코드 편집 중에는 경기 키를 가로채지 않는다. Ctrl+Enter로 코드를 실행한다.</p></article>
+   <article><h2>키보드</h2><table><tbody><tr><th>방향키</th><td>화면 기준 이동. 타격 좌우 방향, ↑ 깊게 · ↓ 짧게. 서브 직후 짧은 구간에도 좌우 입력.</td></tr><tr><th>X · GB A</th><td>토스 / 강한 서브 / 가로로 미는 스트로크. 높은 공은 스매시.</td></tr><tr><th>Z · GB B</th><td>약한 서브 / 아래에서 위로 띄우는 로브. 바운드 전이면 약한 발리.</td></tr><tr><th>S / A</th><td>키보드의 첫째 / 둘째 특수기술. 키보드 A는 GB A와 다르다.</td></tr><tr><th>Enter / Esc</th><td>일시정지·계속. 전체 화면에서 Esc는 먼저 닫기.</td></tr><tr><th>F / M</th><td>전체 화면 / 효과음·음악 켜기·끄기.</td></tr></tbody></table><p>코드 편집 중에는 경기 키를 가로채지 않는다. Ctrl+Enter로 코드를 실행한다.</p></article>
    <article><h2>게임패드</h2><p>십자키·왼 스틱으로 이동한다. 위치 기준 오른쪽 단추(A 위치)는 X 타격, 아래 단추(B 위치)는 Z 로브다. L·R 어깨 단추로 특수기술을 쓴다. Start는 메뉴다.</p><p id="pad-status">연결된 패드 없음</p><p>브라우저 표준 매핑 패드를 대상으로 한다. 실제 패드의 호환성은 기기·브라우저에 따라 다르다.</p><h2>마우스와 모바일</h2><p>메뉴·코드 편집만 마우스로 할 수 있다. 코트를 누르거나 드래그해도 선수는 움직이거나 공을 치지 않는다. 터치 조작판은 없다. 외부 입력 장치 없는 휴대폰에서는 경기 조작이 불가능하다.</p></article>
-   <article><h2>서브와 리턴</h2><p>X로 약 1초 동안 공을 띄우고 X 또는 Z로 친다. 너무 높을 때 누르면 라켓이 닿는 높이까지 기다렸다가 친다. 높은 타점은 바깥쪽 깊게, 낮은 타점은 중앙 쪽 짧게 간다. 공을 안 치고 받으면 폴트 없이 다시 토스한다. 서비스 박스는 대각선이다. 두 번 폴트면 상대 포인트. 네트를 스친 유효 서브는 렛이다.</p><p>그림자는 바닥 위치, 공은 높이다. 공이 라켓 근처에 왔을 때 눌러야 한다. 서브는 한 번 바운드한 뒤 받아야 한다. 일반 랠리에서는 발리와 높은 공의 스매시가 된다.</p></article>
+   <article><h2>서브와 리턴</h2><p>먼저 좌우로 서브 위치를 고른다. X로 약 1초 동안 공을 띄우고 X 또는 Z로 친다. 너무 높을 때 누르면 닿는 높이까지 준비한다. 높은 타점은 깊게, 낮은 타점은 짧게 간다. 타격 직후 0.12초 안의 좌우 입력은 누른 시간·스틱 기울기에 따라 착지를 더 옮긴다. 그 뒤에는 공을 조향하지 않는다. 이 입력 여유는 동현테에서 넓힌 값이다.</p><p>빈 토스는 폴트 없이 다시 한다. 서비스 박스는 대각선이며 두 번 폴트면 상대 포인트, 네트를 스친 유효 서브는 렛이다. 그림자는 바닥 위치, 공은 높이다. 서브는 한 번 바운드한 뒤 받는다. X는 가로 스트로크·강한 발리·높은 공의 스매시, Z는 띄우는 로브·약한 발리다.</p></article>
    <article><h2>점수와 코트 교대</h2><p>0 → 15 → 30 → 40. 듀스에서는 두 점 차로 게임을 딴다. 6게임 이상, 두 게임 차면 세트. 6 대 6에서는 7점 타이브레이크로 두 점 차를 낸다.</p><p>게임마다 서브를 바꾸고 홀수 게임 뒤에는 코트를 바꾼다. 타이브레이크는 첫 1점 뒤부터 두 점마다 서브 교대, 6점마다 코트 교대다. 2세트를 먼저 따면 승리한다.</p></article>
   </div>
  </section>

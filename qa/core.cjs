@@ -22,7 +22,7 @@ test('second bounce wins hitter',()=>{const m=rally(fresh(),{x:0,y:8,z:.001,vz:-
 test('line is in',()=>{const m=rally(fresh(),{x:E.W,y:8,z:.001,vz:-2,vy:0,bounces:0});m.physics(.02);assert.equal(m.phase,'rally');assert.equal(m.ball.bounces,1);});
 test('no service volley',()=>{const m=rally(fresh(),{serve:true,bounces:0});assert.equal(m.stroke(0),false);});
 test('high ball becomes smash',()=>{const m=rally(fresh(),{z:2.8});assert.equal(m.stroke(0),true);assert.equal(m.ball.kind,'smash');});
-test('unbounced ball becomes volley',()=>{const m=rally(fresh(),{bounces:0});m.stroke(0,'lob');assert.equal(m.ball.kind,'volley');});
+test('unbounced B becomes soft volley, A becomes strong volley',()=>{const m=rally(fresh(),{bounces:0}),a=rally(fresh(),{bounces:0});m.stroke(0,'lob');a.stroke(0,'drive');assert.equal(m.ball.kind,'softVolley');assert.equal(a.ball.kind,'volley');assert.ok(m.predict().t>a.predict().t);});
 test('lob flight longer than drive',()=>{const a=rally(fresh()),b=rally(fresh());a.stroke(0,'lob');b.stroke(0,'drive');assert.ok(a.predict().t>b.predict().t);});
 test('four surfaces alter bounce height and speed',()=>{const vals=[];for(let c=0;c<4;c++){const m=rally(fresh(0,c),{x:2,y:8,z:.001,vz:-4,vy:5,bounces:0});m.physics(.01);vals.push([m.ball.vz,m.ball.vy]);}assert.ok(vals[0][0]<vals[2][0]&&vals[2][0]<vals[1][0]&&vals[1][0]<vals[3][0]);assert.ok(vals[0][1]>vals[3][1]);});
 test('deuce advantage and game',()=>{const m=fresh();for(let i=0;i<3;i++){point(m,0);point(m,1);}assert.deepEqual(m.score(),['40','40']);point(m,0);assert.deepEqual(m.score(),['AD','40']);point(m,1);assert.deepEqual(m.score(),['40','40']);point(m,0);point(m,0);assert.deepEqual(m.games,[1,0]);assert.equal(m.server,1);assert.equal(m.people[0].side,-1);});
