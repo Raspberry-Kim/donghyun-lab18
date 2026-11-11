@@ -27,6 +27,14 @@
  .series-strip .series-links:has(.series-item:nth-child(19):last-child) .series-item[data-series="lang"] .series-name{font-size:19px}
  .series-strip .series-links:has(.series-item:nth-child(19):last-child) .series-note{white-space:normal}
 }
+/* Match-clock-driven cue: no flashing, camera movement or pointer interception. */
+.skill-cue{position:absolute;top:5px;left:4%;width:92%;max-width:420px;pointer-events:none;background:#203a32f5;border-left:3px solid var(--cue-color,#ffe49a);box-shadow:0 3px 0 #13292055;color:#fff8e7;padding:5px 9px;display:grid;grid-template-columns:auto 1fr;column-gap:9px;align-items:center;line-height:1.35}
+.skill-cue>span{font-size:10px;color:var(--cue-color,#ffe49a);font-weight:700;white-space:nowrap}
+.skill-cue>strong{font-size:14px;letter-spacing:-.3px}
+.skill-cue>small{grid-column:1/-1;font-size:11px;color:#f1ead6;margin-top:2px}
+.example-comparison{border-left:2px solid var(--line);padding:8px 10px;margin:10px 0;color:var(--ink);font-size:12px;line-height:1.8}
+.example-comparison p+p{margin-top:8px}
+.example-comparison>small{display:block;font-size:11px;color:var(--muted);margin-top:8px}
 @media(max-width:780px){
  .series-strip .series-links:has(.series-item:nth-child(19):last-child){grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none}
  .series-strip .series-links:has(.series-item:nth-child(19):last-child) .series-item[data-series="lang"]{grid-column:span 2;grid-row:auto}

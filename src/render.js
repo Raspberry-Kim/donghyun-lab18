@@ -15,6 +15,22 @@ function project(x,y,z=0){const sy=158+y*7.8,scale=1+y*.006;return {x:150+x*20*s
 function unproject(x,y){const wy=(y-158)/7.8;return{x:(x-150)/(20*(1+wy*.006)),y:wy};}
 // Cartoon scale is visual only: collision, landing and rally trajectory stay in XYZ.
 function ballVisual(ball){return {...project(ball.x,ball.y,ball.z),radius:3+Math.min(3.6,Math.max(0,ball.z))*1.1};}
+const skillStyles={
+ fire:['#ffd080','불꽃 리턴','다음 리턴에 불꽃을 싣는다'],
+ comet:['#bfe8ff','혜성 이동','다음 타격 입력으로 공에 다가간다'],
+ win:['#ffe49a','즉시 승리','뭉치의 특별한 승리'],
+ lose:['#f4b6a0','라켓 파손 · 패배','라켓을 부수고 경기를 마친다'],
+ wind:['#d6f1ac','회오리 드롭','다음 리턴을 네트 앞에 떨어뜨린다'],
+ slow:['#dccbff','느려진 공','상대 공을 리턴할 때까지'],
+ drop:['#bce9ca','반대편 드롭','다음 리턴을 상대 반대편으로'],
+ dance:['#f8c6e4','상대가 춤춘다','이번 랠리 동안'],
+ miss:['#ffe1b1','상대 헛스윙','상대의 다음 리턴에 적용'],
+ fall:['#ffc7cf','귀여움에 쓰러짐','상대가 4초간 쓰러진다'],
+ vanish:['#d2dbff','사라지는 리턴','다음 리턴이 유효하게 튀면 포인트'],
+ serveVanish:['#badff2','사라지는 서브','서비스 박스에 들어가면 포인트'],
+ long:['#dff0ac','길어진 팔','이번 랠리 · 타격 입력은 필요'],
+ predict:['#fff1a6','바운드 예측','이번 랠리 · 착지 표식을 보자']
+};
 // Display-only half-turn at an end change. Court art/camera never moves.
 function viewMatch(m){
  const s=m.people[0].side;if(s===1)return m;
@@ -215,10 +231,50 @@ class Renderer{
    else if(fx.type==='lose'){const p=project(m.people[0].x,m.people[0].y);this.line({x:p.x+7,y:p.y-6},{x:p.x+12,y:p.y-1},'#ead7aa',2);this.line({x:p.x+15,y:p.y+2},{x:p.x+18,y:p.y+6},'#ead7aa',2);}
   }
  }
+ skillBurst(m){
+  const q=m.skillCue;if(!q)return;
+  const g=this.g,s=skillStyles[q.kind],age=q.duration-q.ttl;
+  const target=['dance','miss','fall'].includes(q.kind)?m.people[1]:m.people[0];
+  const p=project(target.x,target.y),t=this.reducedMotion?.35:Math.min(1,age/.8);
+  g.save();g.globalAlpha=Math.min(1,q.ttl/.25);
+  g.strokeStyle=s[0];g.fillStyle=s[0];g.lineWidth=1.4;
+  // Small local effects only; never move the camera or cover the ball with a flash.
+  if(!this.reducedMotion){
+   for(let j=0;j<8;j++){
+    const a=j*Math.PI/4+(q.kind==='wind'?t*3:0),r=10+t*15;
+    const x=p.x+Math.cos(a)*r,y=p.y-12+Math.sin(a)*r*.6;
+    this.rect(x,y,2,2,s[0]);
+   }
+   g.beginPath();g.ellipse(p.x,p.y+1,7+t*11,2+t*3,0,0,Math.PI*2);g.stroke();
+  }
+  // Opponent emblem sits beside the feet, clear of the upper announcement on small screens.
+  const upper=target.y<0;
+  g.translate(Math.max(15,Math.min(305,p.x+(p.x>160?-20:20))),Math.max(20,p.y+(upper?2:-27)-(this.reducedMotion||upper?0:t*4)));
+  g.fillStyle='#203a32';g.beginPath();g.arc(0,0,10,0,Math.PI*2);g.fill();g.stroke();
+  const line=(pts)=>{g.beginPath();pts.forEach(([x,y],i)=>i?g.lineTo(x,y):g.moveTo(x,y));g.stroke();};
+  const ring=(x,y,r)=>{g.beginPath();g.arc(x,y,r,0,Math.PI*2);g.stroke();};
+  g.fillStyle=s[0];
+  switch(q.kind){
+   case 'fire':line([[-5,5],[-6,0],[-2,-5],[-1,-1],[3,-7],[5,0],[4,5],[-5,5]]);break;
+   case 'comet':ring(3,2,3);line([[-7,-6],[0,0]]);line([[-7,-1],[-2,3]]);break;
+   case 'win':line([[-6,-4],[-3,0],[0,-6],[3,0],[6,-4],[5,5],[-5,5],[-6,-4]]);break;
+   case 'lose':line([[-6,6],[-2,2],[-4,0],[-1,-2]]);line([[1,1],[5,-3],[4,-6],[1,-6],[-1,-3]]);break;
+   case 'wind':for(let j=0;j<3;j++){g.beginPath();g.arc(0,0,2+j*2,t*4+j,t*4+j+4);g.stroke();}break;
+   case 'slow':ring(0,0,6);line([[0,-4],[0,0],[4,2]]);break;
+   case 'drop':line([[-5,-4],[0,5],[5,-4]]);line([[-5,6],[5,6]]);break;
+   case 'dance':line([[-3,4],[-3,-4],[4,-6],[4,2]]);ring(-5,4,2);ring(2,3,2);break;
+   case 'miss':g.beginPath();g.ellipse(0,3,4,3,0,0,7);g.fill();for(const x of [-5,0,5]){g.beginPath();g.arc(x,-3,1.7,0,7);g.fill();}break;
+   case 'fall':line([[0,6],[-6,0],[-6,-4],[-3,-6],[0,-3],[3,-6],[6,-4],[6,0],[0,6]]);break;
+   case 'vanish':case 'serveVanish':line([[-5,6],[-5,-3],[-2,-6],[2,-6],[5,-3],[5,6],[2,3],[0,6],[-2,3],[-5,6]]);this.rect(-3,-2,1,2,s[0]);this.rect(2,-2,1,2,s[0]);if(q.kind==='serveVanish')line([[7,2],[7,-5]]);break;
+   case 'long':line([[-7,4],[-3,4],[0,-1],[4,-1],[6,-4]]);ring(5,-4,2);break;
+   case 'predict':ring(0,0,5);ring(0,0,2);line([[-8,0],[-4,0]]);line([[4,0],[8,0]]);line([[0,-8],[0,-4]]);line([[0,4],[0,8]]);break;
+  }
+  g.restore();
+ }
  portrait(id,size=52){
   const cv=document.createElement('canvas');cv.width=32;cv.height=32;const old=this.g;this.g=cv.getContext('2d');this.g.imageSmoothingEnabled=false;
   this.g.translate(-134,-130);this.player({id,x:0,y:0,side:-1,pose:'idle',cool:0},0,'',null,1);this.g=old;return cv.toDataURL();
  }
 }
-window.TeRender={Renderer,project,unproject,poseFrame,ballVisual,racketFrame,viewMatch};
+window.TeRender={Renderer,project,unproject,poseFrame,ballVisual,racketFrame,viewMatch,skillStyles};
 })();
