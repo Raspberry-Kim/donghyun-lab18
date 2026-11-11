@@ -6,7 +6,7 @@
 
 [바로 하기](https://raspberry-kim.github.io/donghyun-lab18/) · [GitHub](https://github.com/Raspberry-Kim/donghyun-lab18)
 
-v0.03은 [v0.03 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.03)에서 받을 수 있다. 이전 판은 [v0.02 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.02)·[Zenodo 보관본](https://zenodo.org/records/24134430)(DOI `10.5281/zenodo.24134430`)과 [v0.01 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.01)·[Zenodo 보관본](https://zenodo.org/records/24133577)(DOI `10.5281/zenodo.24133577`)에 남아 있다. 머리글 배지와 인용 파일은 모든 판을 가리키는 개념 DOI `10.5281/zenodo.24133576`을 쓴다.
+v0.03은 [v0.03 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.03)와 [Zenodo 보관본](https://zenodo.org/records/24147292)(DOI `10.5281/zenodo.24147292`)에서 받을 수 있다. 이전 판은 [v0.02 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.02)·[Zenodo 보관본](https://zenodo.org/records/24134430)(DOI `10.5281/zenodo.24134430`)과 [v0.01 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.01)·[Zenodo 보관본](https://zenodo.org/records/24133577)(DOI `10.5281/zenodo.24133577`)에 남아 있다. 머리글 배지와 인용 파일은 모든 판을 가리키는 개념 DOI `10.5281/zenodo.24133576`을 쓴다.
 
 v0.03에서는 특수기술을 쓸 때 코트 위에 선수·기술명·준비/발동 표지가 잠깐 뜨고, 선수 곁에 기술마다 다른 작은 상징과 입자가 퍼진다. 예제는 24개로 늘었고, 모든 이름을 번호·선수·난이도·코트 순서로 맞추었다. 예제와 직접 고친 코드 모두 난이도와 코트의 차이를 함께 설명한다. 공·선수·코트 그림과 경기 물리는 v0.02와 같다.
 
