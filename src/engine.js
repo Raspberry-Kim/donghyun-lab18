@@ -76,8 +76,8 @@ class Match{
  }
  toss(){
   if(this.phase!=='ready')return false;
-  const p=this.people[this.server];this.ball={x:p.x,y:p.y,z:1.1,vx:0,vy:0,vz:5.1,by:this.server,bounces:0,serve:true,crossed:false};
-  this.phase='toss';this.timer=0;this.animate(this.server,'toss',.9);p.walk=false;p.pose='toss';this.message=this.server===0?'토스 · 공이 머리 위일 때 X 또는 Z':'동현AI™ 토스';this.event('toss','토스');return true;
+  const p=this.people[this.server];this.ball={x:p.x,y:p.y,z:1.1,vx:0,vy:0,vz:7.8,by:this.server,bounces:0,serve:true,crossed:false};
+  this.phase='toss';this.timer=0;this.animate(this.server,'toss',1.3);p.walk=false;p.pose='toss';this.message=this.server===0?'토스 · 내려오는 공이 머리 위일 때 X 또는 Z':'동현AI™ 토스';this.event('toss','토스');return true;
  }
  serve(kind,aim={}){
   const b=this.ball,p=this.people[this.server];if(this.phase!=='toss'||!b)return false;
@@ -167,7 +167,7 @@ class Match{
   if(this.effects.fall>0){p.pose='fall';return;}
   if(this.effects.whiff>0){p.pose='whiff';return;}
   if(this.phase==='ready'&&this.server===1){this.timer+=dt;if(this.timer>.7)this.toss();return;}
-  if(this.phase==='toss'&&this.server===1){if(b.vz<1.6&&b.z>1.5)this.serve(this.rand()<.16?'lob':'drive');return;}
+  if(this.phase==='toss'&&this.server===1){if(b.vz<0&&b.z<=2.35&&b.z>1.5)this.serve(this.rand()<.16?'lob':'drive');return;}
   if(this.phase!=='rally')return;
   this.aiClock-=dt;
   if(this.aiClock<=0){
