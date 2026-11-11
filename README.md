@@ -1,8 +1,14 @@
 # 동현테 v0.01
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24133576.svg)](https://doi.org/10.5281/zenodo.24133576)
+
 동현랭 코드로 선수·난이도·경기장을 정하는 1인용 단식 테니스다. Game Boy Tennis의 조작을 참고한 독립 구현이며, 카메라는 움직이지 않는다.
 
 [바로 하기](https://raspberry-kim.github.io/donghyun-lab18/) · [GitHub](https://github.com/Raspberry-Kim/donghyun-lab18)
+
+첫 공개판은 [v0.01 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.01)와 [Zenodo 보관본](https://zenodo.org/records/24133577)에서 받을 수 있다. 이 판의 DOI는 `10.5281/zenodo.24133577`이며, 머리글 배지와 인용 파일은 모든 판을 가리키는 개념 DOI `10.5281/zenodo.24133576`을 쓴다. DOI 표시는 발행 후 별도 커밋으로 추가했으며 발행된 태그와 보관 파일은 변경하지 않았다.
+
+공개 웹판에는 같은 v0.01 표기를 유지한 후속 수정이 있다. 왼팔을 몸 앞 오른쪽으로 뻗어 공을 올리고 오른손 라켓 위에서 서브하도록 토스 위치·팔 자세·타점을 고쳤다. 이 후속 수정은 기존 Zenodo ZIP에 소급 반영하지 않았다.
 
 ## 시작과 조작
 

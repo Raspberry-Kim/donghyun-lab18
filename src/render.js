@@ -50,15 +50,17 @@ function poseFrame(p,override){
   v.left=[-4,-12,-4+sway,-9-sway];v.right=[4,-12,4,-10+sway];v.racket=[10,-17+sway,'tilt'];v.face=.65+.2*Math.abs(sway)/2;}
  if(kind==='toss'){
   const n=Math.min(3,Math.floor(t*10));v.frame=n;
-  v.left=[[-8,-13,-13,-16],[-9,-18,-13,-23],[-8,-19,-12,-25],[-8,-17,-12,-22]][n];
-  v.right=[[5,-12,5,-10],[5,-12,7,-10],[5,-15,6,-18],[5,-15,6,-18]][n];
-  v.racket=[[10,-17,'tilt'],[15,-12,'wide'],[6,-26,'upright'],[10,-25,'tilt']][n];v.face=[.85,.5,.22,.35][n];v.lean=n>1?-1:0;v.bob=n===0?1:0;
+  const tossX=Math.round(.65*20*(1+(p.y||0)*.006));
+  // The free LEFT arm crosses in front; the RIGHT arm keeps the racket.
+  v.left=[[1,-12,tossX,-13],[2,-18,tossX,-22],[1,-20,8,-27],[-3,-17,-4,-21]][n];
+  v.right=[[6,-10,9,-7],[5,-12,7,-10],[5,-15,6,-18],[5,-15,6,-18]][n];
+  v.racket=[[17,-6,'wide'],[15,-12,'wide'],[6,-26,'upright'],[10,-25,'tilt']][n];v.face=[.85,.5,.22,.35][n];v.lean=n>1?-1:0;v.bob=n===0?1:0;
  }else if(kind==='serve'||kind==='smash'){
   const st=a?.soft?t*.78:t,n=st<.07?0:st<.15?1:st<.28?2:3;v.frame=n;v.lean=[1,2,2,0][n];v.bob=[-1,0,1,0][n];v.face=a?.soft?[.95,.85,.65,.85][n]:[.95,.28,.18,.85][n];
   const contactHeight=(a?.height||2.1)*Z_SCALE,hitY=-Math.round(Math.max(18,Math.min(31,contactHeight)));
   if(kind==='serve'&&n<3)v.lift=-Math.round(Math.max(0,contactHeight-31)*[1,.65,.2][n]);
-  const hitX=kind==='serve'?-Math.round(.65*20*(1+(p.y||0)*.006)):0;
-  v.right=[[-3,-19,hitX,hitY+8],[5,-17,3,-17],[1,-11,-3,-10],[4,-12,4,-10]][n];
+  const hitX=kind==='serve'?Math.round(.65*20*(1+(p.y||0)*.006)):0;
+  v.right=[[kind==='serve'?5:-3,-19,hitX,hitY+8],[5,-17,3,-17],[1,-11,-3,-10],[4,-12,4,-10]][n];
   v.racket=[[hitX,hitY,'upright'],[9,-23,'tilt'],[-11,-10,'wide'],[10,-17,'tilt']][n];
   v.left=[[-4,-14,-5,-16],[-5,-12,-6,-10],[-4,-11,-3,-8],[-4,-12,-4,-9]][n];
   if(n<3)v.feet=[-3,0,-2,-3,3,-1,1,-4];
@@ -123,8 +125,8 @@ class Renderer{
    g.drawImage(img,14,35,14,10,(moving?Math.sign(feet[4])*1:0),-5+(moving?feet[5]:0),7,5);
   }
   g.save();g.translate(lean,bob);
-  const shoulder=id===6?-11:-14,L=v.left,R=v.right;
-  limb(-2,shoulder,...L); // far arm behind the body
+  const shoulder=id===6?-11:-14,L=v.left,R=v.right,armSide=['toss','serve'].includes(v.kind)?p.side:1;
+  limb(-2*armSide,shoulder,...L); // far arm behind the body
   if(id===6){const img=this.shushu[rear?1:0];g.drawImage(img,0,0,28,35,-7,-22.5,14,17.5);}
   else {
    this.rect(-3,-15,6,8,ink);this.rect(-2,-14,4,6,id===4?'#f5efdd':Te.PLAYERS[id].color);
@@ -135,7 +137,7 @@ class Renderer{
     this.rect(v.lean<0?-4:3,-18,1,2,palette.s);
    }
   }
-  limb(2,shoulder,...R);
+  limb(2*armSide,shoulder,...R);
   if(v.kind!=='broken'){
    const rack=racketFrame(v),{x:rx,y:ry,minor,major}=rack;
    this.pixelLine(R[2],R[3],rx-rack.ux*6,ry-rack.uy*6,'#cdb87b',2);

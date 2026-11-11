@@ -81,8 +81,9 @@ class Match{
  }
  toss(){
   if(this.phase!=='ready')return false;
-  // Toss from the free-hand side, not through the player's head.
-  const p=this.people[this.server];this.ball={x:p.x-.65*p.side,y:p.y,z:1.1,vx:0,vy:0,vz:7.8,by:this.server,bounces:0,serve:true,crossed:false};
+  // The left arm reaches across the body to toss above the right-hand racket.
+  // Keep the whole vertical flight clear of the head, on the hitting side.
+  const p=this.people[this.server];this.ball={x:p.x+.65*p.side,y:p.y,z:1.1,vx:0,vy:0,vz:7.8,by:this.server,bounces:0,serve:true,crossed:false};
   this.phase='toss';this.timer=0;this.pendingServe=null;this.animate(this.server,'toss',2.1);p.walk=false;p.pose='toss';this.message=this.server===0?'토스 · X/Z로 타격, 높은 공은 준비 후 자동 타격':'동현AI™ 토스';this.event('toss','토스');return true;
  }
  serve(kind,aim={}){
