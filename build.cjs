@@ -3,7 +3,7 @@ const src=n=>fs.readFileSync(path.join(root,'src',n),'utf8');
 let css=src('style.css');
 for(const name of fs.readdirSync(path.join(root,'fonts')))css=css.replaceAll('./fonts/'+name,'data:font/woff2;base64,'+fs.readFileSync(path.join(root,'fonts',name)).toString('base64'));
 let html=src('index.html').replace('<link rel="stylesheet" href="./style.css">',()=>`<style>${css}</style>`);
-for(const file of ['donghyun.js','engine.js','render.js','app.js'])html=html.replace(`<script src="./${file}"></script>`,()=>'<script>'+src(file).replaceAll('</script','<\\/script')+'</script>');
+for(const file of ['donghyun.js','engine.js','shushu.js','render.js','app.js'])html=html.replace(`<script src="./${file}"></script>`,()=>'<script>'+src(file).replaceAll('</script','<\\/script')+'</script>');
 fs.mkdirSync(path.join(root,'dist'),{recursive:true});
 fs.writeFileSync(path.join(root,'dist/index.html'),html);
 fs.writeFileSync(path.join(root,'index.html'),html);
