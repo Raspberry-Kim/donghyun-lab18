@@ -3,7 +3,7 @@
 const $=s=>document.querySelector(s),E=Te,R=new TeRender.Renderer($('#court')),keys=new Set();
 let match=new E.Match(),active=false,tab='play',manual=false,pending=null,sound=true,ctx=null,last=0,acc=0,notice='',noticeTime=0;
 let oldPad=[],padAxes={x:0,y:0},fps=60,frames=0,fpsLast=0,musicNext=0,musicStep=0,hudKey='',fullRequest=Promise.resolve();
-let tossGain=null,menu=null,padMenu={up:false,down:false};
+let tossGain=null,crowd=null,menu=null,padMenu={up:false,down:false};
 const motionQuery=matchMedia('(prefers-reduced-motion: reduce)');
 R.reducedMotion=motionQuery.matches;motionQuery.addEventListener('change',e=>{R.reducedMotion=e.matches;});
 const captions=['WIMBLEDON / GRASS','AUSTRALIA / HARD','US / HARD','FRANCE / CLAY'];
@@ -45,7 +45,7 @@ $('#example').onchange=()=>example(Number($('#example').value));
 $('#code').oninput=validate;$('#code').onscroll=()=>{hlSync();$('#lines').scrollTop=$('#code').scrollTop;};
 $('#code').onfocus=()=>{if(active&&!match.paused&&match.phase!=='match'){match.paused=true;keys.clear();draw();}};
 function audio(){
- if(!ctx)try{ctx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){return;}
+ if(!ctx)try{ctx=new (window.AudioContext||window.webkitAudioContext)();crowd=new TeCrowd.Crowd(ctx);}catch(e){return;}
  if(ctx.state==='suspended')ctx.resume().catch(()=>{});
 }
 function tone(freq=.0,dur=.08,type='triangle',vol=.035,delay=0){
@@ -78,7 +78,10 @@ const skillSounds={
  predict:()=>{tone(880,.06,'square',.02);tone(880,.06,'square',.02,.1);tone(1175,.14,'square',.02,.2);}
 };
 function sounds(){
- for(const ev of match.events.splice(0)){
+ const events=match.events.splice(0);
+ crowd?.update(sound&&active&&!match.paused&&tab==='play'&&!document.hidden,match.phase==='rally');
+ crowd?.react(events,match.rally);
+ for(const ev of events){
   if(ev.type==='toss')tossSound();
   else if(ev.type==='hit'){
    if(tossGain){tossGain.gain.cancelScheduledValues(ctx.currentTime);tossGain.gain.setTargetAtTime(.0001,ctx.currentTime,.015);}
@@ -113,10 +116,12 @@ function tossSound(){
  }
  setTimeout(()=>{g.disconnect();if(tossGain===g)tossGain=null;},1250);
 }
-function toggleSound(){audio();sound=!sound;if(!sound&&tossGain){tossGain.gain.cancelScheduledValues(ctx.currentTime);tossGain.gain.setValueAtTime(0,ctx.currentTime);}$('#sound').classList.toggle('muted',!sound);$('#sound').setAttribute('aria-pressed',String(sound));}
+function toggleSound(){audio();sound=!sound;if(!sound){crowd?.stop();if(tossGain){tossGain.gain.cancelScheduledValues(ctx.currentTime);tossGain.gain.setValueAtTime(0,ctx.currentTime);}}$('#sound').classList.toggle('muted',!sound);$('#sound').setAttribute('aria-pressed',String(sound));}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)crowd?.stop();});
 $('#sound').onclick=toggleSound;
 $('#theme').onclick=()=>{const on=document.documentElement.dataset.theme!=='dark';document.documentElement.dataset.theme=on?'dark':'light';$('#theme').setAttribute('aria-pressed',String(on));};
 function begin(config){
+ crowd?.stop();
  hideMenu();match=new E.Match(config,Math.floor(Math.random()*2147483646)+1);active=true;manual=false;keys.clear();audio();acc=0;notice='';noticeTime=0;
  $('#stage').focus({preventScroll:true});draw();
 }
@@ -167,6 +172,7 @@ function restoreSave(data){
  if(!data||typeof data!=='object'||data.format!==SAVE_FORMAT)throw new Error('동현테 저장 파일이 아니다.');
  if(data.version!==SAVE_VERSION)throw new Error('지원하지 않는 저장 형식 버전이다('+String(data.version).slice(0,12)+').');
  const m=E.Match.restore(data.state),c=m.config; // throws with the reason when anything is off
+ crowd?.stop();
  hideMenu();match=m;active=true;manual=false;pending=null;$('#confirm-panel').hidden=true;keys.clear();acc=0;notice='';noticeTime=0;audio();
  // The code panel follows the loaded match, so what is shown is what is being played.
  $('#code').value=makeCode(c.player,c.level,c.court);
