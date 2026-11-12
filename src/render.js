@@ -16,7 +16,7 @@ const headPalettes=[
  {...palette,h:'#624234',H:'#916049',b:'#e89b92',n:'#b6636a'},
  {...palette,h:'#3b3029',H:'#635044',s:'#dba784',b:'#c88670'},
  {...palette,h:'#614b39',H:'#997756',b:'#e4a093'},
- {...palette,c:'#e0c49a',d:'#c4a377',m:'#8a4a4a',q:'#a08d6e'}, // 포동이: cream fur, tan ear flaps, small mouth
+ {...palette,c:'#faf9f4',d:'#e6e5df',m:'#8a4a4a',q:'#a6a59c'}, // 포동이: white ear flaps, light grey fold, small mouth
  {...palette,h:'#493329',H:'#866149',b:'#efa79b',n:'#b6636a'}
 ];
 // Retreat is a backward step facing the ball, never a sudden back-of-head sprite.
@@ -144,9 +144,11 @@ class Renderer{
  }
  rect(x,y,w,h,c){const g=this.g;g.fillStyle=c;x=Math.round(x);y=Math.round(y);w=Math.ceil(w);h=Math.ceil(h);
   const t=g.getTransform();
-  if(t.b||t.c){g.fillRect(x,y,w,h);return;} // rotated: draw as before
-  // snap to device pixels so scaled pixel art has no hairline seams
-  const x0=Math.round(t.a*x+t.e),x1=Math.round(t.a*(x+w)+t.e),y0=Math.round(t.d*y+t.f),y1=Math.round(t.d*(y+h)+t.f);
+  // Quarter-turns remain axis-aligned. Floating-point cos(π/2) is not exactly zero.
+  // Previously fall + BODY_WIDTH=.9 bypassed snapping and antialiased each pixel edge.
+  const eps=1e-8,axis=(Math.abs(t.b)<eps&&Math.abs(t.c)<eps)||(Math.abs(t.a)<eps&&Math.abs(t.d)<eps);
+  if(!axis){g.fillRect(x,y,w,h);return;}
+  const x0=Math.round(t.a*x+t.c*y+t.e),x1=Math.round(t.a*(x+w)+t.c*(y+h)+t.e),y0=Math.round(t.b*x+t.d*y+t.f),y1=Math.round(t.b*(x+w)+t.d*(y+h)+t.f);
   g.save();g.setTransform(1,0,0,1,0,0);g.fillRect(Math.min(x0,x1),Math.min(y0,y1),Math.abs(x1-x0),Math.abs(y1-y0));g.restore();}
  line(a,b,c,width=1){const g=this.g;g.strokeStyle=c;g.lineWidth=width;g.beginPath();g.moveTo(Math.round(a.x)+.5,Math.round(a.y)+.5);g.lineTo(Math.round(b.x)+.5,Math.round(b.y)+.5);g.stroke();}
  poly(pts,c){const g=this.g;g.fillStyle=c;g.beginPath();pts.forEach((p,i)=>i?g.lineTo(p.x,p.y):g.moveTo(p.x,p.y));g.closePath();g.fill();}

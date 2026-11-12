@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it using the metadata below."
 title: "Donghyunte (동현테): a fixed-view single-player tennis laboratory configured through Donghyun-lang"
 type: software
-version: "0.10"
+version: "0.11"
 doi: "10.5281/zenodo.24133576"
 date-released: "2026-11-12"
 authors:
@@ -26,7 +26,9 @@ abstract: >-
   constants and hit rules of this independent implementation do not
   numerically match the original. In-app "Why Open?" and "Mathematical
   principles" pages explain the history of open tennis and the engine's
-  equations. Version 0.10 picks the opponent at random from the six other
+  equations. Version 0.11 redraws Podongi with white ears at Quackquack's
+  height, fixes pixel seams in fallen sprites, and adds original procedural
+  crowd murmurs, applause, cheers and protests. Version 0.10 picks the opponent at random from the six other
   players, softens Donghyun's grey hair, and renders at double resolution so
   Shushu appears pixel-for-pixel from Donghyun-pa. Version 0.09 shows the player's own face only before the match
   starts and the back of the head during play, and gives Donghyun mixed white
