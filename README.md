@@ -1,4 +1,4 @@
-# 동현테 v0.09
+# 동현테 v0.10
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24133576.svg)](https://doi.org/10.5281/zenodo.24133576)
 
@@ -6,13 +6,15 @@
 
 [바로 하기](https://raspberry-kim.github.io/donghyun-lab18/) · [GitHub](https://github.com/Raspberry-Kim/donghyun-lab18)
 
-[v0.09 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.09)에서 변경 내용을 볼 수 있다. 이전 v0.08의 [Zenodo 보관본](https://zenodo.org/records/24151410)은 DOI `10.5281/zenodo.24151410`로 남아 있다.
+[v0.10 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.10)에서 변경 내용을 볼 수 있다. 이전 v0.09의 [Zenodo 보관본](https://zenodo.org/records/24152793)은 DOI `10.5281/zenodo.24152793`로 남아 있다.
+
+v0.10에서는 상대가 경기마다 바뀐다. 내 선수를 뺀 여섯 명 가운데 무작위로 정해지므로 같은 선수끼리는 만나지 않는다. 동현의 뒤통수는 검은 점을 줄인 부드러운 회색으로 바꿨다. 화면을 두 배 해상도로 그려 슈슈를 동현파 원본 도트 그대로(1:1) 보여 주고, 다른 여섯 선수는 크기와 모양을 그대로 둔 채 도트 사이 틈만 없앴다.
 
 v0.09에서 내 선수는 출전 전 시작 카드에서만 앞 얼굴을 보이고, 출전한 뒤에는 뒤통수를 보인다. 상대 선수는 계속 앞을 본다. 동현은 머리 위 꽁지머리를 없애고 흰머리와 검은머리가 섞인 색으로 바꿨다.
 
 v0.08은 머리 중심의 둥근 캐릭터를 그렸다. 동현은 흰 머리 남성, 뭉치와 꽥꽥은 단발 여성(꽥꽥은 조금 작은 키), 뚱띠는 넓고 건장한 인상, 또치는 귀엽고 가느다란 인상이다. 포동이의 흰 귀·주둥이를 키웠고 슈슈의 원본 디자인·몸체·팔다리·라켓과 고정 코트는 보존했다. 상대 슈슈는 대기와 후진에서도 앞을 본다.
 
-v0.08은 [v0.08 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.08), v0.07은 [v0.07 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.07)에서 받을 수 있다. 이전 판은 [v0.06 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.06)·[Zenodo 보관본](https://zenodo.org/records/24150828)(DOI `10.5281/zenodo.24150828`), [v0.05 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.05)·[Zenodo 보관본](https://zenodo.org/records/24150092)(DOI `10.5281/zenodo.24150092`), [v0.04 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.04)·[Zenodo 보관본](https://zenodo.org/records/24147779)(DOI `10.5281/zenodo.24147779`), [v0.03 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.03)·[Zenodo 보관본](https://zenodo.org/records/24147292)(DOI `10.5281/zenodo.24147292`), [v0.02 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.02)·[Zenodo 보관본](https://zenodo.org/records/24134430)(DOI `10.5281/zenodo.24134430`), [v0.01 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.01)·[Zenodo 보관본](https://zenodo.org/records/24133577)(DOI `10.5281/zenodo.24133577`)에 남아 있다. 머리글 배지와 인용 파일은 모든 판을 가리키는 개념 DOI `10.5281/zenodo.24133576`을 쓴다.
+v0.09는 [v0.09 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.09), v0.08은 [v0.08 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.08), v0.07은 [v0.07 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.07)에서 받을 수 있다. 이전 판은 [v0.06 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.06)·[Zenodo 보관본](https://zenodo.org/records/24150828)(DOI `10.5281/zenodo.24150828`), [v0.05 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.05)·[Zenodo 보관본](https://zenodo.org/records/24150092)(DOI `10.5281/zenodo.24150092`), [v0.04 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.04)·[Zenodo 보관본](https://zenodo.org/records/24147779)(DOI `10.5281/zenodo.24147779`), [v0.03 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.03)·[Zenodo 보관본](https://zenodo.org/records/24147292)(DOI `10.5281/zenodo.24147292`), [v0.02 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.02)·[Zenodo 보관본](https://zenodo.org/records/24134430)(DOI `10.5281/zenodo.24134430`), [v0.01 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.01)·[Zenodo 보관본](https://zenodo.org/records/24133577)(DOI `10.5281/zenodo.24133577`)에 남아 있다. 머리글 배지와 인용 파일은 모든 판을 가리키는 개념 DOI `10.5281/zenodo.24133576`을 쓴다.
 
 v0.07에서는 메뉴에 **왜 ‘Open’일까?**와 **수학적 원리**를 더했다. 앞의 것은 아마추어의 어원, 프로의 메이저 배제, 1968년 오픈 에라와 상금, 골프 디 오픈과의 비교를 출처와 함께 싣는다. 뒤의 것은 120 Hz 고정 틱, 가상 Z축 포물선과 그림자, 목표점·비행시간으로 푸는 타격 속도, 네트·바운드 사건 시각, 코트별 반발, 서브 타점 품질, 타격 상태 머신, 동현AI™ 예측, 고정 화면 투영을 엔진 코드의 식 그대로 설명한다. 경기 규칙·물리·저장 형식은 바꾸지 않았다.
 
@@ -72,7 +74,7 @@ GB A는 X, GB B는 Z다. X는 가로로 미는 스트로크, Z는 아래에서 �
 - **저장 호환**: 이전 v1 저장도 읽는다. 이전 횟수·초 단위의 긴 팔·쓰러짐과 준비된 혜성/바람 효과는 불러올 때 새 랠리 지속 규칙으로 바꾼다. 파일의 점수·코트·난수·공 좌표는 보존한다.
 - **기본 경기**: XYZ 포물선, 그림자, 높이·거리·타이밍 타격, 서브 폴트·렛, 네트·인·아웃·두 번 바운드, 듀스·어드밴티지·타이브레이크·2세트 선승.
 - **화면**: 고정 시점, 단순한 절차적 도트, 앞·뒷모습, 잔 다르크 심판, 밝은/어두운 UI.
-- **첫 상대**: 슈슈. 동현파 원본의 양쪽 둥근 머리·리본·분홍 원피스·빨간 운동화 도트를 축소해 사용한다. 동현AI™는 일반 타격만 사용한다.
+- **상대**: 내 선수를 뺀 여섯 명 가운데 경기마다 무작위. 같은 선수끼리는 만나지 않는다. 슈슈는 동현파 원본의 양쪽 둥근 머리·리본·분홍 원피스·빨간 운동화 도트를 1:1로 쓴다. 동현AI™는 일반 타격만 사용한다.
 
 ## 원작과의 관계
 

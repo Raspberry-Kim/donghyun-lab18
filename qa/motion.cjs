@@ -5,7 +5,14 @@ const pose=sandbox.window.TeRender.poseFrame;
 let count=0;function check(name,fn){fn();count++;console.log('ok',name);}
 const step=(m,n)=>{for(let i=0;i<n;i++)m.step(E.DT);};
 const descend=m=>{for(let i=0;i<280;i++){if(m.ball.vz<0&&m.ball.z<=2.3&&m.ball.z>=1.5)return;m.step(E.DT);}throw Error('descending service window missing');};
-check('first opponent is Shushu for all 84 settings',()=>{for(let p=0;p<7;p++)for(let l=0;l<3;l++)for(let c=0;c<4;c++)assert.equal(new E.Match({player:p,level:l,court:c}).people[1].id,6);});
+check('v0.10 opponent is random, never the player, fixed by the seed',()=>{
+ for(let p=0;p<7;p++){const seen=new Set();for(let k=1;k<=300;k++){const seed=k*2654435761>>>0,m=new E.Match({player:p,level:k%3,court:k%4},seed);
+  assert.notEqual(m.people[1].id,p);assert.equal(m.config.opponent,m.people[1].id);assert.equal(new E.Match({player:p,level:0,court:0},seed).people[1].id,m.people[1].id);seen.add(m.people[1].id);}
+  assert.equal(seen.size,6);}
+ assert.equal(new E.Match({player:0,level:0,court:0,opponent:3}).people[1].id,3);
+ assert.notEqual(new E.Match({player:2,level:0,court:0,opponent:2}).people[1].id,2);
+ const old=new E.Match({player:1,level:0,court:0}).snapshot();delete old.config.opponent;old.people[1].id=6;assert.equal(E.Match.restore(old).people[1].id,6);
+});
 check('Donghyun-pa original sprite arrays unchanged',()=>{
  assert.equal(crypto.createHash('sha256').update(JSON.stringify(Shu)).digest('hex'),'e5bdb108167349f21617f49b6e78b525572d0e19780fbb8a683ec4e31ac858bb');
  assert.equal(Shu.rows.length,45);assert.equal(Shu.rows[0].length,28);

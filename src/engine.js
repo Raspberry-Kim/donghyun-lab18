@@ -26,10 +26,17 @@ function parse(out){
  t.forEach((v,i)=>{if(!Number.isInteger(v)||v<1||v>[7,3,4][i])throw Error(['선수는 1–7','난이도는 1–3','경기장은 1–4'][i]+'만 된다.');});
  return {player:t[0]-1,level:t[1]-1,court:t[2]-1};
 }
+// Opponent: any of the six other players, chosen from the match seed without touching the rally RNG.
+function pickOpponent(c,seed){
+ const others=[0,1,2,3,4,5,6].filter(i=>i!==c.player);
+ if(Number.isInteger(c.opponent)&&others.includes(c.opponent))return c.opponent;
+ let x=(seed>>>0)^0x9e3779b9;x=Math.imul(x^(x>>>16),0x85ebca6b);x=Math.imul(x^(x>>>13),0xc2b2ae35);x=(x^(x>>>16))>>>0;
+ return others[x%others.length];
+}
 class Match{
  constructor(config={player:0,level:0,court:0},seed=20261111){
-  this.config={...config};this.seed=seed>>>0;this.time=0;this.tick=0;this.level=LEVELS[config.level];this.court=COURTS[config.court];
-  this.people=[{id:config.player,x:1.5,y:12.3,side:1,swing:0,cool:0,pose:'idle'},{id:6,x:-1.5,y:-11,side:-1,swing:0,cool:0,pose:'idle'}];
+  this.config={...config,opponent:pickOpponent(config,seed)};this.seed=seed>>>0;this.time=0;this.tick=0;this.level=LEVELS[config.level];this.court=COURTS[config.court];
+  this.people=[{id:config.player,x:1.5,y:12.3,side:1,swing:0,cool:0,pose:'idle'},{id:this.config.opponent,x:-1.5,y:-11,side:-1,swing:0,cool:0,pose:'idle'}];
   this.points=[0,0];this.games=[0,0];this.sets=[0,0];this.history=[];this.server=0;this.totalGames=0;this.tb=false;this.tbFirst=0;
   this.energy=6;this.returns=0;this.rally=0;this.totalHits=0;this.events=[];this.phase='ready';this.paused=false;this.winner=null;this.faults=0;
   this.message='X 토스';this.armed=null;this.pendingSkills={};this.effects={};this.fx=null;this.ball=null;this.timer=0;this.aiClock=0;this.aiTarget={x:0,y:-10};
@@ -355,7 +362,8 @@ class Match{
   const FX={type:['wall','comet','fire','wind','drop','vanish','long','win','lose'],ttl:'n',duration:'n',x:'n',y:'n',toX:'n',toY:'n',toZ:'n',left:'n',end:'b'};
   const CUE={kind:kinds,prepared:'b',player:'n',slot:'n',name:'s',ttl:'n',duration:'n'};
   if(!Array.isArray(s.people)||s.people.length!==2||!s.people.every(p=>fits(p,PERSON)))bad('선수 정보가 맞지 않는다.');
-  if(s.people[0].id!==c.player||s.people[1].id!==6)bad('선수 정보가 맞지 않는다.');
+  if(c.opponent!==undefined&&(!int(c.opponent,0,6)||c.opponent===c.player))bad('상대 선수 정보가 맞지 않는다.');
+  if(s.people[0].id!==c.player||s.people[1].id!==(c.opponent??6))bad('선수 정보가 맞지 않는다.'); // saves before v0.10 always faced 슈슈
   s.people.forEach(p=>{if(!num(p.x)||!num(p.y)||Math.abs(p.x)>6.31||Math.abs(p.y)>14.21||![1,-1].includes(p.side)||!num(p.swing)||!num(p.cool))bad('선수 위치가 맞지 않는다.');
    if(p.anim!=null&&!(typeof p.anim.name==='string'&&num(p.anim.time)&&num(p.anim.duration)&&num(p.anim.hand)))bad('선수 동작 정보가 맞지 않는다.');});
   if(s.people[0].side!==-s.people[1].side)bad('코트 방향이 맞지 않는다.');
@@ -376,6 +384,7 @@ class Match{
   if(typeof s.message!=='string'||s.message.length>80)bad('경기 안내 정보가 맞지 않는다.');
   // Only the fields a match owns are taken over; anything else in the file is ignored.
   const m=new Match(c,s.seed),copy=JSON.parse(JSON.stringify(s));
+  m.config.opponent=s.people[1].id; // older saves carry no opponent field and always faced 슈슈
   for(const k of Object.keys(m))if(!['level','court','config','events','paused','winner'].includes(k)&&Object.prototype.hasOwnProperty.call(copy,k))m[k]=copy[k];
   // Older v1 saves used one armed slot and numeric duration/charges; migrate to rally effects.
   if(s.pendingSkills===undefined){
