@@ -403,3 +403,26 @@ kbd{display:inline-flex;align-items:center;justify-content:center;min-width:1.8e
  .stage.is-full{padding:6px}.stage.is-full .canvas-shell{max-height:calc(100dvh - 150px);height:calc(100dvh - 150px)}
 }
 @media(max-width:480px){.court-cards{grid-template-columns:1fr}}
+
+/* ---- v0.05: Enter 메뉴 · 저장 칸 · 기술 상태 ---- */
+.game-menu.center{left:50%;top:50%;transform:translate(-50%,-50%);min-width:220px;max-width:92%;z-index:5;color:var(--ink)}
+.game-menu h4{white-space:normal;line-height:1.5;word-break:keep-all}
+.game-menu .mi{align-items:baseline;min-height:32px}
+.game-menu .mi small{font-size:11px;white-space:nowrap}
+.game-menu .menu-hint{margin:6px 6px 2px;padding-top:6px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);line-height:1.9;white-space:normal}
+.game-menu .menu-hint kbd{min-width:1.6em;height:1.6em;margin-right:3px;font-size:10px}
+/* While the menu is open the court is dimmed, never hidden: the paused rally stays readable. */
+.canvas-shell:has(.game-menu:not([hidden]))::after{content:'';position:absolute;inset:0;background:rgba(25,22,19,.45);z-index:4;pointer-events:none}
+.load-status{margin:8px 0 0;font-size:var(--text-xs);color:var(--error);line-height:1.6}.load-status.ok{color:var(--muted)}
+.skill-label{border:1px solid transparent;border-radius:8px;padding:3px 8px 3px 5px;min-height:38px}
+.skill-label.armed{border-color:var(--sk,#f2b705);background:#1f3a2f}
+.skill-label.armed small{color:var(--sk,#f2b705);font-weight:700}
+.skill-label.on{border-color:var(--sk,#f2b705);background:var(--sk,#f2b705);color:#1c2b24;font-weight:700}
+.skill-label.on small{color:#1c2b24;font-weight:700}
+.skill-label.on kbd{background:#1c2b24;border-color:#1c2b24;color:#fff8e7}
+.skill-cue{border-left-width:6px;padding:7px 11px;outline:1px solid color-mix(in srgb,var(--cue-color,#ffe49a) 55%,transparent);outline-offset:-1px}
+.skill-cue>span{font-size:11px;background:var(--cue-color,#ffe49a);color:#1c2b24;border-radius:4px;padding:1px 6px}
+.skill-cue.prepared>span{background:none;color:var(--cue-color,#ffe49a);outline:1px solid var(--cue-color,#ffe49a)}
+.skill-cue>strong{font-size:17px}
+.skill-cue>small{font-size:12px}
+@media(max-width:560px){.skill-cue{padding:5px 8px}.skill-cue>strong{font-size:14px}.skill-cue>small{font-size:10.5px}.skill-label{padding:2px 5px 2px 3px;min-height:34px}.game-menu.center{min-width:0;width:92%}.game-menu .mi{flex-wrap:wrap;gap:0 10px;padding:5px 8px}}
