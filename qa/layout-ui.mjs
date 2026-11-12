@@ -1,4 +1,4 @@
-// v0.06: fixed-view proportions, toolbar spacing, fullscreen, theme, tabs and ordinary play.
+// v0.06–v0.07: fixed-view proportions, toolbar spacing, fullscreen, theme, tabs and ordinary play.
 import {createRequire} from 'node:module';
 const require=createRequire(import.meta.url),{chromium}=require('playwright'),assert=require('assert/strict'),fs=require('fs');
 const url=process.argv[2]||'http://127.0.0.1:3018/',out=process.argv[3]||'/tmp/te-layout';
@@ -35,7 +35,7 @@ for(const [width,height] of viewports){
  await p.click('#full-close');assert.ok(!(await metrics()).full);
  await p.locator('#stage').focus();await p.keyboard.press('f');assert.ok((await metrics()).full);await p.keyboard.press('Escape');assert.ok(!(await metrics()).full);n++;
  await p.click('#theme');await p.locator('.field-col').screenshot({path:`${out}/${width}-${height}-dark.png`});
- for(const tab of ['players','rules','reference','play']){
+ for(const tab of ['players','rules','open','math','reference','play']){
   await p.click(`[data-tab="${tab}"]`);assert.ok(await p.locator(`#tab-${tab}`).isVisible());assert.ok((await metrics()).overflow<=1);
   if(tab==='players'&&width===1440&&height===900)await p.locator('#tab-players').screenshot({path:`${out}/roster.png`});
  }
