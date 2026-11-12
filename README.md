@@ -6,7 +6,7 @@
 
 [바로 하기](https://raspberry-kim.github.io/donghyun-lab18/) · [GitHub](https://github.com/Raspberry-Kim/donghyun-lab18)
 
-[v0.10 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.10)에서 변경 내용을 볼 수 있다. 이전 v0.09의 [Zenodo 보관본](https://zenodo.org/records/24152793)은 DOI `10.5281/zenodo.24152793`로 남아 있다.
+이번 판의 [Zenodo 보관본](https://zenodo.org/records/24152944)은 DOI `10.5281/zenodo.24152944`로 인용할 수 있다. 보관본 ZIP은 v0.10 태그와 같은 내용이다. [v0.10 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.10)에서 변경 내용을 볼 수 있다. 이전 v0.09의 [Zenodo 보관본](https://zenodo.org/records/24152793)은 DOI `10.5281/zenodo.24152793`로 남아 있다.
 
 v0.10에서는 상대가 경기마다 바뀐다. 내 선수를 뺀 여섯 명 가운데 무작위로 정해지므로 같은 선수끼리는 만나지 않는다. 동현의 뒤통수는 검은 점을 줄인 부드러운 회색으로 바꿨다. 화면을 두 배 해상도로 그려 슈슈를 동현파 원본 도트 그대로(1:1) 보여 주고, 다른 여섯 선수는 크기와 모양을 그대로 둔 채 도트 사이 틈만 없앴다.
 
