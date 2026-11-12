@@ -1,4 +1,4 @@
-# 동현테 v0.08
+# 동현테 v0.09
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24133576.svg)](https://doi.org/10.5281/zenodo.24133576)
 
@@ -6,11 +6,13 @@
 
 [바로 하기](https://raspberry-kim.github.io/donghyun-lab18/) · [GitHub](https://github.com/Raspberry-Kim/donghyun-lab18)
 
-이번 판의 [Zenodo 보관본](https://zenodo.org/records/24151410)은 DOI `10.5281/zenodo.24151410`로 인용할 수 있다. 보관본 ZIP은 v0.08 태그와 같은 내용이다. [v0.08 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.08)에서 변경 내용을 볼 수 있다. 이전 v0.07의 [Zenodo 보관본](https://zenodo.org/records/24151119)은 DOI `10.5281/zenodo.24151119`로 남아 있다.
+[v0.09 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.09)에서 변경 내용을 볼 수 있다. 이전 v0.08의 [Zenodo 보관본](https://zenodo.org/records/24151410)은 DOI `10.5281/zenodo.24151410`로 남아 있다.
+
+v0.09에서 내 선수는 출전 전 시작 카드에서만 앞 얼굴을 보이고, 출전한 뒤에는 뒤통수를 보인다. 상대 선수는 계속 앞을 본다. 동현은 머리 위 꽁지머리를 없애고 흰머리와 검은머리가 섞인 색으로 바꿨다.
 
 v0.08은 머리 중심의 둥근 캐릭터를 그렸다. 동현은 흰 머리 남성, 뭉치와 꽥꽥은 단발 여성(꽥꽥은 조금 작은 키), 뚱띠는 넓고 건장한 인상, 또치는 귀엽고 가느다란 인상이다. 포동이의 흰 귀·주둥이를 키웠고 슈슈의 원본 디자인·몸체·팔다리·라켓과 고정 코트는 보존했다. 상대 슈슈는 대기와 후진에서도 앞을 본다.
 
-v0.07은 [v0.07 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.07)에서 받을 수 있다. 이전 판은 [v0.06 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.06)·[Zenodo 보관본](https://zenodo.org/records/24150828)(DOI `10.5281/zenodo.24150828`), [v0.05 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.05)·[Zenodo 보관본](https://zenodo.org/records/24150092)(DOI `10.5281/zenodo.24150092`), [v0.04 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.04)·[Zenodo 보관본](https://zenodo.org/records/24147779)(DOI `10.5281/zenodo.24147779`), [v0.03 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.03)·[Zenodo 보관본](https://zenodo.org/records/24147292)(DOI `10.5281/zenodo.24147292`), [v0.02 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.02)·[Zenodo 보관본](https://zenodo.org/records/24134430)(DOI `10.5281/zenodo.24134430`), [v0.01 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.01)·[Zenodo 보관본](https://zenodo.org/records/24133577)(DOI `10.5281/zenodo.24133577`)에 남아 있다. 머리글 배지와 인용 파일은 모든 판을 가리키는 개념 DOI `10.5281/zenodo.24133576`을 쓴다.
+v0.08은 [v0.08 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.08), v0.07은 [v0.07 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.07)에서 받을 수 있다. 이전 판은 [v0.06 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.06)·[Zenodo 보관본](https://zenodo.org/records/24150828)(DOI `10.5281/zenodo.24150828`), [v0.05 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.05)·[Zenodo 보관본](https://zenodo.org/records/24150092)(DOI `10.5281/zenodo.24150092`), [v0.04 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.04)·[Zenodo 보관본](https://zenodo.org/records/24147779)(DOI `10.5281/zenodo.24147779`), [v0.03 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.03)·[Zenodo 보관본](https://zenodo.org/records/24147292)(DOI `10.5281/zenodo.24147292`), [v0.02 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.02)·[Zenodo 보관본](https://zenodo.org/records/24134430)(DOI `10.5281/zenodo.24134430`), [v0.01 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.01)·[Zenodo 보관본](https://zenodo.org/records/24133577)(DOI `10.5281/zenodo.24133577`)에 남아 있다. 머리글 배지와 인용 파일은 모든 판을 가리키는 개념 DOI `10.5281/zenodo.24133576`을 쓴다.
 
 v0.07에서는 메뉴에 **왜 ‘Open’일까?**와 **수학적 원리**를 더했다. 앞의 것은 아마추어의 어원, 프로의 메이저 배제, 1968년 오픈 에라와 상금, 골프 디 오픈과의 비교를 출처와 함께 싣는다. 뒤의 것은 120 Hz 고정 틱, 가상 Z축 포물선과 그림자, 목표점·비행시간으로 푸는 타격 속도, 네트·바운드 사건 시각, 코트별 반발, 서브 타점 품질, 타격 상태 머신, 동현AI™ 예측, 고정 화면 투영을 엔진 코드의 식 그대로 설명한다. 경기 규칙·물리·저장 형식은 바꾸지 않았다.
 
