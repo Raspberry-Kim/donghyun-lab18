@@ -7,16 +7,16 @@ for(const [w,h,dark] of [[1440,900,0],[375,812,0],[1440,900,1]]){
  const p=await b.newPage({viewport:{width:w,height:h}});const errs=[];p.on('pageerror',e=>errs.push(e.message));
  await p.goto(url);await p.waitForSelector('#example option',{state:'attached'});if(dark)await p.click('#theme');
  const opts=await p.$$eval('#example option',o=>o.map(x=>({v:x.value,t:x.textContent,g:x.parentElement.label})));
- assert.equal(opts.length,24);assert.deepEqual([...new Set(opts.map(o=>o.g))],['통상 · 난이도 2','프로 · 난이도 3','초보 · 난이도 1']);
- assert.deepEqual(opts.map(o=>o.g[0]).join(''),'통'.repeat(7)+'프'.repeat(6)+'초'.repeat(11));
+ assert.equal(opts.length,63);assert.deepEqual([...new Set(opts.map(o=>o.g))],['통상 · 난이도 2','프로 · 난이도 3','초보 · 난이도 1']);
+ assert.deepEqual(opts.map(o=>o.g[0]).join(''),'통'.repeat(28)+'프'.repeat(28)+'초'.repeat(7));
  // inside a group: player order, then court order; no combination twice
  {const ex=await p.evaluate(()=>TeApp.examples.map(e=>[e.l,e.p,e.c]));const rank=[2,0,1];
   for(let i=1;i<ex.length;i++){const a=ex[i-1],c=ex[i];assert.ok(rank[a[0]]<rank[c[0]]||(a[0]===c[0]&&(a[1]<c[1]||(a[1]===c[1]&&a[2]<c[2]))),'order '+i);}
-  assert.equal(new Set(ex.map(String)).size,24);}
- // cross references in the notes: the example named really differs only in what the note says
+  assert.equal(new Set(ex.map(String)).size,63);}
+ // Full Cartesian coverage for normal/pro, seven Wimbledon beginners.
  {const ex=await p.evaluate(()=>TeApp.examples.map(e=>({p:e.p,l:e.l,c:e.c,note:e.note})));
-  const refs=[[1,8,'l'],[1,14,'l'],[2,1,'c'],[3,2,'c'],[3,1,'c'],[4,1,'c'],[8,1,'l'],[9,8,'c'],[9,10,'c'],[9,11,'c'],[11,8,'c'],[14,1,'l'],[15,14,'c'],[16,15,'c'],[16,14,'c'],[17,15,'c'],[17,16,'c'],...[18,19,20,21,22,23].map(k=>[k,14,'p'])];
-  for(const [a,b2,k] of refs){const x=ex[a-1],y=ex[b2-1];assert.ok(x.note.includes(String(b2).padStart(2,'0')),`note ${a} names ${b2}`);for(const f of ['p','l','c'])assert.equal(x[f]!==y[f],f===k,`${a}↔${b2} ${f}`);}}
+  for(const l of [1,2,0])for(let pl=0;pl<7;pl++)for(const c of l===0?[0]:[0,1,2,3])assert.equal(ex.filter(e=>e.p===pl&&e.l===l&&e.c===c).length,1);
+  assert.ok(ex.filter(e=>e.l===0).every(e=>e.c===0));}
  for(const o of opts){
   await p.selectOption('#example',o.v);
   const r=await p.evaluate(()=>({err:!document.querySelector('#error').hidden,desc:document.querySelector('#config-description').textContent,out:document.querySelector('#output').textContent,note:document.querySelector('#example-note').textContent}));

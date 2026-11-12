@@ -2,13 +2,13 @@
 (function(root){
 'use strict';
 const PLAYERS=[
- {name:'동현',atk:100,def:100,mov:100,color:'#b95648',skills:[['샤아아즈나블',3,'다음 리턴이 불꽃 스트로크. 유효한 공이면 상대를 벽으로 날려 포인트.'],['샤아자쿠',2,'다음 타격 입력 때 공으로 혜성 이동하여 리턴.']]},
- {name:'뭉치',atk:90,def:90,mov:90,color:'#aa6454',skills:[['오겡끼데스까',6,'경기를 끝내고 즉시 승리한다.'],['액슬로즈',1,'라켓을 두 번 내리쳐 부수고 이번 게임을 내준다. 경기는 이어진다.']]},
- {name:'뚱띠',atk:120,def:80,mov:110,color:'#aa7041',skills:[['사세보후우샤',2,'다음 리턴을 바람에 실어 네트 바로 앞에 떨어뜨린다.'],['와루이지와나',2,'지금 넘어오는 상대 공의 시간이 느려진다. 리턴하면 해제.']]},
- {name:'또치',atk:90,def:90,mov:120,color:'#458878',skills:[['구마몬기쥬츠',3,'다음 리턴을 상대 반대편에 툭 떨어뜨려 포인트.'],['컴온스펜서',2,'상대가 이번 랠리 동안 공 반대편으로 춤추며 간다.']]},
- {name:'포동이',atk:80,def:80,mov:130,color:'#d5bb82',skills:[['멍멍',2,'상대가 다음 리턴을 헛스윙한다.'],['아잉뿌잉',2,'상대가 귀여움에 4초간 쓰러진다. 포인트가 끝나면 일어난다.']]},
- {name:'꽥꽥',atk:80,def:90,mov:90,color:'#d6a54c',skills:[['비밀이야',3,'다음 리턴이 유효하게 바운드하면 사라지고 내 포인트.'],['알려고하지마',3,'다음 서브가 서비스 박스에 들어가면 사라지고 내 포인트.']]},
- {name:'슈슈',atk:90,def:100,mov:80,color:'#88aa68',skills:[['울트라롱팔',2,'이번 랠리에서 닿지 않는 공을 3번까지 길어진 팔로 리턴한다. 타격 입력은 필요.'],['리만가설',1,'이번 랠리 동안 다음 바운드 위치를 표시한다.']]}
+ {name:'동현',atk:100,def:100,mov:100,color:'#b95648',skills:[['샤아아즈나블',1,'불꽃 리턴이 유효하게 바운드하면 포인트. 성공 전까지 다음 랠리에도 준비가 남는다.'],['샤아자쿠',1,'이번 랠리 동안 타격 입력마다 공으로 혜성 이동하여 리턴한다.']]},
+ {name:'뭉치',atk:90,def:90,mov:90,color:'#aa6454',skills:[['오겡끼데스까',3,'경기를 끝내고 즉시 승리한다.'],['액슬로즈',1,'라켓을 두 번 내리쳐 부수고 이번 게임을 내준다. 경기는 이어진다.']]},
+ {name:'뚱띠',atk:120,def:80,mov:110,color:'#aa7041',skills:[['사세보후우샤',1,'이번 랠리 동안 모든 리턴을 바람에 실어 네트 앞에 떨어뜨린다.'],['와루이지와나',1,'이번 랠리 동안 상대가 치는 모든 공의 시간이 느려진다. 미리 켜 둘 수 있다.']]},
+ {name:'또치',atk:90,def:90,mov:120,color:'#458878',skills:[['구마몬기쥬츠',1,'상대 반대편 드롭이 유효하게 바운드하면 포인트. 성공 전까지 다음 랠리에도 남는다.'],['컴온스펜서',1,'상대가 이번 랠리 동안 공 반대편으로 춤추며 간다.']]},
+ {name:'포동이',atk:80,def:80,mov:130,color:'#d5bb82',skills:[['멍멍',1,'이번 랠리 동안 상대의 모든 리턴이 헛스윙이 된다.'],['아잉뿌잉',1,'이번 랠리 동안 상대가 귀여움에 쓰러진다. 포인트가 끝나면 일어난다.']]},
+ {name:'꽥꽥',atk:80,def:90,mov:90,color:'#d6a54c',skills:[['비밀이야',1,'리턴이 유효하게 바운드하면 사라지고 내 포인트. 성공 전까지 다음 랠리에도 남는다.'],['알려고하지마',1,'유효한 서브가 사라지고 내 포인트. 내 서브가 올 때까지 미리 준비할 수 있다.']]},
+ {name:'슈슈',atk:90,def:100,mov:80,color:'#88aa68',skills:[['울트라롱팔',1,'이번 랠리 동안 횟수 제한 없이 긴 팔로 리턴한다. 타격 입력은 필요.'],['리만가설',1,'이번 랠리 동안 다음 바운드 위치를 표시한다.']]}
 ];
 const COURTS=[
  {name:'윔블던',surface:'잔디',bounce:.56,retain:.94,ground:'#6f9274',outer:'#355d51',line:'#f2edd4',accent:'#beb08b',desc:'낮고 빠르게 미끄러지는 공'},
@@ -31,8 +31,8 @@ class Match{
   this.config={...config};this.seed=seed>>>0;this.time=0;this.tick=0;this.level=LEVELS[config.level];this.court=COURTS[config.court];
   this.people=[{id:config.player,x:1.5,y:12.3,side:1,swing:0,cool:0,pose:'idle'},{id:6,x:-1.5,y:-11,side:-1,swing:0,cool:0,pose:'idle'}];
   this.points=[0,0];this.games=[0,0];this.sets=[0,0];this.history=[];this.server=0;this.totalGames=0;this.tb=false;this.tbFirst=0;
-  this.energy=2;this.returns=0;this.rally=0;this.totalHits=0;this.events=[];this.phase='ready';this.paused=false;this.winner=null;this.faults=0;
-  this.message='X 토스';this.armed=null;this.effects={};this.fx=null;this.ball=null;this.timer=0;this.aiClock=0;this.aiTarget={x:0,y:-10};
+  this.energy=6;this.returns=0;this.rally=0;this.totalHits=0;this.events=[];this.phase='ready';this.paused=false;this.winner=null;this.faults=0;
+  this.message='X 토스';this.armed=null;this.pendingSkills={};this.effects={};this.fx=null;this.ball=null;this.timer=0;this.aiClock=0;this.aiTarget={x:0,y:-10};
   this.setupPoint();
  }
  rand(){let x=this.seed;x^=x<<13;x^=x>>>17;x^=x<<5;this.seed=x>>>0;return this.seed/4294967296;}
@@ -41,7 +41,7 @@ class Match{
  // keep=true after a fault or let: the point is still alive, so prepared skills and rally effects stay.
  setupPoint(keep=false){
   this.phase='ready';this.timer=0;this.ball=null;this.pendingServe=null;this.fx=null;this.skillCue=null;this.rally=0;
-  if(!keep){this.armed=null;this.effects={};}
+  // endRally clears used effects. Preparations made during a point break survive here.
   const s=this.people[this.server],r=this.people[1-this.server],parity=(this.points[0]+this.points[1])%2;
   s.x=(parity? -1:1)*s.side*1.5;s.y=s.side*12.3;r.x=-s.x;r.y=r.side*10.8;
   for(const p of this.people){p.pose='idle';p.swing=0;p.cool=0;p.anim=null;p.walk=false;p.gait=0;p.moveX=0;p.moveY=0;}
@@ -61,9 +61,14 @@ class Match{
   this.skillCue={kind,prepared,player:id,slot,name:PLAYERS[id].skills[slot][0],ttl:1.6,duration:1.6};
  }
  setFx(o,ttl){this.fx={...o,ttl,duration:ttl};}
- // Every way a rally ends releases prepared skills, rally effects and the opponent's forced poses.
+ hasPrepared(kind){return this.armed===kind||this.pendingSkills[kind]===true;}
+ consumePrepared(kind){
+  delete this.pendingSkills[kind];
+  if(this.armed===kind)this.armed=Object.keys(this.pendingSkills)[0]||null;
+ }
+ // One-shot winners are consumed only by a successful legal landing, not by a missed chance.
  endRally(timer){
-  this.faults=0;this.phase='point';this.timer=timer;this.ball=null;this.pendingServe=null;this.armed=null;this.effects={};
+  this.faults=0;this.phase='point';this.timer=timer;this.ball=null;this.pendingServe=null;this.effects={};
   for(const p of this.people)if(['fall','dance','whiff'].includes(p.pose))p.pose='idle';
  }
  winGame(w){
@@ -86,10 +91,10 @@ class Match{
   if(this.phase!=='match'){this.timer=Math.max(this.timer,BREAK_TIME+.2);this.message=name+' · 이번 게임을 내줬다';}
   this.event('concede',this.message);return true;
  }
- finish(w,why){this.phase='match';this.winner=w;this.message=why+' · '+(w===0?'승리':'패배');this.ball=null;this.event('match',this.message);}
+ finish(w,why){this.phase='match';this.winner=w;this.message=why+' · '+(w===0?'승리':'패배');this.ball=null;this.armed=null;this.pendingSkills={};this.effects={};this.event('match',this.message);}
  point(w,why){
   if(['point','match'].includes(this.phase))return;
-  this.points[w]++;this.energy=clamp(this.energy+1,0,6);this.message=why+' · '+(w===0?'내':'상대')+' 포인트';this.event('point',this.message);
+  this.points[w]++;this.energy=clamp(this.energy+2,0,6);this.message=why+' · '+(w===0?'내':'상대')+' 포인트';this.event('point',this.message);
   this.endRally(1.7);
   const endSet=this.tb?(this.points[w]>=7&&this.points[w]-this.points[1-w]>=2):false;
   if(this.tb){
@@ -139,6 +144,7 @@ class Match{
   const p=this.people[i],old=this.ball;let z=serve?old.z:clamp(old.z,.25,3.4);
   t=Math.max(.5,t)/this.level.speed;
   this.ball={x:old.x,y:old.y,z,vx:(tx-old.x)/t,vy:(ty-old.y)/t,vz:(.5*G*t*t-z)/t,by:i,bounces:0,serve,crossed:false,netTouch:false,kind,age:0,flightTime:t,serviceOriginX:serve?p.x:null};
+  this.ball.slow=i===1&&!!this.effects.slow;
   this.phase='rally';this.event('hit',kind);this.totalHits++;this.aiClock=0;
  }
  reachable(i,remote=false){
@@ -151,19 +157,19 @@ class Match{
   const p=this.people[i];if(p.cool>0)return false;
   p.swing=.19;p.cool=.30;p.pose='swing';p.kind=kind;p.aim={...aim};
   const hand=this.ball&&this.ball.x<p.x? -1:1;this.animate(i,kind==='lob'?'lobWindup':'windup',.3,hand);
-  if(i===0&&this.armed==='comet'&&this.reachable(0,true)){
+  if(i===0&&this.effects.comet&&this.reachable(0,true)){
    this.setFx({type:'comet',x:p.x,y:p.y,toX:this.ball.x,toY:this.ball.y},.7);
-   p.x=this.ball.x;p.y=this.ball.y+.25*p.side;this.armed=null;this.cueSkill('comet');
+   p.x=clamp(this.ball.x,-6.3,6.3);p.y=clamp(this.ball.y+.25*p.side,p.side===1?.8:-14.2,p.side===1?14.2:-.8);this.cueSkill('comet');
   }
   return this.tryHit(i);
  }
  tryHit(i){
   const p=this.people[i],b=this.ball;
   if(p.swing<=0)return false;
-  // The long arm is spent only on balls the normal reach cannot touch.
+  // The long-arm animation is used only beyond normal reach; the effect lasts for the rally.
   const near=this.reachable(i,false),remote=!near&&i===0&&this.effects.long>0&&this.reachable(0,true);
   if(!near&&!remote)return false;
-  if(i===1&&this.effects.miss){delete this.effects.miss;this.effects.whiff=1.4;p.swing=0;p.pose='whiff';this.event('skill','헛스윙!');return false;}
+  if(i===1&&this.effects.miss){this.effects.whiff=1.4;p.swing=0;p.pose='whiff';this.event('skill','헛스윙!');return false;}
   if(i===1&&(this.effects.fall>0||this.effects.whiff>0||this.effects.dance))return false;
   const aim=p.aim||{},kind=p.kind||'drive',isSmash=kind!=='lob'&&b.z>2.25,isVolley=b.bounces===0;
   const localY=(aim.y||0)*p.side;
@@ -175,37 +181,32 @@ class Match{
   let t=kind==='lob'&&!isVolley?2.20:Math.max(.78,Math.abs(b.y-ty)/(12.5*PLAYERS[p.id].atk/100));
   if(isVolley)t*=kind==='lob'?1.18:.80;
   if(isSmash)t*=.74;
-  const oldArm=i===0?this.armed:null,from={x:p.x,y:p.y,toX:b.x,toY:b.y,toZ:b.z};
+  const oldArm=i===0?(['fire','drop','vanish'].find(k=>this.hasPrepared(k))||(this.effects.wind?'wind':null)):null,from={x:p.x,y:p.y,toX:b.x,toY:b.y,toZ:b.z};
   if(oldArm==='wind'||oldArm==='drop'){ty=-p.side*1.7;tx=oldArm==='drop'?(this.people[1].x>=0?-3.5:3.5):clamp(tx,-3.4,3.4);t=Math.max(1.05,Math.abs(b.y-ty)/10);}
   this.launch(i,tx,ty,t,isSmash?'smash':isVolley?(kind==='lob'?'softVolley':'volley'):kind);
-  this.ball.power=oldArm;this.ball.slow=false;
-  if(oldArm&&oldArm!=='serveVanish'){this.armed=null;this.setFx({type:oldArm,x:p.x,y:p.y},1.1);this.cueSkill(oldArm);}
+  this.ball.power=oldArm;
+  if(oldArm){this.setFx({type:oldArm,x:p.x,y:p.y},1.1);this.cueSkill(oldArm);}
   if(remote){
-   this.effects.long--;this.setFx({type:'long',...from,left:this.effects.long},.5);this.event('long','긴 팔 리턴');
-   if(this.effects.long<=0){delete this.effects.long;this.event('release','울트라롱팔 해제 · 세 번을 다 썼다');}
+   this.setFx({type:'long',...from},.5);this.event('long','긴 팔 리턴');
   }
   p.swing=0;p.pose=isSmash?'smash':isVolley?'volley':'swing';p.cool=.24;
   this.animate(i,isSmash?'smash':isVolley?(kind==='lob'?'softVolley':'volley'):kind==='lob'?'lob':hitHand<0?'backhand':'forehand',isSmash?.40:kind==='lob'?.46:.34,hitHand,hitHeight);
-  this.rally++;if(i===0){this.returns++;if(this.returns%4===0){this.energy=clamp(this.energy+1,0,6);this.event('charge','리턴 4회 · 기술 +1');}}
+  this.rally++;if(i===0){this.returns++;if(this.returns%2===0){this.energy=clamp(this.energy+1,0,6);this.event('charge','리턴 2회 · 기술 +1');}}
   this.message=isSmash?'스매시':isVolley?(kind==='lob'?'약한 발리':'강한 발리'):kind==='lob'?'로브 · 높게 띄워 치기':'스트로크 · 가로로 밀어 치기';return true;
  }
  skill(slot){
-  if(this.paused||['point','fault','match'].includes(this.phase))return {ok:false,why:'공이 살아 있을 때 쓰자.'};
+  if(this.paused||this.phase==='match')return {ok:false,why:'경기를 계속할 때 쓰자.'};
   const id=this.people[0].id,sk=PLAYERS[id].skills[slot];if(!sk)return {ok:false,why:'없는 기술'};
   if(this.energy<sk[1])return {ok:false,why:`기술 에너지 ${sk[1]}칸이 필요하다.`};
   let kind=SKILL_KINDS[id][slot];
-  const arm=['fire','comet','wind','drop','vanish','serveVanish'].includes(kind);
-  if(arm&&this.armed)return {ok:false,why:'이미 준비한 기술이 있다.'};
-  if(kind==='serveVanish'&&!(this.server===0&&['ready','toss'].includes(this.phase)))return {ok:false,why:'내 서브 토스 전후에 준비하자.'};
-  if(kind==='slow'&&!(this.phase==='rally'&&this.ball.by===1))return {ok:false,why:'상대가 친 공이 있을 때 쓰자.'};
-  if(['dance','miss','fall','long','predict'].includes(kind)&&this.effects[kind])return {ok:false,why:'아직 효과가 남아 있다.'};
-  if(kind==='slow'&&this.ball.slow)return {ok:false,why:'이미 느려진 공이다.'};
+  const arm=['fire','drop','vanish','serveVanish'].includes(kind);
+  if(this.hasPrepared(kind)||this.effects[kind])return {ok:false,why:'이미 준비했거나 효과가 남아 있다.'};
+  if(['win','lose'].includes(kind)&&['point','fault'].includes(this.phase))return {ok:false,why:'다음 서브 준비 때 쓰자.'};
   this.energy-=sk[1];this.event('skill',sk[0],kind);this.message=sk[0];this.cueSkill(kind,arm);
-  if(arm)this.armed=kind;
+  if(arm){this.pendingSkills[kind]=true;if(!this.armed)this.armed=kind;}
   else if(kind==='win'){this.setFx({type:'win'},3);this.finish(0,sk[0]);}
   else if(kind==='lose'){this.concedeGame(sk[0]);this.setFx({type:'lose'},BREAK_TIME);}
-  else if(kind==='slow')this.ball.slow=true;
-  else this.effects[kind]=kind==='fall'?4:kind==='long'?LONG_REACH:true;
+  else {this.effects[kind]=true;if(kind==='slow'&&this.phase==='rally'&&this.ball?.by===1)this.ball.slow=true;}
   return {ok:true,why:sk[0]};
  }
  predict(){
@@ -222,7 +223,7 @@ class Match{
  }
  ai(dt){
   const p=this.people[1],b=this.ball;
-  if(this.effects.fall>0){p.pose='fall';return;}
+  if(this.phase==='rally'&&this.effects.fall>0){p.pose='fall';return;}
   if(this.effects.whiff>0){p.pose='whiff';return;}
   if(this.phase==='ready'&&this.server===1){this.timer+=dt;if(this.timer>.7)this.toss();return;}
   if(this.phase==='toss'&&this.server===1){if(b.vz<0&&b.z<=2.35&&b.z>1.5)this.serve(this.rand()<.16?'lob':'drive');return;}
@@ -253,7 +254,7 @@ class Match{
    if(f.type==='lose'){const now=f.duration-f.ttl;if(was<.42&&now>=.42)this.event('smash','쾅');if(was<.92&&now>=.92)this.event('crack','라켓이 부러졌다');}
    if(f.ttl<=0)this.fx=null;
   }
-  for(const k of ['fall','whiff'])if(this.effects[k]>0){
+  for(const k of ['whiff'])if(this.effects[k]>0){
    this.effects[k]-=dt;
    if(this.effects[k]<=0){ // never leave a negative, truthy timer behind
     delete this.effects[k];const o=this.people[1];if(['fall','whiff'].includes(o.pose))o.pose='idle';
@@ -315,9 +316,10 @@ class Match{
       const box=legal&&Math.abs(b.y)<=6.4+.035&&b.x*(b.serviceOriginX??this.people[b.by].x)<=0;
       if(!box){this.fault('서비스 아웃');return;}
       if(b.netTouch){this.phase='fault';this.timer=1.0;this.ball=null;this.message='렛 · 같은 서브 다시';this.event('let',this.message);return;}
-      if(b.by===0&&this.armed==='serveVanish'){this.setFx({type:'vanish',x:b.x,y:b.y,end:true},1.5);this.cueSkill('serveVanish');this.point(0,'알려고하지마');return;}
+      if(b.by===0&&this.hasPrepared('serveVanish')){this.consumePrepared('serveVanish');this.setFx({type:'vanish',x:b.x,y:b.y,end:true},1.5);this.cueSkill('serveVanish');this.point(0,'알려고하지마');return;}
      }else if(!legal){this.point(1-b.by,'아웃');return;}
      if(b.by===0&&['fire','drop','vanish'].includes(b.power)){
+      this.consumePrepared(b.power);
       this.setFx({type:b.power==='fire'?'wall':b.power,x:b.x,y:b.y,end:true},1.6);this.point(0,b.power==='fire'?'샤아아즈나블':b.power==='drop'?'구마몬기쥬츠':'비밀이야');return;
      }
      b.vz=-b.vz*this.court.bounce;b.vx*=this.court.retain;b.vy*=this.court.retain;
@@ -361,9 +363,10 @@ class Match{
   if(['toss','rally'].includes(s.phase)!==(b!=null))bad('공 정보가 맞지 않는다.');
   if(b&&(!fits(b,BALL)||!['x','y','z','vx','vy','vz'].every(k=>num(b[k]))||!int(b.by,0,1)||!int(b.bounces,0,2)||(s.phase==='rally'&&!(num(b.age)&&num(b.flightTime)))))bad('공 정보가 맞지 않는다.');
   if(s.armed!=null&&!SKILL_KINDS[c.player].includes(s.armed))bad('준비한 기술 정보가 맞지 않는다.');
+  if(s.pendingSkills!==undefined&&(!s.pendingSkills||Array.isArray(s.pendingSkills)||typeof s.pendingSkills!=='object'||Object.entries(s.pendingSkills).some(([k,v])=>!['fire','drop','vanish','serveVanish'].includes(k)||!SKILL_KINDS[c.player].includes(k)||v!==true)))bad('준비한 기술 정보가 맞지 않는다.');
   const e=s.effects;if(!e||typeof e!=='object'||Array.isArray(e))bad('기술 효과 정보가 맞지 않는다.');
   for(const k of Object.keys(e)){
-   const v=e[k],ok=['dance','miss','predict'].includes(k)?v===true:k==='long'?int(v,1,LONG_REACH):k==='fall'?num(v)&&v>0&&v<=4:k==='whiff'?num(v)&&v>0&&v<=1.4:false;
+   const v=e[k],ok=['dance','miss','predict','comet','wind','slow'].includes(k)?v===true:k==='long'?v===true||int(v,1,LONG_REACH):k==='fall'?v===true||(num(v)&&v>0&&v<=4):k==='whiff'?num(v)&&v>0&&v<=1.4:false;
    if(!ok)bad('기술 효과 정보가 맞지 않는다.');
   }
   if(!s.aiTarget||!num(s.aiTarget.x)||!num(s.aiTarget.y))bad('상대 정보가 맞지 않는다.');
@@ -374,6 +377,13 @@ class Match{
   // Only the fields a match owns are taken over; anything else in the file is ignored.
   const m=new Match(c,s.seed),copy=JSON.parse(JSON.stringify(s));
   for(const k of Object.keys(m))if(!['level','court','config','events','paused','winner'].includes(k)&&Object.prototype.hasOwnProperty.call(copy,k))m[k]=copy[k];
+  // Older v1 saves used one armed slot and numeric duration/charges; migrate to rally effects.
+  if(s.pendingSkills===undefined){
+   if(['comet','wind'].includes(m.armed)){m.effects[m.armed]=true;m.armed=null;}
+   else if(m.armed)m.pendingSkills[m.armed]=true;
+   if(m.effects.long)m.effects.long=true;if(m.effects.fall)m.effects.fall=true;
+   if(m.ball?.slow)m.effects.slow=true;
+  }
   return m;
  }
  action(key,aim={}){

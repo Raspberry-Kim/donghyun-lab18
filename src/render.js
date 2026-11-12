@@ -2,14 +2,24 @@
 (function(){
 'use strict';
 const heads=[
- ['.hhhhhhh.','hhhhhhhhh','hhssssshh','hsssssssh','skkssskks','swwssswws','.sssnsss.','..sssss..','...sss...'],
- ['..hhh..','.hhhhh.','hhssssh','.skssk.','.sssss.','..sns..','..sss..'],
- ['.hhhhh.','hhhhhhh','hsssssh','sskssks','sssssss','.snnns.','..sss..'],
- ['...hh..','..hhhh.','.hssss.','.skssk.','.sssss.','..sns..','..sss..'],
- ['ww.....ww','wwwwwwwww','wwwwwwwww','wwwkwkwww','wwwwwwwww','.wwknkww.','..wwwww..'],
- ['..yyy..','.yyyyy.','.ykyky.','.yyyyy.','ooooooo','.ooooo.','..yyy..']
+ ['....hhhhh....','..hhhhhhhhh..','.hhHHhhhhhhh.','hhHhhhhhhHhhh','hhssssssssshh','hsssssssssssh','ssskwssskwsss','ssskkssskksss','.sbssssssbs..','.ssssnsssss..','..sssssssss..','...ssnnnss...','....sssss....'],
+ ['....hhhhh....','..hhhhhhhhh..','.hhHHhhhhhhh.','hhhhhhhhhhhhh','hhhsshhhsshhh','hhssssssssshh','hhskwssskwshh','hhskkssskkshh','hhsbsssssbshh','hhsssnnnssshh','.hhsssssshh..','...hssssh....'],
+ ['...hhhhhhhh...','..hhhhhhhhhh..','.hhHHhhhhhhhh.','hhhhhhhhhhhhhh','hhsssssssssshh','hssskksskksssh','ssskwsssswksss','ssskksssskksss','ssssssssssssss','.sbsssnsssbs..','.sssssssssss..','..sssnnnnsss..','...ssssssss...'],
+ ['....hhh....','...hhHhh...','..hHHhhhh..','.hhhhhhhhh.','.hhssssshh.','hhssssssssh','.skwssskws.','.skkssskks.','.sbsssssb..','..sssnnss..','..sssssss..','...sssss...'],
+ ['..ww.......ww..','.wwwwwwwwwwwww.','wwwwwwwwwwwwwww','wwwwwwwwwwwwwww','wwwwkwwwwwkwwww','wwwwkwwwwwkwwww','wwwwwwwwwwwwwww','wwwwwwkkkwwwwww','.wwwwwwkwwwwww.','..wwwwnwnwwww..','...wwwwwwwww...','.....wwwww.....'],
+ ['...hhhhhhh...','..hhHHhhhhh..','.hhhhhhhhhhh.','hhhsshhhsshhh','hhssssssssshh','hhskwssskwshh','hhskkssskkshh','hhsbsssssbshh','.hsssnnnsshh.','..hhssssshh..','....sssss....']
 ];
 const palette={h:'#342e2c',s:'#e3b797',k:'#292e2b',w:'#f5efdd',n:'#ab725c',y:'#e6be62',o:'#c67d43',g:'#a6be7b'};
+const headPalettes=[
+ {...palette,h:'#e5e6dc',H:'#ffffff',b:'#d88f82'},
+ {...palette,h:'#624234',H:'#916049',b:'#e89b92',n:'#b6636a'},
+ {...palette,h:'#3b3029',H:'#635044',s:'#dba784',b:'#c88670'},
+ {...palette,h:'#614b39',H:'#997756',b:'#e4a093'},
+ {...palette,b:'#dca79b'},
+ {...palette,h:'#493329',H:'#866149',b:'#efa79b',n:'#b6636a'}
+];
+// Retreat is a backward step facing the ball, never a sudden back-of-head sprite.
+function rearFacing(p,kind){return p.side===1&&['toss','serve'].includes(kind);}
 const W=320,H=304,Z_SCALE=12,COURT_Y=166,DEPTH=8.4,BODY_WIDTH=.9;
 // Only the ground projection grows in depth. Ball height and world physics do not change.
 function project(x,y,z=0){const sy=COURT_Y+y*DEPTH,scale=1+y*.006;return {x:150+x*20*scale,y:sy-z*Z_SCALE,scale};}
@@ -21,18 +31,18 @@ function ballVisual(ball){
 }
 const skillStyles={
  fire:['#ffd080','불꽃 리턴','다음 리턴에 불꽃을 싣는다'],
- comet:['#bfe8ff','혜성 이동','다음 타격 입력으로 공에 다가간다'],
+ comet:['#bfe8ff','혜성 이동','이번 랠리 · 타격 입력마다 이동'],
  win:['#ffe49a','즉시 승리','뭉치의 특별한 승리'],
  lose:['#f4b6a0','라켓 파손 · 게임 내줌','라켓을 부수고 이번 게임을 내준다'],
- wind:['#d6f1ac','회오리 드롭','다음 리턴을 네트 앞에 떨어뜨린다'],
- slow:['#dccbff','느려진 공','상대 공을 리턴할 때까지'],
+ wind:['#d6f1ac','회오리 드롭','이번 랠리 · 모든 리턴에 적용'],
+ slow:['#dccbff','느려진 공','이번 랠리 · 상대가 치는 모든 공'],
  drop:['#bce9ca','반대편 드롭','다음 리턴을 상대 반대편으로'],
  dance:['#f8c6e4','상대가 춤춘다','이번 랠리 동안'],
- miss:['#ffe1b1','상대 헛스윙','상대의 다음 리턴에 적용'],
- fall:['#ffc7cf','귀여움에 쓰러짐','상대가 4초간 쓰러진다'],
+ miss:['#ffe1b1','상대 헛스윙','이번 랠리 · 상대의 모든 리턴'],
+ fall:['#ffc7cf','귀여움에 쓰러짐','이번 랠리 끝까지 쓰러진다'],
  vanish:['#d2dbff','사라지는 리턴','다음 리턴이 유효하게 튀면 포인트'],
  serveVanish:['#badff2','사라지는 서브','서비스 박스에 들어가면 포인트'],
- long:['#dff0ac','길어진 팔 · 3번','닿지 않는 공 3번 · 타격 입력은 필요'],
+ long:['#dff0ac','길어진 팔 · 랠리 내내','횟수 제한 없음 · 타격 입력은 필요'],
  predict:['#fff1a6','바운드 예측','이번 랠리 · 착지 표식을 보자']
 };
 // Display-only half-turn at an end change. Court art/camera never moves.
@@ -140,7 +150,7 @@ class Renderer{
   for(let n=0;n<90;n++){this.rect(x0,y0,width,width,color);if(x0===x1&&y0===y1)break;const e2=2*e;if(e2>=dy){e+=dy;x0+=sx;}if(e2<=dx){e+=dx;y0+=sy;}}
  }
  player(p,time,role='',poseOverride=null,size=1,opt={}){
-  const g=this.g,pos=project(p.x,p.y),id=p.id,v=poseFrame(p,poseOverride),rear=p.walk&&p.moveY? p.moveY<0:p.side===1,ink=id===6?TeShushu.colors.o:'#343c32',skin=id===4?'#f5efdd':id===5?'#e6be62':id===6?TeShushu.colors.s:'#e3b797';
+  const g=this.g,pos=project(p.x,p.y),id=p.id,v=poseFrame(p,poseOverride),rear=rearFacing(p,v.kind),ink=id===6?TeShushu.colors.o:'#343c32',skin=id===4?'#f5efdd':id===6?TeShushu.colors.s:'#e3b797';
   g.save();g.translate(Math.round(pos.x),Math.round(pos.y));g.scale(size,size);g.imageSmoothingEnabled=false;
   this.rect(-4,0,9,1,'#172e3055');
   g.translate(0,v.lift);
@@ -168,11 +178,12 @@ class Renderer{
   else {
    this.rect(-3,-15,6,8,ink);this.rect(-2,-14,4,6,id===4?'#f5efdd':Te.PLAYERS[id].color);
    this.rect(-3,-8,6,2,'#eee8d4');if(!rear)this.rect(-1,-14,2,1,'#eee8d4');
-   const rows=heads[id].map((row,y)=>[...row].map(ch=>rear&&ch!=='.'?(id<4?(y<5?'h':'s'):id===4?'w':'y'):ch).join(''));
-   this.pixels(rows,-Math.floor(rows[0].length/2),id===0?-24:-22,palette);
-   if(['toss','serve','forehand','backhand'].includes(v.kind)&&id<4){ // turning profile, rather than a rigid front/back stamp
-    this.rect(v.lean<0?-4:3,-18,1,2,palette.s);
+   const rows=heads[id].map((row,y)=>[...row].map(ch=>rear&&ch!=='.'?(id===4?'w':y<row.length-3?'h':'s'):ch).join(''));
+   if(id===0||id===4){
+    const mask=rows.map(row=>row.replace(/[^.]/g,'q')),hp={q:'#9a9685'},hx=-Math.floor(rows[0].length/2);
+    for(const [dx,dy] of [[-1,0],[1,0],[0,-1],[0,1]])this.pixels(mask,hx+dx,-27+dy,hp);
    }
+   this.pixels(rows,-Math.floor(rows[0].length/2),id===5?-25:-27,headPalettes[id]);
   }
   g.restore();
   const racketState=opt.hideArm?'none':v.racketState||'whole';
@@ -192,7 +203,7 @@ class Renderer{
    g.beginPath();g.ellipse(0,0,minor,major,0,0,Math.PI*2);g.strokeStyle='#f5ecd2';g.lineWidth=1.25;g.stroke();g.restore();
   }
   g.restore();
-  if(role)this.rect(-1,(id===0?-28:-26)+v.bob,2,1,role==='P'?'#f3d884':'#e9e9dc');
+  if(role)this.rect(-1,(id===6?-26:id===5?-28:-30)+v.bob,2,1,role==='P'?'#f3d884':'#e9e9dc');
   g.restore();
  }
  umpire(time){
@@ -243,7 +254,7 @@ class Renderer{
    g.fillStyle='#203832a8';g.beginPath();g.ellipse(shadow.x,shadow.y,groundRadius*1.15,groundRadius*.4,0,0,Math.PI*2);g.fill();
    // Where the ball was i frames ago, from its own flight; trails never bend the real path.
    const past=tau=>ballVisual({x:ball.x-ball.vx*tau,y:ball.y-ball.vy*tau,z:Math.max(0,ball.z-ball.vz*tau-.5*Te.G*tau*tau)});
-   const ghostServe=ball.serve&&ball.by===0&&m.armed==='serveVanish',power=ghostServe?'vanish':ball.power;
+   const ghostServe=ball.serve&&ball.by===0&&m.hasPrepared('serveVanish'),power=ghostServe?'vanish':ball.power;
    if(power==='fire'){
     for(let i=9;i>=1;i--){const q=past(i*.016),sz=7-i*.55,j=still?0:Math.sin(T*40+i*1.7)*1.5;this.rect(q.x-sz/2+j,q.y-sz/2,sz,sz,['#fff2a8','#f7b84a','#e7823c','#ce4a3a'][Math.min(3,i>>1)]);}
     g.strokeStyle='#ffd080';g.lineWidth=1;g.beginPath();g.arc(pos.x,pos.y,r+2.5,0,Math.PI*2);g.stroke();
@@ -283,8 +294,8 @@ class Renderer{
    g.setLineDash([2,3]);g.lineDashOffset=still?0:-T*14;g.beginPath();g.ellipse(a.x,a.y+1,15,5,0,0,Math.PI*2);g.stroke();g.setLineDash([]);
    for(let j=0;j<5;j++){const ph=still?(j+1)/6:(T*.9+j/5)%1;g.globalAlpha=1-ph;this.rect(a.x-12+j*6,a.y-1-ph*18,1,2,c);}g.globalAlpha=1;
   }
-  if(e.long>0&&live){ // 울트라롱팔: uses left, one pip each
-   const n=Te.LONG_REACH||3;for(let j=0;j<n;j++){const x=a.x-(n*5-1)/2+j*5,y=a.y+5;this.rect(x-1,y-1,5,5,'#203a32');this.rect(x,y,3,3,j<e.long?skillStyles.long[0]:'#56695c');}
+  if(e.long>0&&live){ // Continuous rally effect, not a decreasing charge counter.
+   for(let j=0;j<3;j++){const x=a.x-7+j*5,y=a.y+5;this.rect(x-1,y-1,5,5,'#203a32');this.rect(x,y,3,3,skillStyles.long[0]);}
   }
   if(fx?.type==='long'&&Number.isFinite(fx.toX)){ // the arm really stretches to where the ball was met
    const k=still?1:Math.min(1,age/.1)*Math.min(1,fx.ttl/.16),sh={x:a.x+2,y:a.y-11},to=project(fx.toX,fx.toY,fx.toZ||1);
@@ -317,9 +328,9 @@ class Renderer{
    g.strokeStyle=skillStyles.miss[0];for(let j=0;j<3;j++){g.beginPath();g.arc(o.x,o.y-12,11+j*4,-.4+j*.2,.9+j*.2);g.stroke();g.beginPath();g.arc(o.x,o.y-12,11+j*4,Math.PI-.9-j*.2,Math.PI+.4-j*.2);g.stroke();}
    for(let j=0;j<3;j++)this.glyph(['.x.','xxx','xxx'],o.x-13+j*13,o.y-29+(j%2)*3,'#bfe8ff');
   }
-  if(e.fall>0){ // 아잉뿌잉: hearts, and one pip for each second still on the floor
+  if(e.fall>0){ // Rally duration, not a four-second countdown.
    for(let j=0;j<3;j++){const ph=still?(j+1)/4:(T*.7+j/3)%1;g.globalAlpha=1-ph*.7;this.heart(o.x-10+j*10,o.y-13-ph*13,skillStyles.fall[0]);}g.globalAlpha=1;
-   const n=Math.ceil(e.fall);for(let j=0;j<4;j++){this.rect(o.x-11+j*6,o.y+4,5,4,'#203a32');this.rect(o.x-10+j*6,o.y+5,3,2,j<n?skillStyles.fall[0]:'#56695c');}
+   for(let j=0;j<4;j++){this.rect(o.x-11+j*6,o.y+4,5,4,'#203a32');this.rect(o.x-10+j*6,o.y+5,3,2,skillStyles.fall[0]);}
   }
   g.restore();
  }
@@ -474,5 +485,5 @@ class Renderer{
   this.g.translate(-134,28-COURT_Y);this.player({id,x:0,y:0,side:-1,pose:'idle',cool:0},0,'',null,1);this.g=old;return cv.toDataURL();
  }
 }
-window.TeRender={Renderer,project,unproject,poseFrame,ballVisual,racketFrame,viewMatch,skillStyles};
+window.TeRender={Renderer,project,unproject,poseFrame,ballVisual,racketFrame,viewMatch,skillStyles,heads,headPalettes,rearFacing};
 })();

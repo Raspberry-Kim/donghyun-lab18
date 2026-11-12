@@ -16,10 +16,10 @@ const canStore=await p.evaluate(()=>{try{localStorage.setItem('donghyunte:probe'
 assert.ok(canStore,'localStorage available on this origin');
 // empty slots on the setup panel
 assert.equal(await p.locator('#slot-list .slot-btn').count(),3);assert.equal(await p.locator('#slot-list .slot-btn:disabled').count(),3);assert.equal(await p.locator('#slot-list .slot-del').count(),0);ok('setup panel lists three empty slots');
-// start example 10 (동현 · 프로 · US), play a serve into a rally
-await p.selectOption('#example','9');await p.click('#court-start');await adv(0);
+// start example 31 (동현 · 프로 · US), play a serve into a rally
+await p.selectOption('#example','30');await p.click('#court-start');await adv(0);
 await key('a');await adv(100);await key('x');await adv(480);await key('x');await adv(350);
-let s0=await st();assert.equal(s0.phase,'rally');assert.ok(s0.ball);assert.equal(s0.armed,'comet');
+let s0=await st();assert.equal(s0.phase,'rally');assert.ok(s0.ball);assert.equal(s0.effects.comet,true);
 await key('Enter');let m=await menu();
 assert.equal(m.title,'잠시 멈춤');assert.deepEqual(m.items.map(i=>i.t),['계속 간다','저장','불러오기','포기하고 출전 준비로']);assert.ok(m.items[0].sel);
 const frozen=await snap();await adv(800);assert.equal(await snap(),frozen);assert.equal((await st()).paused,true);ok('Enter opens the menu and the match stands still');
@@ -63,8 +63,8 @@ const txt=await p.locator('#slot-list .slot-btn').first().innerText();assert.ok(
 assert.equal(await p.locator('#example').inputValue(),'0');
 await p.locator('#slot-list .slot-btn').first().click();
 m=await menu();assert.equal(m.title,'저장한 경기를 불러왔다 · 잠시 멈춤');assert.equal(await snap(),frozen);
-assert.equal(await p.locator('#example').inputValue(),'9');assert.equal(await p.locator('#config-description').innerText(),'동현 · 프로 · US');assert.equal(await p.locator('#stamp-player').innerText(),'동현 선수');
-assert.equal((await st()).armed,'comet');assert.ok((await p.locator('#skill2').innerText()).includes('준비됨'));ok('after a reload the slot loads; code panel, example and prepared skill follow the save');
+assert.equal(await p.locator('#example').inputValue(),'30');assert.equal(await p.locator('#config-description').innerText(),'동현 · 프로 · US');assert.equal(await p.locator('#stamp-player').innerText(),'동현 선수');
+assert.equal((await st()).effects.comet,true);assert.ok((await p.locator('#skill2').innerText()).includes('랠리 끝까지'));ok('after a reload the slot loads; code panel, example and active skill follow the save');
 await adv(0);await key('Enter');await adv(2500);assert.equal(await snap(),later);ok('…and it continues identically after the reload too');
 // loading from the setup panel during a match asks first; "그만둔다" keeps the match
 await key('Enter');const live=await snap();await key('Escape');

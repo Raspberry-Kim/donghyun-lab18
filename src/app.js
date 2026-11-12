@@ -11,27 +11,10 @@ const encode=n=>'도'+'오'.repeat(n-1)+'옹';
 const makeCode=(p=0,l=0,c=0)=>`나는 동현이냐?\n   ㅋㅋ 선수 ${p+1} · ${E.PLAYERS[p].name}\n  뿡뿡 ${encode(p+1)}~뿡뿡뿡\n   ㅋㅋ 난이도 ${l+1} · ${E.LEVELS[l].name}\n  뿡뿡 ${encode(l+1)}~뿡뿡뿡\n   ㅋㅋ 경기장 ${c+1} · ${E.COURTS[c].name}\n  뿡뿡 ${encode(c+1)}~뿡뿡뿡\n동현이구나`;
 // Examples in three difficulty groups: 통상 → 프로 → 초보. Inside a group: player, then court.
 const ex=(p,l,c,note)=>({group:['초보 · 난이도 1','통상 · 난이도 2','프로 · 난이도 3'][l],p,l,c,note});
-const skillNote=i=>`${E.PLAYERS[i].name}의 기술: ${E.PLAYERS[i].skills.map(s=>s[0]).join(' / ')}. 14와 선수만 다르다.`;
-const examples=[
- ex(0,1,0,'기준이 되는 조합. 속도 1.00배, 슈슈는 0.14초마다 자리를 다시 정하고 자리 오차는 ±0.16m다. 08(프로)·14(초보)는 난이도만 다르다.'),
- ex(0,1,1,'01과 코트만 다르다. 반발 0.56→0.73, 바운드 뒤 속도 유지 94%→85%. 안정적인 중간 높이로 튄다.'),
- ex(0,1,2,'코트 3. 반발 0.69, 속도 유지 90%. 02의 호주보다 낮고 빠르며 01의 윔블던보다는 덜 미끄러진다.'),
- ex(0,1,3,'코트 4. 반발 0.83, 속도 유지 72%. 가장 높이 튀고 가장 느려진다. 01–04를 차례로 해 보면 네 코트의 차이가 보인다.'),
- ex(1,1,1,'능력치가 모두 90인 균형형. 중간 높이 반발의 호주에서 기본기를 확인하자.'),
- ex(2,1,3,'공격 120·수비 80. 클레이가 강한 공을 늦추지만 높게 튄 공을 받을 시간도 함께 준다.'),
- ex(4,1,0,'이동 130으로 가장 빠르지만 공격·수비 80. 낮게 깔리는 잔디에서 발로 따라잡는 연습이다.'),
- ex(0,2,0,'01과 코트는 같고 난이도만 3이다. 속도 1.13배, 슈슈는 0.07초마다 자리를 다시 정하고 오차는 ±0.07m다. 낮게 미끄러지는 잔디라 반응할 시간이 가장 짧다.'),
- ex(0,2,1,'프로에서 코트만 바꿔 보는 묶음. 08(윔블던)·10(US)·11(프랑스)과 함께 네 코트를 같은 난이도로 비교한다.'),
- ex(0,2,2,'빠른 공과 빨라진 상대 반응. 반발 0.69, 속도 유지 90%의 하드 코트다.'),
- ex(0,2,3,'08과 난이도는 같고 코트만 클레이다. 바운드 뒤 수평 속도가 72%만 남아 프로의 빠른 공이 한 박자 늦어진다. 08과 번갈아 해 보자.'),
- ex(3,2,2,'이동 120. 빠른 하드 코트와 프로 상대에서 넓게 뛰며 버티는 조합이다.'),
- ex(5,2,0,'공격 80·수비 90. 가장 빠른 조합에서 비밀이야·알려고하지마로 포인트를 노린다.'),
- ex(0,0,0,'처음이라면 여기서 시작하자. 01에서 난이도만 2→1로 낮춘다. 공과 두 선수의 속도 1.00배→0.88배, 슈슈가 자리를 다시 정하는 간격 0.14초→0.24초, 자리 오차 ±0.16m→±0.33m.'),
- ex(0,0,1,'14와 선수·난이도는 같고 코트만 2로 바꾼다. 반발 0.56→0.73, 바운드 뒤 속도 유지 94%→85%. 공이 더 높고 조금 느리게 온다.'),
- ex(0,0,2,'코트 3. 반발 0.69, 속도 유지 90%. 15의 호주보다 낮고 빠르며 14의 윔블던보다는 덜 미끄러진다.'),
- ex(0,0,3,'코트 4. 반발 0.83, 속도 유지 72%. 가장 높이 튀고 가장 느려진다. 15·16과 같은 난이도에서 차이를 느껴 보자.'),
- ex(1,0,0,skillNote(1)),ex(2,0,0,skillNote(2)),ex(3,0,0,skillNote(3)),ex(4,0,0,skillNote(4)),ex(5,0,0,skillNote(5)),ex(6,0,0,skillNote(6)),
- ex(6,0,3,'가장 너그러운 조합. 초보의 느린 공에 높이 튀는 클레이가 겹쳐 공을 기다릴 여유가 크다. 슈슈의 리만가설로 바운드 위치를 미리 보며 연습하자.')];
+const examples=[1,2,0].flatMap(l=>E.PLAYERS.flatMap((p,i)=>(l===0?[0]:[0,1,2,3]).map(c=>{
+ const court=E.COURTS[c],level=E.LEVELS[l];
+ return ex(i,l,c,`${p.name} · 공격 ${p.atk} / 수비 ${p.def} / 이동 ${p.mov}. ${l===0?'처음이라면 초보 윔블던에서 시작하자. ':''}${level.name} 속도 ${level.speed.toFixed(2)}배, ${court.name} 반발 ${court.bounce.toFixed(2)}·수평 속도 유지 ${Math.round(court.retain*100)}%. ${court.desc}. 기술: ${p.skills.map(s=>s[0]).join(' / ')}.`);
+})));
 // Derive all titles from the config, rather than maintaining inconsistent hand-written names.
 examples.forEach((e,i)=>{e.name=`${String(i+1).padStart(2,'0')} · ${E.PLAYERS[e.p].name} · ${E.LEVELS[e.l].name} · ${E.COURTS[e.c].name}`;});
 {const sel=$('#example');let html='',group='';examples.forEach((e,i)=>{if(e.group!==group){if(group)html+='</optgroup>';group=e.group;html+=`<optgroup label="${group}">`;}html+=`<option value="${i}">${e.name}</option>`;});sel.innerHTML=html+'</optgroup>';}
@@ -353,12 +336,8 @@ function draw(){
  const eff=match.effects,skillState=p.skills.map((sk,i)=>{
   const k=E.SKILL_KINDS[cfg.player][i];
   if(!active)return ['',`${sk[1]}칸`];
-  if(match.armed===k)return ['armed','준비됨 · '+(k==='serveVanish'?'다음 서브':k==='comet'?'다음 타격 입력':'다음 리턴')];
-  if(k==='long'&&eff.long>0)return ['on',`발동 중 · 남은 ${eff.long}번`];
-  if(k==='fall'&&eff.fall>0)return ['on',`발동 중 · ${Math.ceil(eff.fall)}초`];
-  if(k==='miss'&&(eff.miss||eff.whiff>0))return ['on',eff.miss?'발동 중 · 상대 다음 스윙':'상대 헛스윙'];
-  if((k==='dance'||k==='predict')&&eff[k])return ['on','발동 중 · 이번 랠리'];
-  if(k==='slow'&&match.ball?.slow)return ['on','발동 중 · 리턴하면 해제'];
+  if(match.hasPrepared(k))return ['armed','준비됨 · '+(k==='serveVanish'?'내 서브까지 유지':'성공할 때까지 유지')];
+  if(eff[k])return ['on',['ready','toss','point','fault'].includes(match.phase)?'준비됨 · 다음 랠리 끝까지':'발동 중 · 랠리 끝까지'];
   if(k==='lose'&&fx?.type==='lose')return ['on','라켓 파손'];
   return ['',`${sk[1]}칸 · ${match.energy>=sk[1]?'사용 가능':'충전 필요'}`];
  });
@@ -392,7 +371,7 @@ $('#open-code').onchange=async e=>{const f=e.target.files[0];if(!f)return;if(f.s
 $('#court-cards').innerHTML=E.COURTS.map((c,i)=>`<article class="court-card" style="--court:${c.ground}"><h3>${c.name}<small>${c.surface}</small></h3><p>${c.desc}</p><div class="coeff">반발 ${c.bounce.toFixed(2)} · 속도 유지 ${c.retain.toFixed(2)}</div></article>`).join('');
 $('#roster').innerHTML=E.PLAYERS.map((p,i)=>`<article class="player-card"><div class="player-top"><img src="${R.portrait(i)}" alt="${p.name} 테니스 도트"><div><span>PLAYER 0${i+1}</span><h2>${p.name}</h2></div></div><div class="stats"><span>공격 <b>${p.atk}</b></span><span>수비 <b>${p.def}</b></span><span>이동 <b>${p.mov}</b></span></div>${p.skills.map((s,j)=>`<h3>${j?'A':'S'} · ${s[0]} <small>${s[1]}칸</small></h3><p>${s[2]}</p>`).join('')}<button data-player="${i}">이 선수의 출전 코드 불러오기</button></article>`).join('');
 document.querySelectorAll('[data-player]').forEach(b=>b.onclick=()=>{const i=examples.findIndex(e=>e.p===Number(b.dataset.player)&&e.l===0&&e.c===0);$('#example').value=String(i);example(i);setTab('play');$('#code').focus();});
-window.render_game_to_text=()=>JSON.stringify({phase:active?match.phase:'setup',paused:match.paused,coordinate:'World XYZ; display x/y = world x/y × viewSide. Human always bottom; fixed camera.',viewSide:match.people[0].side,config:match.config,people:match.people,ball:match.ball,score:match.score(),games:match.games,sets:match.sets,server:match.server,energy:match.energy,armed:match.armed,effects:match.effects,fx:match.fx,skillCue:match.skillCue,message:match.message,tab,winner:match.winner,menu:menu?{title:menu.title,i:menu.i,items:menu.items.map(it=>it.label+(it.note?' — '+it.note:'')+(it.off?' (off)':''))}:null});
+window.render_game_to_text=()=>JSON.stringify({phase:active?match.phase:'setup',paused:match.paused,coordinate:'World XYZ; display x/y = world x/y × viewSide. Human always bottom; fixed camera.',viewSide:match.people[0].side,config:match.config,people:match.people,ball:match.ball,score:match.score(),games:match.games,sets:match.sets,server:match.server,energy:match.energy,armed:match.armed,pendingSkills:match.pendingSkills,effects:match.effects,fx:match.fx,skillCue:match.skillCue,message:match.message,tab,winner:match.winner,menu:menu?{title:menu.title,i:menu.i,items:menu.items.map(it=>it.label+(it.note?' — '+it.note:'')+(it.off?' (off)':''))}:null});
 window.advanceTime=ms=>{manual=true;for(let i=0;i<Math.round(ms/1000/E.DT);i++)tick(E.DT);draw();};
 window.TeApp={get match(){return match;},get menu(){return menu;},begin,setup,makeCode,examples,saveData,loadFrom,renderer:R,resumeClock(){manual=false;acc=0;}};
 $('.brand').onclick=e=>{e.preventDefault();setTab('play');scrollTo({top:0,behavior:'smooth'});};

@@ -17,7 +17,7 @@ for(let player=0;player<7;player++)for(let slot=0;slot<2;slot++){
  checks++;
 }
 const m=new E.Match();m.energy=0;assert.equal(m.skill(0).ok,false);assert.equal(m.skillCue,null);
-m.energy=6;m.skill(0);const cue=m.skillCue;assert.equal(m.skill(1).ok,false);assert.equal(m.skillCue,cue);
+m.energy=6;m.skill(0);const cue=m.skillCue;assert.equal(m.skill(0).ok,false);assert.equal(m.skillCue,cue);
 assert.equal(m.skillCue.prepared,true);m.cueSkill('fire');assert.equal(m.skillCue.prepared,false);
 for(const [player,slot] of [[0,0],[0,1],[2,0],[3,0],[5,0]]){
  const a=new E.Match({player,level:0,court:0});a.energy=6;a.skill(slot);
