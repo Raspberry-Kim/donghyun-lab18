@@ -6,6 +6,8 @@
 
 [바로 하기](https://raspberry-kim.github.io/donghyun-lab18/) · [GitHub](https://github.com/Raspberry-Kim/donghyun-lab18)
 
+이번 판의 [Zenodo 보관본](https://zenodo.org/records/24150828)은 DOI `10.5281/zenodo.24150828`로 인용할 수 있다. 보관본 ZIP은 v0.06 태그와 같은 내용이다.
+
 v0.06은 [v0.06 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.06)에서 받을 수 있다. 이전 판은 [v0.05 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.05)·[Zenodo 보관본](https://zenodo.org/records/24150092)(DOI `10.5281/zenodo.24150092`), [v0.04 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.04)·[Zenodo 보관본](https://zenodo.org/records/24147779)(DOI `10.5281/zenodo.24147779`), [v0.03 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.03)·[Zenodo 보관본](https://zenodo.org/records/24147292)(DOI `10.5281/zenodo.24147292`), [v0.02 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.02)·[Zenodo 보관본](https://zenodo.org/records/24134430)(DOI `10.5281/zenodo.24134430`), [v0.01 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.01)·[Zenodo 보관본](https://zenodo.org/records/24133577)(DOI `10.5281/zenodo.24133577`)에 남아 있다. 머리글 배지와 인용 파일은 모든 판을 가리키는 개념 DOI `10.5281/zenodo.24133576`을 쓴다.
 
 v0.06에서는 코트를 세로로 조금 길게 하고 선수의 몸·머리 폭을 약 10% 줄였다. 공은 상대 코트로 갈수록 작아지고 바닥에 닿을 때도 더 작아진다. 높이 올라가면 커지는 표현은 그대로다. 전체 화면 단추는 코트·키 안내와 간격을 두었고 좁은 전체 화면의 코트 비율을 바로잡았다. 카메라는 고정되어 있고 타격·점수·특수기술·저장 규칙은 v0.05와 같다.
