@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it using the metadata below."
 title: "Donghyunte (동현테): a fixed-view single-player tennis laboratory configured through Donghyun-lang"
 type: software
-version: "0.04"
+version: "0.05"
 doi: "10.5281/zenodo.24133576"
 date-released: "2026-11-12"
 authors:
@@ -20,7 +20,8 @@ abstract: >-
   and touch do not control the match. The fixed camera keeps the player at
   the bottom even after a change of ends. The game includes a two-stage serve,
   differentiated strokes and lobs, fourteen special abilities, deuce,
-  tiebreaks, and best-of-three sets. Game Boy Tennis was privately observed
+  tiebreaks, and best-of-three sets. A match in progress can be saved to
+  three browser slots or a .dhsave file and restored exactly. Game Boy Tennis was privately observed
   as a reference, but this independent implementation does not claim numerical
   equivalence to the original physics. The 0.12-second post-hit serve input
   window and court coefficients are original gameplay adjustments. No ROM,

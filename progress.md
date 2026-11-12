@@ -69,3 +69,10 @@ Original prompt: 동현테(donghyunte). 업로드한 Game Boy Tennis 롬을 참�
 - 4탭·7선수·슈슈 기술·재시작 승인/취소·전체 화면 경쟁·음소거·테마·코드 파일 왕복·오류 거부·설정표·마우스 무조작·375px 및 데스크톱 복귀 검사. pageerror 없음.
 - 별도 실시간32초 키보드 탐색: X/Z 리턴7회, 총18타, 포인트 전환 확인. 기본 게임 클라이언트는 X/Z 매핑이 없어 이동/메뉴 스모크에 한정하고 X/Z는 대화형 Playwright 키 이벤트 검사로 확인.
 - 동일 미리보기 배포 완료. 새 컨텍스트에서 실시간 서브 방향 입력·유효 바운드, 실제 네 포인트 종료·코트 교대·하단 유지, 교대 후 X/Z 동작 및 키 방향, 정지·전체 화면·규칙 안내 확인. pageerror 없음. 검사 화면 시작 상태 복귀. 공개 버전·태그·저장소 발행 없음.
+
+## v0.05 (2026-11-12)
+- 요청: 저장/불러오기(시리즈 방식), 예제 통상→프로→초보, 슈슈 기술 등 해제 버그 점검, 액슬로즈 라켓 파손 연출과 ‘이번 게임만 내줌’, 기술 강조.
+- 엔진: `LONG_REACH=3`, `BREAK_TIME=2.8`, `concedeGame`, `setupPoint(keep)`, 타이머 정리, `snapshot()`/`Match.restore()`(모양 검사). 렌더: `break` 자세, `states()`·`effect()`·`breakRacket()`, 테두리 맥동. 앱: Enter 메뉴, 칸 3개·`.dhsave`, 기술 칸 상태, 예제 재배열.
+- 시험: skill-rules.cjs, save-ui.mjs, pad-menu.mjs 추가. examples-ui·specials-ui 갱신.
+- 남김: 오겡끼데스까 그대로. 실물 패드·모바일 외부 키보드·Safari/Firefox 미확인.
+

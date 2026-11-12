@@ -12,7 +12,7 @@ export async function checkSpecials(browser,url,out='/tmp/te-specials'){
    }});
   });
   const p=await ctx.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));
-  await p.goto(url);await p.selectOption('#example',String(player));await p.click('#court-start');
+  await p.goto(url);await p.selectOption('#example',String(await p.evaluate(n=>TeApp.examples.findIndex(e=>e.p===n&&e.l===0&&e.c===0),player)));await p.click('#court-start');
   await p.evaluate(()=>advanceTime(0));
   if(player===2&&slot===1)await p.evaluate(()=>{
    const m=window.__qaMatch;m.phase='rally';
@@ -24,14 +24,19 @@ export async function checkSpecials(browser,url,out='/tmp/te-specials'){
   assert.equal(await p.locator('#skill-cue-name').innerText(),state.skillCue.name);
   assert.equal(await p.locator('#skill-cue').isVisible(),true);
   await p.locator('#stage').screenshot({path:`${out}/${player}-${slot}.png`});
+  if(player===1&&slot===1){ // 액슬로즈: only this game is conceded, and the racket break plays to the end
+   assert.equal(state.phase,'point');assert.deepEqual(state.games,[0,1]);assert.deepEqual(state.sets,[0,0]);assert.equal(state.fx.type,'lose');assert.equal(state.winner,null);
+   assert.ok((await p.locator('#skill2').innerText()).includes('라켓 파손'));
+  }
   if(state.phase!=='match'){
-   await p.keyboard.press('Enter');const ttl=JSON.parse(await p.evaluate(()=>render_game_to_text())).skillCue.ttl;
+   await p.keyboard.press('Enter');assert.equal(await p.locator('#menu').isVisible(),true);const ttl=JSON.parse(await p.evaluate(()=>render_game_to_text())).skillCue.ttl;
    await p.evaluate(()=>advanceTime(500));
    assert.equal(JSON.parse(await p.evaluate(()=>render_game_to_text())).skillCue.ttl,ttl);
-   assert.equal(await p.locator('#skill-cue').isVisible(),false);await p.keyboard.press('Enter');
+   assert.equal(await p.locator('#skill-cue').isVisible(),false);await p.keyboard.press('Enter');assert.equal(await p.locator('#menu').isVisible(),false);
   }
-  await p.evaluate(()=>advanceTime(1700));assert.equal(await p.locator('#skill-cue').isVisible(),false);
+  await p.evaluate(()=>advanceTime(2100));assert.equal(await p.locator('#skill-cue').isVisible(),false);
   if(state.phase==='match')assert.equal(await p.locator('#end-card').isVisible(),true);
+  if(player===1&&slot===1){await p.evaluate(()=>advanceTime(1500));const after=JSON.parse(await p.evaluate(()=>render_game_to_text()));assert.equal(after.fx,null);assert.ok(['ready','toss','rally'].includes(after.phase),after.phase);assert.equal(await p.locator('#end-card').isVisible(),false);}
   assert.deepEqual(errors,[]);results.push({player,slot,name:state.skillCue.name,kind:state.skillCue.kind});
   await ctx.close();
  }
