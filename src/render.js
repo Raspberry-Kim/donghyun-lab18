@@ -11,7 +11,7 @@ const heads=[
 ];
 const palette={h:'#342e2c',s:'#e3b797',k:'#292e2b',w:'#f5efdd',n:'#ab725c',y:'#e6be62',o:'#c67d43',g:'#a6be7b'};
 const headPalettes=[
- {...palette,h:'#c9c8bd',H:'#f6f4ea',D:'#3b3734',b:'#d88f82'}, // 동현: white and black hair mixed
+ {...palette,h:'#bfbdb5',H:'#dddbd3',D:'#a3a098',b:'#d88f82'}, // 동현: soft grey, white and dark strands blended
  {...palette,h:'#624234',H:'#916049',b:'#e89b92',n:'#b6636a'},
  {...palette,h:'#3b3029',H:'#635044',s:'#dba784',b:'#c88670'},
  {...palette,h:'#614b39',H:'#997756',b:'#e4a093'},
@@ -22,7 +22,7 @@ const headPalettes=[
 const SALT_PEPPER=['hhDhhHhhDhhHh','hHhhDhhhhHhDh','DhhHhhDhHhhhh','hhDhhhhhhDhHh','hHhhDhHhhhhhD','DhhhhhhDhhHhh','hhHhDhhhhDhhH','hDhhhhHhDhhhh','hhhDhHhhhhHDh','HhhhhhDhhhhhD']; // fixed scattered black/white strands
 function saltPepper(x,y){return SALT_PEPPER[y%SALT_PEPPER.length][x%13];}
 function rearFacing(p,kind){return p.side===1&&['toss','serve'].includes(kind);}
-const W=320,H=304,Z_SCALE=12,COURT_Y=166,DEPTH=8.4,BODY_WIDTH=.9;
+const W=320,H=304,PIXEL=2,Z_SCALE=12,COURT_Y=166,DEPTH=8.4,BODY_WIDTH=.9;
 // Only the ground projection grows in depth. Ball height and world physics do not change.
 function project(x,y,z=0){const sy=COURT_Y+y*DEPTH,scale=1+y*.006;return {x:150+x*20*scale,y:sy-z*Z_SCALE,scale};}
 function unproject(x,y){const wy=(y-COURT_Y)/DEPTH;return{x:(x-150)/(20*(1+wy*.006)),y:wy};}
@@ -137,11 +137,16 @@ function poseFrame(p,override){
  return v;
 }
 class Renderer{
- constructor(canvas){this.canvas=canvas;this.g=canvas.getContext('2d');canvas.width=W;canvas.height=H;this.g.imageSmoothingEnabled=false;
+ constructor(canvas){this.canvas=canvas;this.g=canvas.getContext('2d');canvas.width=W*PIXEL;canvas.height=H*PIXEL;this.g.imageSmoothingEnabled=false; // 2x backing store: 슈슈 is drawn 1:1 from 동현파
   this.shushu=[false,true].map(back=>{const c=document.createElement('canvas');c.width=28;c.height=45;const g=c.getContext('2d');
    TeShushu.rows.forEach((row,y)=>[...row].forEach((ch,x)=>{if(back&&y>=12&&y<21&&'sewbm'.includes(ch))ch='H';const color=TeShushu.colors[ch];if(color){g.fillStyle=color;g.fillRect(x,y,1,1);}}));return c;});
  }
- rect(x,y,w,h,c){const g=this.g;g.fillStyle=c;g.fillRect(Math.round(x),Math.round(y),Math.ceil(w),Math.ceil(h));}
+ rect(x,y,w,h,c){const g=this.g;g.fillStyle=c;x=Math.round(x);y=Math.round(y);w=Math.ceil(w);h=Math.ceil(h);
+  const t=g.getTransform();
+  if(t.b||t.c){g.fillRect(x,y,w,h);return;} // rotated: draw as before
+  // snap to device pixels so scaled pixel art has no hairline seams
+  const x0=Math.round(t.a*x+t.e),x1=Math.round(t.a*(x+w)+t.e),y0=Math.round(t.d*y+t.f),y1=Math.round(t.d*(y+h)+t.f);
+  g.save();g.setTransform(1,0,0,1,0,0);g.fillRect(Math.min(x0,x1),Math.min(y0,y1),Math.abs(x1-x0),Math.abs(y1-y0));g.restore();}
  line(a,b,c,width=1){const g=this.g;g.strokeStyle=c;g.lineWidth=width;g.beginPath();g.moveTo(Math.round(a.x)+.5,Math.round(a.y)+.5);g.lineTo(Math.round(b.x)+.5,Math.round(b.y)+.5);g.stroke();}
  poly(pts,c){const g=this.g;g.fillStyle=c;g.beginPath();pts.forEach((p,i)=>i?g.lineTo(p.x,p.y):g.moveTo(p.x,p.y));g.closePath();g.fill();}
  worldLine(x,y,x2,y2,c,w=1){this.line(project(x,y),project(x2,y2),c,w);}
@@ -162,7 +167,7 @@ class Renderer{
   }
   const feet=v.feet,lean=v.lean,bob=v.bob;
   const limb=(sx,sy,ex,ey,hx,hy,c=skin)=>{this.pixelLine(sx,sy,ex,ey,ink,2);this.pixelLine(ex,ey,hx,hy,ink,2);this.pixelLine(sx,sy,ex,ey,c);this.pixelLine(ex,ey,hx,hy,c);};
-  g.save();g.scale(BODY_WIDTH,1);
+  g.save();if(id!==6)g.scale(BODY_WIDTH,1);
   if(id!==6){
    limb(-1,-6,feet[2],feet[3],feet[0],feet[1]-1,ink);limb(1,-6,feet[6],feet[7],feet[4],feet[5]-1,ink);
    this.rect(feet[0]-1,feet[1],3,1,'#f2ead5');this.rect(feet[4]-1,feet[5],3,1,'#f2ead5');
@@ -175,7 +180,7 @@ class Renderer{
   g.save();g.translate(lean,bob);
   const shoulder=id===6?-11:-14,L=v.left,R=v.right,armSide=['toss','serve'].includes(v.kind)?p.side:1;
   limb(-2*armSide,shoulder,...L); // far arm behind the body
-  g.save();g.scale(BODY_WIDTH,1);
+  g.save();if(id!==6)g.scale(BODY_WIDTH,1);
   if(id===6){const img=this.shushu[rear?1:0];g.drawImage(img,0,0,28,35,-7,-22.5,14,17.5);}
   else {
    this.rect(-3,-15,6,8,ink);this.rect(-2,-14,4,6,id===4?'#f5efdd':Te.PLAYERS[id].color);
@@ -220,6 +225,7 @@ class Renderer{
   this.rect(9,-24,1,25,'#ae9870');this.rect(10,-23,8,9,'#e5d4a8');this.rect(13,-21,1,5,'#597c9b');this.rect(11,-19,5,1,'#597c9b');g.restore();g.restore();
  }
  draw(m,o={}){
+  this.g.setTransform(PIXEL,0,0,PIXEL,0,0);this.g.imageSmoothingEnabled=false;
   this.started=!!o.started; // the player's own face shows only before the first start
   m=viewMatch(m);
   const g=this.g,c=m.court;
@@ -308,7 +314,7 @@ class Renderer{
    for(let d=7;d<len-3;d+=7)this.rect(sh.x+ux*d-1,sh.y+uy*d-1,2,2,skillStyles.long[0]); // stretch marks
    g.translate(hx+ux*6,hy+uy*6);g.rotate(Math.atan2(ux,-uy));
    g.beginPath();g.ellipse(0,0,4.5,5.8,0,0,Math.PI*2);g.fillStyle='#45695c';g.fill();g.strokeStyle='#f5ecd2';g.lineWidth=1.25;g.stroke();
-   g.setTransform(1,0,0,1,0,0);g.lineWidth=1;
+   g.setTransform(PIXEL,0,0,PIXEL,0,0);g.lineWidth=1;
    this.spark(to.x,to.y,3+(still?0:Math.round(age*10)),skillStyles.long[0]);
   }
   if(e.predict){ // 리만가설: the flight still to come, and a large mark where it lands
@@ -484,8 +490,8 @@ class Renderer{
   g.restore();
  }
  portrait(id,size=52){
-  const cv=document.createElement('canvas');cv.width=32;cv.height=32;const old=this.g;this.g=cv.getContext('2d');this.g.imageSmoothingEnabled=false;
-  this.g.translate(-134,28-COURT_Y);this.player({id,x:0,y:0,side:-1,pose:'idle',cool:0},0,'',null,1);this.g=old;return cv.toDataURL();
+  const cv=document.createElement('canvas');cv.width=32*PIXEL;cv.height=32*PIXEL;const old=this.g;this.g=cv.getContext('2d');this.g.imageSmoothingEnabled=false;
+  this.g.scale(PIXEL,PIXEL);this.g.translate(-134,28-COURT_Y);this.player({id,x:0,y:0,side:-1,pose:'idle',cool:0},0,'',null,1);this.g=old;return cv.toDataURL();
  }
 }
 window.TeRender={Renderer,project,unproject,poseFrame,ballVisual,racketFrame,viewMatch,skillStyles,heads,headPalettes,rearFacing};
