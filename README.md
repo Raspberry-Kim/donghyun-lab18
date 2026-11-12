@@ -6,7 +6,7 @@
 
 [바로 하기](https://raspberry-kim.github.io/donghyun-lab18/) · [GitHub](https://github.com/Raspberry-Kim/donghyun-lab18)
 
-v0.08 보관본 DOI는 릴리스 뒤 확인해 기록한다. 이전 v0.07의 [Zenodo 보관본](https://zenodo.org/records/24151119)은 DOI `10.5281/zenodo.24151119`로 인용할 수 있다.
+이번 판의 [Zenodo 보관본](https://zenodo.org/records/24151410)은 DOI `10.5281/zenodo.24151410`로 인용할 수 있다. 보관본 ZIP은 v0.08 태그와 같은 내용이다. [v0.08 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.08)에서 변경 내용을 볼 수 있다. 이전 v0.07의 [Zenodo 보관본](https://zenodo.org/records/24151119)은 DOI `10.5281/zenodo.24151119`로 남아 있다.
 
 v0.08은 머리 중심의 둥근 캐릭터를 그렸다. 동현은 흰 머리 남성, 뭉치와 꽥꽥은 단발 여성(꽥꽥은 조금 작은 키), 뚱띠는 넓고 건장한 인상, 또치는 귀엽고 가느다란 인상이다. 포동이의 흰 귀·주둥이를 키웠고 슈슈의 원본 디자인·몸체·팔다리·라켓과 고정 코트는 보존했다. 상대 슈슈는 대기와 후진에서도 앞을 본다.
 
