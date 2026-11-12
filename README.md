@@ -1,4 +1,4 @@
-# 동현테 v0.05
+# 동현테 v0.06
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24133576.svg)](https://doi.org/10.5281/zenodo.24133576)
 
@@ -6,9 +6,11 @@
 
 [바로 하기](https://raspberry-kim.github.io/donghyun-lab18/) · [GitHub](https://github.com/Raspberry-Kim/donghyun-lab18)
 
-v0.05는 [v0.05 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.05)와 [Zenodo 보관본](https://zenodo.org/records/24150092)(DOI `10.5281/zenodo.24150092`)에서 받을 수 있다. 이전 판은 [v0.04 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.04)·[Zenodo 보관본](https://zenodo.org/records/24147779)(DOI `10.5281/zenodo.24147779`), [v0.03 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.03)·[Zenodo 보관본](https://zenodo.org/records/24147292)(DOI `10.5281/zenodo.24147292`), [v0.02 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.02)·[Zenodo 보관본](https://zenodo.org/records/24134430)(DOI `10.5281/zenodo.24134430`), [v0.01 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.01)·[Zenodo 보관본](https://zenodo.org/records/24133577)(DOI `10.5281/zenodo.24133577`)에 남아 있다. 머리글 배지와 인용 파일은 모든 판을 가리키는 개념 DOI `10.5281/zenodo.24133576`을 쓴다.
+v0.06은 [v0.06 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.06)에서 받을 수 있다. 이전 판은 [v0.05 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.05)·[Zenodo 보관본](https://zenodo.org/records/24150092)(DOI `10.5281/zenodo.24150092`), [v0.04 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.04)·[Zenodo 보관본](https://zenodo.org/records/24147779)(DOI `10.5281/zenodo.24147779`), [v0.03 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.03)·[Zenodo 보관본](https://zenodo.org/records/24147292)(DOI `10.5281/zenodo.24147292`), [v0.02 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.02)·[Zenodo 보관본](https://zenodo.org/records/24134430)(DOI `10.5281/zenodo.24134430`), [v0.01 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.01)·[Zenodo 보관본](https://zenodo.org/records/24133577)(DOI `10.5281/zenodo.24133577`)에 남아 있다. 머리글 배지와 인용 파일은 모든 판을 가리키는 개념 DOI `10.5281/zenodo.24133576`을 쓴다.
 
-v0.05에서는 다섯 가지를 고쳤다. 경기 중 Enter 메뉴에서 브라우저 칸 3개나 `.dhsave` 파일로 저장하고 불러온다. 예제 24개는 통상(01–07) · 프로(08–13) · 초보(14–24) 순서로 다시 놓았다. 풀리지 않던 특수기술을 바로잡았다: 울트라롱팔은 닿지 않는 공 세 번까지만 받고, 아잉뿌잉은 4초 뒤 풀리며, 폴트·렛 뒤에는 준비한 기술이 남는다. 액슬로즈는 라켓을 두 번 내리쳐 부수는 장면이 생겼고, 경기 패배가 아니라 지금 게임만 내준다. 열네 기술의 연출을 키우고 코트 아래 기술 칸에 준비됨·발동 중·남은 횟수를 표시한다. 카메라와 코트·선수 그림, 일반 타격의 물리는 v0.04와 같다.
+v0.06에서는 코트를 세로로 조금 길게 하고 선수의 몸·머리 폭을 약 10% 줄였다. 공은 상대 코트로 갈수록 작아지고 바닥에 닿을 때도 더 작아진다. 높이 올라가면 커지는 표현은 그대로다. 전체 화면 단추는 코트·키 안내와 간격을 두었고 좁은 전체 화면의 코트 비율을 바로잡았다. 카메라는 고정되어 있고 타격·점수·특수기술·저장 규칙은 v0.05와 같다.
+
+경기 중 Enter 메뉴에서 브라우저 칸 3개나 `.dhsave` 파일로 저장하고 불러온다. 예제 24개는 통상(01–07) · 프로(08–13) · 초보(14–24) 순서다. 울트라롱팔은 닿지 않는 공 세 번까지만 받고, 아잉뿌잉은 4초 뒤 풀리며, 폴트·렛 뒤에는 준비한 기술이 남는다. 액슬로즈는 라켓을 두 번 내리쳐 부수고 지금 게임만 내준다. 기술 칸에는 준비됨·발동 중·남은 횟수가 표시된다.
 
 v0.04에서는 페이지의 색과 큰 틀을 동현큐·동현심 등 시리즈의 다른 실험실과 맞추었다. 종이색 바탕과 노란 강조, 포동이 머리글, 소개와 입력 표식, 노란 밑줄 탭, “처음이라면?” 상자, A 코트 · B 동현랭 출전 코드의 두 칸 배치, 구문 강조 편집기가 같은 모양이다. 코트 그림과 경기 화면 안의 점수판·기술 띠, 선수·공·물리 규칙은 v0.03과 같다.
 
@@ -86,6 +88,7 @@ node build.cjs
 node qa/examples-ui.mjs
 node qa/save-ui.mjs
 node qa/pad-menu.mjs
+node qa/layout-ui.mjs
 ```
 
 `src/engine.js`는 화면과 독립적인 120 Hz 엔진이다. `render.js`는 도트·코트, `app.js`는 동현랭·입력·메뉴·소리를 담당한다. `build.cjs`는 원본 실행기와 글꼴을 포함한 단일 HTML을 `dist`에 만든다.

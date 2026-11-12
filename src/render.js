@@ -10,11 +10,15 @@ const heads=[
  ['..yyy..','.yyyyy.','.ykyky.','.yyyyy.','ooooooo','.ooooo.','..yyy..']
 ];
 const palette={h:'#342e2c',s:'#e3b797',k:'#292e2b',w:'#f5efdd',n:'#ab725c',y:'#e6be62',o:'#c67d43',g:'#a6be7b'};
-const W=320,H=288,Z_SCALE=12;
-function project(x,y,z=0){const sy=158+y*7.8,scale=1+y*.006;return {x:150+x*20*scale,y:sy-z*Z_SCALE,scale};}
-function unproject(x,y){const wy=(y-158)/7.8;return{x:(x-150)/(20*(1+wy*.006)),y:wy};}
+const W=320,H=304,Z_SCALE=12,COURT_Y=166,DEPTH=8.4,BODY_WIDTH=.9;
+// Only the ground projection grows in depth. Ball height and world physics do not change.
+function project(x,y,z=0){const sy=COURT_Y+y*DEPTH,scale=1+y*.006;return {x:150+x*20*scale,y:sy-z*Z_SCALE,scale};}
+function unproject(x,y){const wy=(y-COURT_Y)/DEPTH;return{x:(x-150)/(20*(1+wy*.006)),y:wy};}
 // Cartoon scale is visual only: collision, landing and rally trajectory stay in XYZ.
-function ballVisual(ball){return {...project(ball.x,ball.y,ball.z),radius:3+Math.min(3.6,Math.max(0,ball.z))*1.1};}
+function ballVisual(ball){
+ const depth=Math.max(.7,Math.min(1.06,.88+ball.y*.012));
+ return {...project(ball.x,ball.y,ball.z),radius:(2.2+Math.min(3.6,Math.max(0,ball.z))*1.1)*depth};
+}
 const skillStyles={
  fire:['#ffd080','불꽃 리턴','다음 리턴에 불꽃을 싣는다'],
  comet:['#bfe8ff','혜성 이동','다음 타격 입력으로 공에 다가간다'],
@@ -146,6 +150,7 @@ class Renderer{
   }
   const feet=v.feet,lean=v.lean,bob=v.bob;
   const limb=(sx,sy,ex,ey,hx,hy,c=skin)=>{this.pixelLine(sx,sy,ex,ey,ink,2);this.pixelLine(ex,ey,hx,hy,ink,2);this.pixelLine(sx,sy,ex,ey,c);this.pixelLine(ex,ey,hx,hy,c);};
+  g.save();g.scale(BODY_WIDTH,1);
   if(id!==6){
    limb(-1,-6,feet[2],feet[3],feet[0],feet[1]-1,ink);limb(1,-6,feet[6],feet[7],feet[4],feet[5]-1,ink);
    this.rect(feet[0]-1,feet[1],3,1,'#f2ead5');this.rect(feet[4]-1,feet[5],3,1,'#f2ead5');
@@ -154,9 +159,11 @@ class Renderer{
    g.drawImage(img,0,35,14,10,-7+(moving?Math.sign(feet[0])*1:0),-5+(moving?feet[1]:0),7,5);
    g.drawImage(img,14,35,14,10,(moving?Math.sign(feet[4])*1:0),-5+(moving?feet[5]:0),7,5);
   }
+  g.restore();
   g.save();g.translate(lean,bob);
   const shoulder=id===6?-11:-14,L=v.left,R=v.right,armSide=['toss','serve'].includes(v.kind)?p.side:1;
   limb(-2*armSide,shoulder,...L); // far arm behind the body
+  g.save();g.scale(BODY_WIDTH,1);
   if(id===6){const img=this.shushu[rear?1:0];g.drawImage(img,0,0,28,35,-7,-22.5,14,17.5);}
   else {
    this.rect(-3,-15,6,8,ink);this.rect(-2,-14,4,6,id===4?'#f5efdd':Te.PLAYERS[id].color);
@@ -167,6 +174,7 @@ class Renderer{
     this.rect(v.lean<0?-4:3,-18,1,2,palette.s);
    }
   }
+  g.restore();
   const racketState=opt.hideArm?'none':v.racketState||'whole';
   if(!opt.hideArm)limb(2*armSide,shoulder,...R);
   if(racketState==='stub'){ // snapped shaft: grip plus two jagged splinters
@@ -188,6 +196,7 @@ class Renderer{
   g.restore();
  }
  umpire(time){
+  this.g.save();this.g.translate(0,COURT_Y-158);
   this.rect(291,134,15,4,'#c3b895');this.rect(294,138,2,25,'#c3b895');this.rect(304,138,2,25,'#c3b895');
   for(let y=143;y<162;y+=5)this.rect(296,y,8,1,'#a49677');
   const g=this.g;g.save();g.translate(299,135);
@@ -195,7 +204,7 @@ class Renderer{
   this.rect(-5,-17,9,3,'#d6dbcf');this.rect(-6,-14,11,5,'#8eaaa7');this.rect(-3,-12,5,4,'#dfb594');
   this.rect(-2,-11,1,1,'#303b35');this.rect(1,-11,1,1,'#303b35');this.rect(-5,-8,9,7,'#b9c7bd');
   this.rect(-7,-7,3,4,'#d3d9cc');this.rect(4,-7,3,4,'#d3d9cc');this.rect(-4,-1,3,3,'#3c5350');this.rect(1,-1,3,3,'#3c5350');
-  this.rect(9,-24,1,25,'#ae9870');this.rect(10,-23,8,9,'#e5d4a8');this.rect(13,-21,1,5,'#597c9b');this.rect(11,-19,5,1,'#597c9b');g.restore();
+  this.rect(9,-24,1,25,'#ae9870');this.rect(10,-23,8,9,'#e5d4a8');this.rect(13,-21,1,5,'#597c9b');this.rect(11,-19,5,1,'#597c9b');g.restore();g.restore();
  }
  draw(m){
   m=viewMatch(m);
@@ -230,7 +239,8 @@ class Renderer{
   this.states(m);
   if(m.ball){
    const ball=m.ball,shadow=project(ball.x,ball.y),pos=ballVisual(ball),r=pos.radius;
-   g.fillStyle='#203832a8';g.beginPath();g.ellipse(shadow.x,shadow.y,3.5,1.3,0,0,Math.PI*2);g.fill();
+   const groundRadius=ballVisual({...ball,z:0}).radius;
+   g.fillStyle='#203832a8';g.beginPath();g.ellipse(shadow.x,shadow.y,groundRadius*1.15,groundRadius*.4,0,0,Math.PI*2);g.fill();
    // Where the ball was i frames ago, from its own flight; trails never bend the real path.
    const past=tau=>ballVisual({x:ball.x-ball.vx*tau,y:ball.y-ball.vy*tau,z:Math.max(0,ball.z-ball.vz*tau-.5*Te.G*tau*tau)});
    const ghostServe=ball.serve&&ball.by===0&&m.armed==='serveVanish',power=ghostServe?'vanish':ball.power;
@@ -461,7 +471,7 @@ class Renderer{
  }
  portrait(id,size=52){
   const cv=document.createElement('canvas');cv.width=32;cv.height=32;const old=this.g;this.g=cv.getContext('2d');this.g.imageSmoothingEnabled=false;
-  this.g.translate(-134,-130);this.player({id,x:0,y:0,side:-1,pose:'idle',cool:0},0,'',null,1);this.g=old;return cv.toDataURL();
+  this.g.translate(-134,28-COURT_Y);this.player({id,x:0,y:0,side:-1,pose:'idle',cool:0},0,'',null,1);this.g=old;return cv.toDataURL();
  }
 }
 window.TeRender={Renderer,project,unproject,poseFrame,ballVisual,racketFrame,viewMatch,skillStyles};
