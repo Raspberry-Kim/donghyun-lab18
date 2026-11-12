@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it using the metadata below."
 title: "Donghyunte (동현테): a fixed-view single-player tennis laboratory configured through Donghyun-lang"
 type: software
-version: "0.07"
+version: "0.08"
 doi: "10.5281/zenodo.24133576"
 date-released: "2026-11-12"
 authors:
@@ -26,7 +26,10 @@ abstract: >-
   constants and hit rules of this independent implementation do not
   numerically match the original. In-app "Why Open?" and "Mathematical
   principles" pages explain the history of open tennis and the engine's
-  equations. The 0.12-second post-hit serve input
+  equations. Version 0.08 enlarges the character heads, offers 63 examples,
+  and makes sustained abilities last for the rally while unused one-shot
+  winning abilities carry forward until a successful landing. The opponent
+  AI never uses special abilities. The 0.12-second post-hit serve input
   window and court coefficients are original gameplay adjustments. No ROM,
   emulator state, original-game screenshot, extracted art, or original audio
   is distributed. Code and documentation are MIT; bundled fonts are OFL.
