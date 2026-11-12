@@ -68,6 +68,8 @@ test('enlarged rectangular heads and CPU front orientation at all movements',()=
  const sandbox={window:{}};vm.runInNewContext(fs.readFileSync(require.resolve('../src/render'),'utf8'),sandbox);const R=sandbox.window.TeRender;
  for(const h of R.heads){assert.ok(h[0].length>=11);assert.ok(h.length>=11);assert.ok(h.every(row=>row.length===h[0].length));}
  for(const moveY of [-1,0,1])for(const kind of ['idle','run','toss','serve','lob','volley'])assert.equal(R.rearFacing({side:-1,walk:true,moveY},kind),false);
- assert.ok(R.heads[5].length<R.heads[1].length);assert.ok(R.heads[2][0].length>R.heads[3][0].length);
+ assert.ok(R.heads[5].length<R.heads[1].length);assert.equal(R.heads[4].length,R.heads[5].length); // 포동이 is as short as 꽥꽥
+ assert.ok(R.heads[4].some(r=>r.includes('kk'))&&R.heads[4].some(r=>r.startsWith('cc')&&r.endsWith('cc'))); // round eyes and both ear flaps
+assert.ok(R.heads[2][0].length>R.heads[3][0].length);
 });
 console.log(`${count} rally-skill/identity checks passed`);

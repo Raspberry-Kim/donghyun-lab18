@@ -6,16 +6,17 @@ const heads=[
  ['....hhhhh....','..hhhhhhhhh..','.hhHHhhhhhhh.','hhhhhhhhhhhhh','hhhsshhhsshhh','hhssssssssshh','hhskwssskwshh','hhskkssskkshh','hhsbsssssbshh','hhsssnnnssshh','.hhsssssshh..','...hssssh....'],
  ['...hhhhhhhh...','..hhhhhhhhhh..','.hhHHhhhhhhhh.','hhhhhhhhhhhhhh','hhsssssssssshh','hssskksskksssh','ssskwsssswksss','ssskksssskksss','ssssssssssssss','.sbsssnsssbs..','.sssssssssss..','..sssnnnnsss..','...ssssssss...'],
  ['....hhh....','...hhHhh...','..hHHhhhh..','.hhhhhhhhh.','.hhssssshh.','hhssssssssh','.skwssskws.','.skkssskks.','.sbsssssb..','..sssnnss..','..sssssss..','...sssss...'],
- ['..ww.......ww..','.wwwwwwwwwwwww.','wwwwwwwwwwwwwww','wwwwwwwwwwwwwww','wwwwkwwwwwkwwww','wwwwkwwwwwkwwww','wwwwwwwwwwwwwww','wwwwwwkkkwwwwww','.wwwwwwkwwwwww.','..wwwwnwnwwww..','...wwwwwwwww...','.....wwwww.....'],
+ ['....wwwwwww....','..wwwwwwwwwww..','.wwwwwwwwwwwww.','ccwwwwwwwwwwwcc','ccwkkwwwwwkkwcc','ccwkkwwwwwkkwcc','ccdwwwwwwwwwdcc','ccdwwwkkkwwwdcc','ccdwwwwmwwwwdcc','.cc.wwwwwww.cc.','.....wwwww.....'], // 포동이: series icon face (drooping ears, round eyes, button nose), 꽥꽥's height
  ['...hhhhhhh...','..hhHHhhhhh..','.hhhhhhhhhhh.','hhhsshhhsshhh','hhssssssssshh','hhskwssskwshh','hhskkssskkshh','hhsbsssssbshh','.hsssnnnsshh.','..hhssssshh..','....sssss....']
 ];
+const SHORT=new Set([4,5]);
 const palette={h:'#342e2c',s:'#e3b797',k:'#292e2b',w:'#f5efdd',n:'#ab725c',y:'#e6be62',o:'#c67d43',g:'#a6be7b'};
 const headPalettes=[
  {...palette,h:'#bfbdb5',H:'#dddbd3',D:'#a3a098',b:'#d88f82'}, // 동현: soft grey, white and dark strands blended
  {...palette,h:'#624234',H:'#916049',b:'#e89b92',n:'#b6636a'},
  {...palette,h:'#3b3029',H:'#635044',s:'#dba784',b:'#c88670'},
  {...palette,h:'#614b39',H:'#997756',b:'#e4a093'},
- {...palette,b:'#dca79b'},
+ {...palette,c:'#e0c49a',d:'#c4a377',m:'#8a4a4a',q:'#a08d6e'}, // 포동이: cream fur, tan ear flaps, small mouth
  {...palette,h:'#493329',H:'#866149',b:'#efa79b',n:'#b6636a'}
 ];
 // Retreat is a backward step facing the ball, never a sudden back-of-head sprite.
@@ -185,12 +186,13 @@ class Renderer{
   else {
    this.rect(-3,-15,6,8,ink);this.rect(-2,-14,4,6,id===4?'#f5efdd':Te.PLAYERS[id].color);
    this.rect(-3,-8,6,2,'#eee8d4');if(!rear)this.rect(-1,-14,2,1,'#eee8d4');
-   const rows=heads[id].map((row,y)=>[...row].map((ch,x)=>{const c=rear&&ch!=='.'?(id===4?'w':y<row.length-3?'h':'s'):ch;return id===0&&c==='h'?saltPepper(x,y):c;}).join(''));
+   const headTop=SHORT.has(id)?-25:-27; // 포동이·꽥꽥 are the short ones
+   const rows=heads[id].map((row,y)=>[...row].map((ch,x)=>{const c=rear&&ch!=='.'?(id===4?(ch==='c'||ch==='d'?ch:'w'):y<row.length-3?'h':'s'):ch;return id===0&&c==='h'?saltPepper(x,y):c;}).join(''));
    if(id===0||id===4){
-    const mask=rows.map(row=>row.replace(/[^.]/g,'q')),hp={q:'#9a9685'},hx=-Math.floor(rows[0].length/2);
-    for(const [dx,dy] of [[-1,0],[1,0],[0,-1],[0,1]])this.pixels(mask,hx+dx,-27+dy,hp);
+    const mask=rows.map(row=>row.replace(/[^.]/g,'q')),hp={q:headPalettes[id].q||'#9a9685'},hx=-Math.floor(rows[0].length/2);
+    for(const [dx,dy] of [[-1,0],[1,0],[0,-1],[0,1]])this.pixels(mask,hx+dx,headTop+dy,hp);
    }
-   this.pixels(rows,-Math.floor(rows[0].length/2),id===5?-25:-27,headPalettes[id]);
+   this.pixels(rows,-Math.floor(rows[0].length/2),headTop,headPalettes[id]);
   }
   g.restore();
   const racketState=opt.hideArm?'none':v.racketState||'whole';
@@ -210,7 +212,7 @@ class Renderer{
    g.beginPath();g.ellipse(0,0,minor,major,0,0,Math.PI*2);g.strokeStyle='#f5ecd2';g.lineWidth=1.25;g.stroke();g.restore();
   }
   g.restore();
-  if(role)this.rect(-1,(id===6?-26:id===5?-28:-30)+v.bob,2,1,role==='P'?'#f3d884':'#e9e9dc');
+  if(role)this.rect(-1,(id===6?-26:SHORT.has(id)?-28:-30)+v.bob,2,1,role==='P'?'#f3d884':'#e9e9dc');
   g.restore();
  }
  umpire(time){
