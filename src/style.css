@@ -446,4 +446,6 @@ kbd{display:inline-flex;align-items:center;justify-content:center;min-width:1.8e
 @media (max-width:700px){.timeline{grid-template-columns:repeat(3,1fr);row-gap:10px}.document .eq.big math{font-size:1.12em}}
 .document .eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px 30px}
 .document .eq math{margin:0}
+.document .eq .eq-run{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 0;min-width:0;max-width:100%}
+@media (min-width:701px) and (max-width:1100px){.document .eq.big math{font-size:1.16em}}
 @media (max-width:440px){.document .eq{padding:8px 10px}.document .eq math,.document .eq.big math{font-size:.94em}}
