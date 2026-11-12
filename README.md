@@ -6,7 +6,7 @@
 
 [바로 하기](https://raspberry-kim.github.io/donghyun-lab18/) · [GitHub](https://github.com/Raspberry-Kim/donghyun-lab18)
 
-[v0.11 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.11)에서 바뀐 점을 볼 수 있다. 앞선 v0.10의 [Zenodo 보관본](https://zenodo.org/records/24152944)은 DOI `10.5281/zenodo.24152944`로 남아 있다.
+이번 판의 [Zenodo 보관본](https://zenodo.org/records/24157838)은 DOI [`10.5281/zenodo.24157838`](https://doi.org/10.5281/zenodo.24157838)로 인용할 수 있다. 보관본 ZIP은 v0.11 태그와 같은 내용이다. [v0.11 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.11)에서 바뀐 점을 볼 수 있다. 앞선 v0.10의 [Zenodo 보관본](https://zenodo.org/records/24152944)은 DOI `10.5281/zenodo.24152944`로 남아 있다.
 
 v0.11에서는 포동이 얼굴을 시리즈 머리글 아이콘처럼 둥글게 다듬고 귀를 흰색으로 맞췄다. 까만 눈과 코, 작은 입을 넣었고 키는 꽥꽥만큼 작다. 몸과 동작은 그대로이며, 쓰러진 자세의 머리에 생기던 줄무늬도 고쳤다.
 
