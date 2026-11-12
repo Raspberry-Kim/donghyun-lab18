@@ -20,7 +20,8 @@ check('both serve types can hit the descending ball on every court',()=>{
 });
 check('far-end toss apex and full enlarged ball stay inside canvas',()=>{
  const v=R.ballVisual({x:1.5,y:-12.3,z:3.44});
- assert.ok(v.y-v.radius>0);assert.ok(v.radius*2>13);assert.ok(R.ballVisual({x:0,y:0,z:0}).radius*2>=6);
+ assert.ok(v.y-v.radius>0);assert.ok(v.radius*2>8);assert.ok(v.radius*2<10);
+ const ground=R.ballVisual({x:0,y:0,z:0});assert.ok(ground.radius*2>=3);assert.ok(ground.radius*2<6);
 });
 check('above-reach input waits for reachable contact instead of faulting',()=>{
  const m=new E.Match();m.toss();for(let i=0;i<120;i++)m.step(E.DT);
@@ -43,5 +44,31 @@ check('left hand tosses over right racket, clear of head, at both ends without a
   assert.ok(pose.racket[0]*p.side>0,'serve must contact above the right-hand racket');
   assert.ok(Math.abs(pose.racket[0]-(R.ballVisual(hit.ball).x-R.project(hit.people[server].x,hit.people[server].y).x))<2);
  }
+});
+check('depth shrinks the ball continuously; ground is smaller, height still enlarges it',()=>{
+ for(const z of [0,.1,1,2,3.44]){
+  let last=0;
+  for(let y=-14.2;y<=14.2;y+=.2){const r=R.ballVisual({x:0,y,z}).radius;assert.ok(r>last);last=r;}
+  const far=R.ballVisual({x:0,y:-12.3,z}).radius,near=R.ballVisual({x:0,y:12.3,z}).radius;
+  assert.ok(far<near*.75);
+ }
+ for(const y of [-14.2,0,14.2]){
+  const r=z=>R.ballVisual({x:0,y,z}).radius;
+  assert.ok(r(0)<3);assert.ok(r(0)>1.5);assert.ok(r(0)<r(1)&&r(1)<r(3.44));
+ }
+ for(const side of [1,-1]){
+  const m=new E.Match();if(side===-1)m.swapEnds();
+  m.ball={x:0,y:-side*12.3,z:1,by:0};const far=R.ballVisual(R.viewMatch(m).ball).radius;
+  m.ball.y=side*12.3;assert.ok(far<R.ballVisual(R.viewMatch(m).ball).radius);
+ }
+});
+check('deeper projection is invertible, preserves width, and keeps baseline and feet inside canvas',()=>{
+ for(const x of [-6.3,0,6.3])for(const y of [-14.2,-11.885,0,11.885,14.2]){
+  const p=R.project(x,y),q=R.unproject(p.x,p.y);
+  assert.ok(Math.abs(q.x-x)<1e-10&&Math.abs(q.y-y)<1e-10);
+  assert.ok(p.y-25>0&&p.y+4<304);
+  assert.equal(p.x,150+x*20*(1+y*.006));
+ }
+ assert.ok(Math.abs((R.project(0,11.885).y-R.project(0,-11.885).y)/(2*11.885*7.8)-8.4/7.8)<1e-10);
 });
 console.log(`${count} round-ball/toss checks passed`);
