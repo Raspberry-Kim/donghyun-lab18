@@ -2,7 +2,7 @@
 (function(){
 'use strict';
 const heads=[
- ['....hhhhh....','..hhhhhhhhh..','.hhHHhhhhhhh.','hhHhhhhhhHhhh','hhssssssssshh','hsssssssssssh','ssskwssskwsss','ssskkssskksss','.sbssssssbs..','.ssssnsssss..','..sssssssss..','...ssnnnss...','....sssss....'],
+ ['.............','..hhhhhhhhh..','.hhHHhhhhhhh.','hhHhhhhhhHhhh','hhssssssssshh','hsssssssssssh','ssskwssskwsss','ssskkssskksss','.sbssssssbs..','.ssssnsssss..','..sssssssss..','...ssnnnss...','....sssss....'],
  ['....hhhhh....','..hhhhhhhhh..','.hhHHhhhhhhh.','hhhhhhhhhhhhh','hhhsshhhsshhh','hhssssssssshh','hhskwssskwshh','hhskkssskkshh','hhsbsssssbshh','hhsssnnnssshh','.hhsssssshh..','...hssssh....'],
  ['...hhhhhhhh...','..hhhhhhhhhh..','.hhHHhhhhhhhh.','hhhhhhhhhhhhhh','hhsssssssssshh','hssskksskksssh','ssskwsssswksss','ssskksssskksss','ssssssssssssss','.sbsssnsssbs..','.sssssssssss..','..sssnnnnsss..','...ssssssss...'],
  ['....hhh....','...hhHhh...','..hHHhhhh..','.hhhhhhhhh.','.hhssssshh.','hhssssssssh','.skwssskws.','.skkssskks.','.sbsssssb..','..sssnnss..','..sssssss..','...sssss...'],
@@ -11,7 +11,7 @@ const heads=[
 ];
 const palette={h:'#342e2c',s:'#e3b797',k:'#292e2b',w:'#f5efdd',n:'#ab725c',y:'#e6be62',o:'#c67d43',g:'#a6be7b'};
 const headPalettes=[
- {...palette,h:'#e5e6dc',H:'#ffffff',b:'#d88f82'},
+ {...palette,h:'#c9c8bd',H:'#f6f4ea',D:'#3b3734',b:'#d88f82'}, // 동현: white and black hair mixed
  {...palette,h:'#624234',H:'#916049',b:'#e89b92',n:'#b6636a'},
  {...palette,h:'#3b3029',H:'#635044',s:'#dba784',b:'#c88670'},
  {...palette,h:'#614b39',H:'#997756',b:'#e4a093'},
@@ -19,6 +19,8 @@ const headPalettes=[
  {...palette,h:'#493329',H:'#866149',b:'#efa79b',n:'#b6636a'}
 ];
 // Retreat is a backward step facing the ball, never a sudden back-of-head sprite.
+const SALT_PEPPER=['hhDhhHhhDhhHh','hHhhDhhhhHhDh','DhhHhhDhHhhhh','hhDhhhhhhDhHh','hHhhDhHhhhhhD','DhhhhhhDhhHhh','hhHhDhhhhDhhH','hDhhhhHhDhhhh','hhhDhHhhhhHDh','HhhhhhDhhhhhD']; // fixed scattered black/white strands
+function saltPepper(x,y){return SALT_PEPPER[y%SALT_PEPPER.length][x%13];}
 function rearFacing(p,kind){return p.side===1&&['toss','serve'].includes(kind);}
 const W=320,H=304,Z_SCALE=12,COURT_Y=166,DEPTH=8.4,BODY_WIDTH=.9;
 // Only the ground projection grows in depth. Ball height and world physics do not change.
@@ -150,7 +152,7 @@ class Renderer{
   for(let n=0;n<90;n++){this.rect(x0,y0,width,width,color);if(x0===x1&&y0===y1)break;const e2=2*e;if(e2>=dy){e+=dy;x0+=sx;}if(e2<=dx){e+=dx;y0+=sy;}}
  }
  player(p,time,role='',poseOverride=null,size=1,opt={}){
-  const g=this.g,pos=project(p.x,p.y),id=p.id,v=poseFrame(p,poseOverride),rear=rearFacing(p,v.kind),ink=id===6?TeShushu.colors.o:'#343c32',skin=id===4?'#f5efdd':id===6?TeShushu.colors.s:'#e3b797';
+  const g=this.g,pos=project(p.x,p.y),id=p.id,v=poseFrame(p,poseOverride),rear=opt.rear??rearFacing(p,v.kind),ink=id===6?TeShushu.colors.o:'#343c32',skin=id===4?'#f5efdd':id===6?TeShushu.colors.s:'#e3b797';
   g.save();g.translate(Math.round(pos.x),Math.round(pos.y));g.scale(size,size);g.imageSmoothingEnabled=false;
   this.rect(-4,0,9,1,'#172e3055');
   g.translate(0,v.lift);
@@ -178,7 +180,7 @@ class Renderer{
   else {
    this.rect(-3,-15,6,8,ink);this.rect(-2,-14,4,6,id===4?'#f5efdd':Te.PLAYERS[id].color);
    this.rect(-3,-8,6,2,'#eee8d4');if(!rear)this.rect(-1,-14,2,1,'#eee8d4');
-   const rows=heads[id].map((row,y)=>[...row].map(ch=>rear&&ch!=='.'?(id===4?'w':y<row.length-3?'h':'s'):ch).join(''));
+   const rows=heads[id].map((row,y)=>[...row].map((ch,x)=>{const c=rear&&ch!=='.'?(id===4?'w':y<row.length-3?'h':'s'):ch;return id===0&&c==='h'?saltPepper(x,y):c;}).join(''));
    if(id===0||id===4){
     const mask=rows.map(row=>row.replace(/[^.]/g,'q')),hp={q:'#9a9685'},hx=-Math.floor(rows[0].length/2);
     for(const [dx,dy] of [[-1,0],[1,0],[0,-1],[0,1]])this.pixels(mask,hx+dx,-27+dy,hp);
@@ -217,7 +219,8 @@ class Renderer{
   this.rect(-7,-7,3,4,'#d3d9cc');this.rect(4,-7,3,4,'#d3d9cc');this.rect(-4,-1,3,3,'#3c5350');this.rect(1,-1,3,3,'#3c5350');
   this.rect(9,-24,1,25,'#ae9870');this.rect(10,-23,8,9,'#e5d4a8');this.rect(13,-21,1,5,'#597c9b');this.rect(11,-19,5,1,'#597c9b');g.restore();g.restore();
  }
- draw(m){
+ draw(m,o={}){
+  this.started=!!o.started; // the player's own face shows only before the first start
   m=viewMatch(m);
   const g=this.g,c=m.court;
   this.rect(0,0,W,H,c.outer);
@@ -236,8 +239,8 @@ class Renderer{
   const T=m.time,still=this.reducedMotion,eff=m.effects||{},fxAge=m.fx?(still&&m.fx.type==='lose'?2.4:(m.fx.duration||m.fx.ttl)-m.fx.ttl):0;
   const person=p=>{
    const me=p===m.people[0];
-   if(me&&m.fx?.type==='lose')return this.player({...p,walk:false,anim:{name:'break',time:fxAge,duration:m.fx.duration,hand:1}},T,'P','break');
-   this.player(p,T,me?'P':'C',null,1,me?{longArm:eff.long>0,hideArm:m.fx?.type==='long'}:{});
+   if(me&&m.fx?.type==='lose')return this.player({...p,walk:false,anim:{name:'break',time:fxAge,duration:m.fx.duration,hand:1}},T,'P','break',1,{rear:this.started});
+   this.player(p,T,me?'P':'C',null,1,me?{longArm:eff.long>0,hideArm:m.fx?.type==='long',rear:this.started}:{});
   };
   for(const p of visible.filter(p=>p.y<0))person(p);
   const a=project(-5.7,0),b=project(5.7,0),nh=Math.round(Te.NET*Z_SCALE);
@@ -353,7 +356,7 @@ class Renderer{
    const b=project(fx.toX,fx.toY),k=still?1:Math.min(1,age/.18);g.globalAlpha=fade;
    for(let j=-2;j<=2;j++)this.line({x:at.x,y:at.y-10+j*3},{x:at.x+(b.x-at.x)*k,y:b.y-10+j*3},j?'#8fc9e8':'#f1fbff',j?1:2);
    for(let j=0;j<8;j++){const t=j/8;this.spark(at.x+(b.x-at.x)*t,at.y+(b.y-at.y)*t-10+((j*5)%9-4),j%3?1:2,j%2?'#bfe8ff':'#ffffff');}
-   if(!still)for(const [t,al] of [[.25,.22],[.6,.38]]){g.globalAlpha=al*fade;this.player({...me,x:fx.x+(fx.toX-fx.x)*t,y:fx.y+(fx.toY-fx.y)*t,walk:false,anim:null},T);}
+   if(!still)for(const [t,al] of [[.25,.22],[.6,.38]]){g.globalAlpha=al*fade;this.player({...me,x:fx.x+(fx.toX-fx.x)*t,y:fx.y+(fx.toY-fx.y)*t,walk:false,anim:null},T,'',null,1,{rear:this.started});}
   }else if(fx.type==='fire'){
    g.globalAlpha=fade;for(let j=0;j<11;j++){const h=7+((j*5)%7)+(still?0:Math.sin(T*22+j*1.9)*4),x=at.x-13+j*2.6;this.rect(x,at.y-h,2,h,'#ce4a3a');this.rect(x,at.y-h*.7,2,h*.7,'#e7823c');this.rect(x,at.y-h*.38,2,h*.38,'#ffd080');}
   }else if(fx.type==='wind'){
