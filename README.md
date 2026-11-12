@@ -6,7 +6,7 @@
 
 [바로 하기](https://raspberry-kim.github.io/donghyun-lab18/) · [GitHub](https://github.com/Raspberry-Kim/donghyun-lab18)
 
-모든 판을 묶는 DOI는 [`10.5281/zenodo.24133576`](https://doi.org/10.5281/zenodo.24133576)이다. [v0.12 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.12)에서 바뀐 점을 볼 수 있다. 앞선 v0.11의 [Zenodo 보관본](https://zenodo.org/records/24157838)은 DOI `10.5281/zenodo.24157838`로, v0.10의 [Zenodo 보관본](https://zenodo.org/records/24152944)은 DOI `10.5281/zenodo.24152944`로 남아 있다.
+모든 판을 묶는 DOI는 [`10.5281/zenodo.24133576`](https://doi.org/10.5281/zenodo.24133576)이다. 이번 v0.12의 [Zenodo 보관본](https://zenodo.org/records/24159947)은 DOI [`10.5281/zenodo.24159947`](https://doi.org/10.5281/zenodo.24159947)이고, 보관본 ZIP은 v0.12 태그와 같은 내용이다. [v0.12 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.12)에서 바뀐 점을 볼 수 있다. 앞선 v0.11의 [Zenodo 보관본](https://zenodo.org/records/24157838)은 DOI `10.5281/zenodo.24157838`로, v0.10의 [Zenodo 보관본](https://zenodo.org/records/24152944)은 DOI `10.5281/zenodo.24152944`로 남아 있다.
 
 v0.12에서는 ‘수학적 원리’를 처음부터 다시 맞춰 봤다. 스매시의 수평 속도 배수를 바운드 뒤(×0.74)와 바운드 전(×0.80×0.74≈0.59)으로 나눠 바로 적었고, 긴 식은 좁은 화면에서 잘리지 않고 그 자리에서 줄이 바뀐다. 경기 규칙과 조작은 그대로다.
 
