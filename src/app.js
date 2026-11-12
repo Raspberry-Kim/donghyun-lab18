@@ -314,7 +314,7 @@ function pollPad(){
  oldPad=pad.buttons.map(b=>b.pressed);
 }
 function draw(){
- R.draw(match);const cfg=match.config,p=E.PLAYERS[cfg.player],opp=E.PLAYERS[match.people[1].id];
+ R.draw(match,{started:active});const cfg=match.config,p=E.PLAYERS[cfg.player],opp=E.PLAYERS[match.people[1].id];
  // Whatever paused the match (Enter, a lost focus, another tab), the menu is what the player sees.
  if(active&&match.paused&&!menu&&!pending&&match.phase!=='match'&&tab==='play'){mainMenu();return;}
  const cue=match.skillCue,el=$('#skill-cue');
