@@ -1,4 +1,4 @@
-# 동현테 v0.06
+# 동현테 v0.07
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24133576.svg)](https://doi.org/10.5281/zenodo.24133576)
 
@@ -9,6 +9,8 @@
 이번 판의 [Zenodo 보관본](https://zenodo.org/records/24150828)은 DOI `10.5281/zenodo.24150828`로 인용할 수 있다. 보관본 ZIP은 v0.06 태그와 같은 내용이다.
 
 v0.06은 [v0.06 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.06)에서 받을 수 있다. 이전 판은 [v0.05 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.05)·[Zenodo 보관본](https://zenodo.org/records/24150092)(DOI `10.5281/zenodo.24150092`), [v0.04 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.04)·[Zenodo 보관본](https://zenodo.org/records/24147779)(DOI `10.5281/zenodo.24147779`), [v0.03 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.03)·[Zenodo 보관본](https://zenodo.org/records/24147292)(DOI `10.5281/zenodo.24147292`), [v0.02 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.02)·[Zenodo 보관본](https://zenodo.org/records/24134430)(DOI `10.5281/zenodo.24134430`), [v0.01 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.01)·[Zenodo 보관본](https://zenodo.org/records/24133577)(DOI `10.5281/zenodo.24133577`)에 남아 있다. 머리글 배지와 인용 파일은 모든 판을 가리키는 개념 DOI `10.5281/zenodo.24133576`을 쓴다.
+
+v0.07에서는 메뉴에 **왜 ‘Open’일까?**와 **수학적 원리**를 더했다. 앞의 것은 아마추어의 어원, 프로의 메이저 배제, 1968년 오픈 에라와 상금, 골프 디 오픈과의 비교를 출처와 함께 싣는다. 뒤의 것은 120 Hz 고정 틱, 가상 Z축 포물선과 그림자, 목표점·비행시간으로 푸는 타격 속도, 네트·바운드 사건 시각, 코트별 반발, 서브 타점 품질, 타격 상태 머신, 동현AI™ 예측, 고정 화면 투영을 엔진 코드의 식 그대로 설명한다. 경기 규칙·물리·저장 형식은 바꾸지 않았다.
 
 v0.06에서는 코트를 세로로 조금 길게 하고 선수의 몸·머리 폭을 약 10% 줄였다. 공은 상대 코트로 갈수록 작아지고 바닥에 닿을 때도 더 작아진다. 높이 올라가면 커지는 표현은 그대로다. 전체 화면 단추는 코트·키 안내와 간격을 두었고 좁은 전체 화면의 코트 비율을 바로잡았다. 카메라는 고정되어 있고 타격·점수·특수기술·저장 규칙은 v0.05와 같다.
 
@@ -68,7 +70,7 @@ GB A는 X, GB B는 Z다. X는 가로로 미는 스트로크, Z는 아래에서 �
 
 ## 원작과의 관계
 
-업로드한 TENNIS 롬을 PyBoy에서 직접 실행하고 토스·서브·공과 그림자·코트·선수 크기를 관찰했다. 기계어 전체 역분석이나 물리 상수의 수치 일치 검증은 하지 않았으며, 이 구현을 정확한 복제라고 부르지 않는다.
+1989 GB 테니스를 실행하여 코트·선수 크기·토스·공과 그림자를 관찰했다. 기계어를 역분석한 것이 아니며, 물리 상수와 타격 판정이 원작과 수치적으로 일치하지 않는다. 이 구현을 정확한 복제라고 부르지 않는다.
 
 두 단계 서브, A 스트로크·강한 발리, B 로브·약한 발리, 높은 공의 스매시와 방향 조절은 [Nintendo Tennis 설명서](https://www.thegameisafootarcade.com/wp-content/uploads/2017/04/Tennis-Game-Manual.pdf)를 참고했다. 원작에서 관찰한 화면 이동은 사용자 요청에 따라 재현하지 않았다.
 

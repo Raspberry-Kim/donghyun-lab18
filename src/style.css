@@ -428,3 +428,22 @@ kbd{display:inline-flex;align-items:center;justify-content:center;min-width:1.8e
 .skill-cue>strong{font-size:17px}
 .skill-cue>small{font-size:12px}
 @media(max-width:560px){.skill-cue{padding:5px 8px}.skill-cue>strong{font-size:14px}.skill-cue>small{font-size:10.5px}.skill-label{padding:2px 5px 2px 3px;min-height:34px}.game-menu.center{min-width:0;width:92%}.game-menu .mi{flex-wrap:wrap;gap:0 10px;padding:5px 8px}}
+/* v0.07: 왜 Open일까 · 수학적 원리 */
+.tabs{min-width:0}
+@media (max-width:1240px){.tabs>span{display:none}}
+@media (max-width:900px){.tabs{gap:16px;overflow-x:auto}.tabs button{white-space:nowrap}}
+.document .num{display:inline-grid;place-items:center;width:1.6em;height:1.6em;margin-right:8px;border-radius:50%;background:var(--accent);color:#1f2410;font:700 .78em var(--mono);vertical-align:.1em}
+.document .eq{margin:12px 0;padding:10px 14px;border-left:3px solid var(--accent);background:var(--surface2);border-radius:0 6px 6px 0;overflow-x:auto;overflow-y:hidden;max-width:100%}
+.document .eq math{font-family:"STIX Two Math","Latin Modern Math","Cambria Math",math;font-size:1.08em;color:var(--ink)}
+.document .eq.big math{font-size:1.28em}
+.document var{font-family:"STIX Two Math","Latin Modern Math","Cambria Math",serif;font-style:italic;color:var(--ink)}
+.document .math-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:var(--text-sm)}
+.document .math-table th,.document .math-table td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;font-variant-numeric:tabular-nums}
+.document .math-table th{color:var(--ink);white-space:normal}
+.timeline{display:grid;grid-template-columns:repeat(6,1fr);gap:0;margin:28px 0 8px;border-top:2px solid var(--accent)}
+.timeline>div{padding:10px 8px 0 0;font-size:var(--text-xs);color:var(--muted);line-height:1.6;word-break:keep-all}
+.timeline b{display:block;font:700 var(--text-lg) var(--mono);color:var(--ink)}
+@media (max-width:700px){.timeline{grid-template-columns:repeat(3,1fr);row-gap:10px}.document .eq.big math{font-size:1.12em}}
+.document .eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px 30px}
+.document .eq math{margin:0}
+@media (max-width:440px){.document .eq{padding:8px 10px}.document .eq math,.document .eq.big math{font-size:.94em}}
