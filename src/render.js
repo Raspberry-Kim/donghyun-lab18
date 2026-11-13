@@ -2,19 +2,21 @@
 (function(){
 'use strict';
 const heads=[
- ['.............','..hhhhhhhhh..','.hhHHhhhhhhh.','hhHhhhhhhHhhh','hhssssssssshh','hsssssssssssh','ssskwssskwsss','ssskkssskksss','.sbssssssbs..','.ssssnsssss..','..sssssssss..','...ssnnnss...','....sssss....'],
+ ['...AAAAAAA...','..AAGGAAAAA..','.AAGAAhAAAAA.','hAAAAhhhAAAAh','hhssssssssshh','hsssssssssssh','ssskwssskwsss','ssskkssskksss','.sbssssssbs..','.ssssnsssss..','..sssssssss..','...ssnnnss...','....sssss....'],
  ['....hhhhh....','..hhhhhhhhh..','.hhHHhhhhhhh.','hhhhhhhhhhhhh','hhhsshhhsshhh','hhssssssssshh','hhskwssskwshh','hhskkssskkshh','hhsbsssssbshh','hhsssnnnssshh','.hhsssssshh..','...hssssh....'],
  ['...hhhhhhhh...','..hhhhhhhhhh..','.hhHHhhhhhhhh.','hhhhhhhhhhhhhh','hhsssssssssshh','hssskksskksssh','ssskwsssswksss','ssskksssskksss','ssssssssssssss','.sbsssnsssbs..','.sssssssssss..','..sssnnnnsss..','...ssssssss...'],
  ['....hhh....','...hhHhh...','..hHHhhhh..','.hhhhhhhhh.','.hhssssshh.','hhssssssssh','.skwssskws.','.skkssskks.','.sbsssssb..','..sssnnss..','..sssssss..','...sssss...'],
  ['....wwwwwww....','..wwwwwwwwwww..','.wwwwwwwwwwwww.','ccwwwwwwwwwwwcc','ccwkkwwwwwkkwcc','ccwkkwwwwwkkwcc','ccdwwwwwwwwwdcc','ccdwwwkkkwwwdcc','ccdwwwwmwwwwdcc','.cc.wwwwwww.cc.','.....wwwww.....'], // 포동이: series icon face (drooping ears, round eyes, button nose), 꽥꽥's height
  ['...hhhhhhh...','..hhHHhhhhh..','.hhhhhhhhhhh.','hhhsshhhsshhh','hhssssssssshh','hhskwssskwshh','hhskkssskkshh','hhsbsssssbshh','.hsssnnnsshh.','..hhssssshh..','....sssss....']
 ];
+// 동현의 거꾸로 쓴 야구모자: 앞에서는 조임 띠 구멍, 뒤(내 선수 뒷모습)에서는 챙이 목 쪽으로 나온다.
+const CAP_REAR=['...AAAAAAA...','..AAAAGAAAA..','.AAAAwwAAAAA.','hAAAAAAAAAAAh','FFFFFFFFFFFFF','.FFFFFFFFFFF.'];
 const SHORT=new Set([4,5]);
 // 큰 그림 선수(슈슈·이삐·빽빽): sprites.js의 28칸 그림을 2배 캔버스에 1:1로 그린다. 불러올 때는 건드리지 않는다.
 const big=id=>(window.TeSprites?window.TeSprites.sprites:{})[id];
 const palette={h:'#342e2c',s:'#e3b797',k:'#292e2b',w:'#f5efdd',n:'#ab725c',y:'#e6be62',o:'#c67d43',g:'#a6be7b'};
 const headPalettes=[
- {...palette,h:'#bfbdb5',H:'#dddbd3',D:'#a3a098',b:'#d88f82'}, // 동현: soft grey, white and dark strands blended
+ {...palette,h:'#bfbdb5',H:'#dddbd3',D:'#a3a098',b:'#d88f82',A:'#34476f',G:'#566f9e',F:'#232f4a'}, // 동현: soft grey hair, backwards navy cap
  {...palette,h:'#624234',H:'#916049',b:'#e89b92',n:'#b6636a'},
  {...palette,h:'#3b3029',H:'#635044',s:'#dba784',b:'#c88670'},
  {...palette,h:'#614b39',H:'#997756',b:'#e4a093'},
@@ -36,7 +38,7 @@ function ballVisual(ball){
 }
 const skillStyles={
  fire:['#ffd080','불꽃 리턴','다음 리턴에 불꽃을 싣는다'],
- comet:['#bfe8ff','혜성 이동','이번 랠리 · 타격 입력마다 이동'],
+ comet:['#ff6a5c','혜성 이동','이번 랠리 · 타격 입력마다 이동'],
  win:['#ffe49a','즉시 승리','뭉치의 특별한 승리'],
  lose:['#f4b6a0','라켓 파손 · 게임 내줌','라켓을 부수고 이번 게임을 내준다'],
  wind:['#d6f1ac','회오리 드롭','이번 랠리 · 모든 리턴에 적용'],
@@ -198,7 +200,7 @@ class Renderer{
    this.rect(-3,-15,6,8,ink);this.rect(-2,-14,4,6,id===4?'#f5efdd':Te.PLAYERS[id].color);
    this.rect(-3,-8,6,2,'#eee8d4');if(!rear)this.rect(-1,-14,2,1,'#eee8d4');
    const headTop=SHORT.has(id)?-25:-27; // 포동이·꽥꽥 are the short ones
-   const rows=heads[id].map((row,y)=>[...row].map((ch,x)=>{const c=rear&&ch!=='.'?(id===4?(ch==='c'||ch==='d'?ch:'w'):y<row.length-3?'h':'s'):ch;return id===0&&c==='h'?saltPepper(x,y):c;}).join(''));
+   const rows=heads[id].map((row,y)=>[...(id===0&&rear&&CAP_REAR[y]||row)].map((ch,x)=>{const c=rear&&ch!=='.'&&!(id===0&&CAP_REAR[y])?(id===4?(ch==='c'||ch==='d'?ch:'w'):y<row.length-3?'h':'s'):ch;return id===0&&c==='h'?saltPepper(x,y):c;}).join(''));
    if(id===0||id===4){
     const mask=rows.map(row=>row.replace(/[^.]/g,'q')),hp={q:headPalettes[id].q||'#9a9685'},hx=-Math.floor(rows[0].length/2);
     for(const [dx,dy] of [[-1,0],[1,0],[0,-1],[0,1]])this.pixels(mask,hx+dx,headTop+dy,hp);
@@ -439,8 +441,8 @@ class Renderer{
    }
   }else if(fx.type==='comet'){
    const b=project(fx.toX,fx.toY),k=still?1:Math.min(1,age/.18);g.globalAlpha=fade;
-   for(let j=-2;j<=2;j++)this.line({x:at.x,y:at.y-10+j*3},{x:at.x+(b.x-at.x)*k,y:b.y-10+j*3},j?'#8fc9e8':'#f1fbff',j?1:2);
-   for(let j=0;j<8;j++){const t=j/8;this.spark(at.x+(b.x-at.x)*t,at.y+(b.y-at.y)*t-10+((j*5)%9-4),j%3?1:2,j%2?'#bfe8ff':'#ffffff');}
+   for(let j=-2;j<=2;j++)this.line({x:at.x,y:at.y-10+j*3},{x:at.x+(b.x-at.x)*k,y:b.y-10+j*3},j?'#d9362c':'#ffd9d0',j?1:2);
+   for(let j=0;j<8;j++){const t=j/8;this.spark(at.x+(b.x-at.x)*t,at.y+(b.y-at.y)*t-10+((j*5)%9-4),j%3?1:2,j%2?'#ff6a5c':'#ffe3dc');}
    if(!still)for(const [t,al] of [[.25,.22],[.6,.38]]){g.globalAlpha=al*fade;this.player({...me,x:fx.x+(fx.toX-fx.x)*t,y:fx.y+(fx.toY-fx.y)*t,walk:false,anim:null},T,'',null,1,{rear:this.started});}
   }else if(fx.type==='fire'){
    g.globalAlpha=fade;for(let j=0;j<11;j++){const h=7+((j*5)%7)+(still?0:Math.sin(T*22+j*1.9)*4),x=at.x-13+j*2.6;this.rect(x,at.y-h,2,h,'#ce4a3a');this.rect(x,at.y-h*.7,2,h*.7,'#e7823c');this.rect(x,at.y-h*.38,2,h*.38,'#ffd080');}
