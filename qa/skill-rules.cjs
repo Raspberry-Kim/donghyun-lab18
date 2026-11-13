@@ -103,7 +103,7 @@ test('저장: 원본과 복원본이 이후 600틱 동안 같다 (기술·서브
 test('저장: 잘못된 자료는 거부한다',()=>{
  const good=()=>fresh(0).snapshot();
  assert.throws(()=>E.Match.restore(null),/경기 정보/);
- for(const [f,re] of [[s=>{s.config.player=7;},/선수·난이도/],[s=>{s.phase='match';},/끝난 경기/],[s=>{s.phase='x';},/진행/],[s=>{s.points=[0,-1];},/점수/],[s=>{s.sets=[2,0];},/점수/],
+ for(const [f,re] of [[s=>{s.config.player=9;},/선수·난이도/],[s=>{s.phase='match';},/끝난 경기/],[s=>{s.phase='x';},/진행/],[s=>{s.points=[0,-1];},/점수/],[s=>{s.sets=[2,0];},/점수/],
   [s=>{s.energy=9;},/에너지/],[s=>{s.people[0].x=null;},/선수/],[s=>{s.people[0].x=99;},/위치/],[s=>{s.people[0].id=3;},/선수 정보/],[s=>{s.people[1].side=1;},/방향/],[s=>{s.ball={x:0};},/공/],[s=>{s.phase='rally';},/공/],
   [s=>{s.armed='win';},/준비한 기술/],[s=>{s.skillCue={kind:'nope',name:'x',ttl:1,duration:1};},/연출/],[s=>{s.fx={type:'boom',ttl:1,duration:1};},/연출/],[s=>{s.fx={type:'long',ttl:1};},/연출/],
   [s=>{s.people[0].pose='<img>';},/선수 정보/],[s=>{s.people[1].hack=1;},/선수 정보/],[s=>{s.people[0].aim={x:'a'};},/선수 정보/],[s=>{s.message='x'.repeat(200);},/안내/],[s=>{s.message=5;},/안내/],
@@ -117,7 +117,7 @@ test('저장: 잘못된 자료는 거부한다',()=>{
 });
 test('무작위 기술 사용 240분: 포인트마다 효과가 비고 값이 유한하다',()=>{
  let points=0,uses=0,longest=0;
- for(let p=0;p<7;p++)for(let level=0;level<3;level++){
+ for(let p=0;p<E.PLAYERS.length;p++)for(let level=0;level<3;level++){
   let m=fresh(p,level,(p+level)%4,1000+p*10+level),k=p*31+level+1;const rnd=()=>{k=(k*1103515245+12345)&0x7fffffff;return k/0x7fffffff;};
   let lastPoint=0,since=0;
   for(let i=0;i<120*60*11.5;i++){

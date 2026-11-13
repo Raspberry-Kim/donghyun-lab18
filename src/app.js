@@ -75,7 +75,13 @@ const skillSounds={
  vanish:()=>{[1047,1319,1047].forEach((f,i)=>tone(f,.06,'sine',.03,i*.05));noise(.12,.02,.12,4000);},
  serveVanish:()=>{[880,1175,880].forEach((f,i)=>tone(f,.06,'sine',.03,i*.05));noise(.12,.02,.12,4000);},
  long:()=>[262,330,392,523,659].forEach((f,i)=>tone(f,.07,'triangle',.03,i*.04)),
- predict:()=>{tone(880,.06,'square',.02);tone(880,.06,'square',.02,.1);tone(1175,.14,'square',.02,.2);}
+ predict:()=>{tone(880,.06,'square',.02);tone(880,.06,'square',.02,.1);tone(1175,.14,'square',.02,.2);},
+ flood:()=>{noise(.7,.04,0,420);[330,294,247,196].forEach((f,i)=>tone(f,.14,'sine',.03,i*.11));},
+ wheel:()=>{tone(1568,.07,'sine',.035);tone(2093,.12,'sine',.03,.07);},
+ wheelMiss:()=>{noise(.18,.04,0,2400);[494,370,262].forEach((f,i)=>tone(f,.09,'triangle',.03,i*.08));},
+ hearts:()=>[1047,1319,1568,1319,2093].forEach((f,i)=>tone(f,.07,'sine',.028,i*.05)),
+ heartPop:()=>{noise(.06,.05,0,3000);tone(330,.1,'triangle',.03,.04);},
+ drunk:()=>[659,523,587,440,494,370].forEach((f,i)=>tone(f,.13,'triangle',.028,i*.12))
 };
 function sounds(){
  const events=match.events.splice(0);
@@ -91,6 +97,8 @@ function sounds(){
   else if(ev.type==='bounce')tone(190,.035,'triangle',.03);
   else if(ev.type==='point'||ev.type==='game'){tone(523,.10);tone(659,.13,'triangle',.035,.12);}
   else if(ev.type==='skill'){(skillSounds[ev.kind]||skillSounds.predict)();notice=ev.text;noticeTime=1.4;}
+  else if(ev.type==='wheel'){tone(1568,.05,'sine',.03);tone(2093,.09,'sine',.028,.06);}
+  else if(ev.type==='hearts'){tone(1319,.05,'sine',.022);tone(1760,.07,'sine',.02,.05);}
   else if(ev.type==='long'){tone(294,.05,'triangle',.035);tone(587,.09,'triangle',.035,.05);}
   else if(ev.type==='release'){tone(440,.08,'sine',.03);tone(330,.12,'sine',.03,.08);notice=ev.text;noticeTime=1.8;}
   else if(ev.type==='concede'){notice=ev.text;noticeTime=2.6;}
@@ -197,7 +205,7 @@ function saveToSlot(n){
 function deleteSlot(n){try{localStorage.removeItem(SLOT_KEY(n));}catch(e){}renderSlotList();}
 function saveToFile(){
  const d=saveData(),a=document.createElement('a'),u=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:'application/json'}));
- a.href=u;a.download=`donghyunte-${['donghyun','mungchi','ttungtti','ttochi','podongi','kkwaek','shushu'][match.config.player]}-set${d.summary.sets.join('-')}-game${d.summary.games.join('-')}.dhsave`;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);
+ a.href=u;a.download=`donghyunte-${['donghyun','mungchi','ttungtti','ttochi','podongi','kkwaek','shushu','ippi','ppaekppaek'][match.config.player]}-set${d.summary.sets.join('-')}-game${d.summary.games.join('-')}.dhsave`;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);
  toast('저장 파일을 내려받았다.');mainMenu('저장 파일을 내려받았다');
 }
 function saveMenu(){

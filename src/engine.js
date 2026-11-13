@@ -8,7 +8,9 @@ const PLAYERS=[
  {name:'또치',atk:90,def:90,mov:120,color:'#458878',skills:[['구마몬기쥬츠',1,'상대 반대편 드롭이 유효하게 바운드하면 포인트. 성공 전까지 다음 랠리에도 남는다.'],['컴온스펜서',1,'상대가 이번 랠리 동안 공 반대편으로 춤추며 간다.']]},
  {name:'포동이',atk:80,def:80,mov:130,color:'#d5bb82',skills:[['멍멍',1,'이번 랠리 동안 상대의 모든 리턴이 헛스윙이 된다.'],['아잉뿌잉',1,'이번 랠리 동안 상대가 귀여움에 쓰러진다. 포인트가 끝나면 일어난다.']]},
  {name:'꽥꽥',atk:80,def:90,mov:90,color:'#d6a54c',skills:[['비밀이야',1,'리턴이 유효하게 바운드하면 사라지고 내 포인트. 성공 전까지 다음 랠리에도 남는다.'],['알려고하지마',1,'유효한 서브가 사라지고 내 포인트. 내 서브가 올 때까지 미리 준비할 수 있다.']]},
- {name:'슈슈',atk:90,def:100,mov:80,color:'#88aa68',skills:[['울트라롱팔',1,'이번 랠리 동안 횟수 제한 없이 긴 팔로 리턴한다. 타격 입력은 필요.'],['리만가설',1,'이번 랠리 동안 다음 바운드 위치를 표시한다.']]}
+ {name:'슈슈',atk:90,def:100,mov:80,color:'#88aa68',skills:[['울트라롱팔',1,'이번 랠리 동안 횟수 제한 없이 긴 팔로 리턴한다. 타격 입력은 필요.'],['리만가설',1,'이번 랠리 동안 다음 바운드 위치를 표시한다.']]},
+ {name:'이삐',atk:70,def:90,mov:100,color:'#6fa9bf',skills:[['양재천범람',1,'이번 랠리 동안 내가 친 공과 함께 물결이 네트를 넘어 상대를 덮친다. 젖은 상대는 이동이 90% 느려진다.'],['브롬톤앞바퀴',1,'이번 랠리 동안 닿지 않는 공에 타격 입력을 하면 앞바퀴를 타고 굴러가 친다. 혜성보다 조금 느리고 다섯 번에 한 번꼴로 놓친다.']]},
+ {name:'빽빽',atk:90,def:100,mov:110,color:'#9a86c4',skills:[['오마이갓',1,'이번 랠리 동안 내가 친 공이 하트 다섯 갈래로 갈라진다. 진짜는 무작위 하나뿐이고, 상대가 우연히 진짜를 고르면 랠리가 이어진다.'],['백미취사완료',1,'이번 랠리 동안 내가 공을 치면 상대가 취한 듯 비틀거리며 네트 앞으로 걸어온다. 팔이 닿는 거리도 절반이 된다.']]}
 ];
 const COURTS=[
  {name:'윔블던',surface:'잔디',bounce:.56,retain:.94,ground:'#6f9274',outer:'#355d51',line:'#f2edd4',accent:'#beb08b',desc:'낮고 빠르게 미끄러지는 공'},
@@ -17,18 +19,24 @@ const COURTS=[
  {name:'프랑스',surface:'클레이',bounce:.83,retain:.72,ground:'#b7795b',outer:'#405f55',line:'#f2dfc9',accent:'#d3b594',desc:'속도는 줄고 높이 튀는 공'}
 ];
 const LEVELS=[{name:'초보',speed:.88,react:.24,error:.65},{name:'통상',speed:1,react:.14,error:.32},{name:'프로',speed:1.13,react:.07,error:.13}];
-const SKILL_KINDS=[['fire','comet'],['win','lose'],['wind','slow'],['drop','dance'],['miss','fall'],['vanish','serveVanish'],['long','predict']];
+const SKILL_KINDS=[['fire','comet'],['win','lose'],['wind','slow'],['drop','dance'],['miss','fall'],['vanish','serveVanish'],['long','predict'],['flood','wheel'],['hearts','drunk']];
 const G=13,NET=.92,W=4.115,L=11.885,DT=1/120,LONG_REACH=3,BREAK_TIME=2.8;
+// 이삐·빽빽: all four are rally effects. FLOOD_MOVE scales the soaked opponent's speed; the wheel ride takes
+// WHEEL_TICKS fixed steps (0.2 s) and skids past the ball with probability WHEEL_MISS; five hearts fan out
+// HEART_SPREAD metres apart at the first bounce; a tipsy opponent walks at TIPSY_WALK of full speed with TIPSY_REACH of the reach.
+const FLOOD_MOVE=.1,WHEEL_TICKS=24,WHEEL_MISS=.2,WHEEL_SKID=1.5,HEARTS=5,HEART_SPREAD=1.5,TIPSY_WALK=.45,TIPSY_REACH=.5;
+// Sideways offset of heart j from the real ball: zero at the racket, full spread from the first bounce on.
+function heartOffset(b,j){const h=b&&b.hearts;if(!h)return 0;return (j-h.real)*HEART_SPREAD*clamp((b.age||0)/(b.flightTime||1),0,1);}
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 function parse(out){
  const t=String(out).trim().split(/\s+/).filter(Boolean).map(Number);
  if(t.length!==3)throw Error('선수 · 난이도 · 경기장, 정수 세 개를 차례로 출력하자.');
- t.forEach((v,i)=>{if(!Number.isInteger(v)||v<1||v>[7,3,4][i])throw Error(['선수는 1–7','난이도는 1–3','경기장은 1–4'][i]+'만 된다.');});
+ t.forEach((v,i)=>{if(!Number.isInteger(v)||v<1||v>[PLAYERS.length,3,4][i])throw Error(['선수는 1–'+PLAYERS.length,'난이도는 1–3','경기장은 1–4'][i]+'만 된다.');});
  return {player:t[0]-1,level:t[1]-1,court:t[2]-1};
 }
-// Opponent: any of the six other players, chosen from the match seed without touching the rally RNG.
+// Opponent: any of the other players, chosen from the match seed without touching the rally RNG.
 function pickOpponent(c,seed){
- const others=[0,1,2,3,4,5,6].filter(i=>i!==c.player);
+ const others=PLAYERS.map((_,i)=>i).filter(i=>i!==c.player);
  if(Number.isInteger(c.opponent)&&others.includes(c.opponent))return c.opponent;
  let x=(seed>>>0)^0x9e3779b9;x=Math.imul(x^(x>>>16),0x85ebca6b);x=Math.imul(x^(x>>>13),0xc2b2ae35);x=(x^(x>>>16))>>>0;
  return others[x%others.length];
@@ -39,7 +47,7 @@ class Match{
   this.people=[{id:config.player,x:1.5,y:12.3,side:1,swing:0,cool:0,pose:'idle'},{id:this.config.opponent,x:-1.5,y:-11,side:-1,swing:0,cool:0,pose:'idle'}];
   this.points=[0,0];this.games=[0,0];this.sets=[0,0];this.history=[];this.server=0;this.totalGames=0;this.tb=false;this.tbFirst=0;
   this.energy=6;this.returns=0;this.rally=0;this.totalHits=0;this.events=[];this.phase='ready';this.paused=false;this.winner=null;this.faults=0;
-  this.message='X 토스';this.armed=null;this.pendingSkills={};this.effects={};this.fx=null;this.ball=null;this.timer=0;this.aiClock=0;this.aiTarget={x:0,y:-10};
+  this.message='X 토스';this.armed=null;this.pendingSkills={};this.effects={};this.fx=null;this.ball=null;this.wheel=null;this.timer=0;this.aiClock=0;this.aiTarget={x:0,y:-10};
   this.setupPoint();
  }
  rand(){let x=this.seed;x^=x<<13;x^=x>>>17;x^=x<<5;this.seed=x>>>0;return this.seed/4294967296;}
@@ -47,7 +55,7 @@ class Match{
  score(){if(this.tb)return this.points.map(String);if(this.points[0]>=3&&this.points[1]>=3)return this.points[0]===this.points[1]?['40','40']:this.points[0]>this.points[1]?['AD','40']:['40','AD'];return this.points.map(p=>['0','15','30','40'][p]||'40');}
  // keep=true after a fault or let: the point is still alive, so prepared skills and rally effects stay.
  setupPoint(keep=false){
-  this.phase='ready';this.timer=0;this.ball=null;this.pendingServe=null;this.fx=null;this.skillCue=null;this.rally=0;
+  this.phase='ready';this.timer=0;this.ball=null;this.pendingServe=null;this.fx=null;this.skillCue=null;this.rally=0;this.wheel=null;
   // endRally clears used effects. Preparations made during a point break survive here.
   const s=this.people[this.server],r=this.people[1-this.server],parity=(this.points[0]+this.points[1])%2;
   s.x=(parity? -1:1)*s.side*1.5;s.y=s.side*12.3;r.x=-s.x;r.y=r.side*10.8;
@@ -75,8 +83,8 @@ class Match{
  }
  // One-shot winners are consumed only by a successful legal landing, not by a missed chance.
  endRally(timer){
-  this.faults=0;this.phase='point';this.timer=timer;this.ball=null;this.pendingServe=null;this.effects={};
-  for(const p of this.people)if(['fall','dance','whiff'].includes(p.pose))p.pose='idle';
+  this.faults=0;this.phase='point';this.timer=timer;this.ball=null;this.pendingServe=null;this.effects={};this.wheel=null;
+  for(const p of this.people)if(['fall','dance','whiff','drunk'].includes(p.pose))p.pose='idle';
  }
  winGame(w){
   this.games[w]++;this.points=[0,0];this.totalGames++;this.server=1-this.server;
@@ -98,7 +106,7 @@ class Match{
   if(this.phase!=='match'){this.timer=Math.max(this.timer,BREAK_TIME+.2);this.message=name+' · 이번 게임을 내줬다';}
   this.event('concede',this.message);return true;
  }
- finish(w,why){this.phase='match';this.winner=w;this.message=why+' · '+(w===0?'승리':'패배');this.ball=null;this.armed=null;this.pendingSkills={};this.effects={};this.event('match',this.message);}
+ finish(w,why){this.phase='match';this.winner=w;this.message=why+' · '+(w===0?'승리':'패배');this.ball=null;this.armed=null;this.pendingSkills={};this.effects={};this.wheel=null;this.event('match',this.message);}
  point(w,why){
   if(['point','match'].includes(this.phase))return;
   this.points[w]++;this.energy=clamp(this.energy+2,0,6);this.message=why+' · '+(w===0?'내':'상대')+' 포인트';this.event('point',this.message);
@@ -153,17 +161,41 @@ class Match{
   this.ball={x:old.x,y:old.y,z,vx:(tx-old.x)/t,vy:(ty-old.y)/t,vz:(.5*G*t*t-z)/t,by:i,bounces:0,serve,crossed:false,netTouch:false,kind,age:0,flightTime:t,serviceOriginX:serve?p.x:null};
   this.ball.slow=i===1&&!!this.effects.slow;
   this.phase='rally';this.event('hit',kind);this.totalHits++;this.aiClock=0;
+  if(i===0)this.launchSkills(old);
+ }
+ // 이삐·빽빽: what my own hit sets off while the rally effect is on. Serves count as hits.
+ launchSkills(from){
+  const e=this.effects,b=this.ball,o=this.people[1];
+  if(e.flood){b.flood=true;if(!e.soaked)this.setFx({type:'flood',x:from.x,y:from.y},.9);}
+  if(e.hearts){
+   // Two draws per hit: which heart is the ball, and which one the opponent believes in.
+   b.hearts={real:Math.floor(this.rand()*HEARTS),pick:Math.floor(this.rand()*HEARTS),swung:false};
+   this.setFx({type:'hearts',x:from.x,y:from.y},.9);this.cueSkill('hearts');this.event('hearts','하트 다섯 갈래');
+  }
+  if(e.drunk&&!e.tipsy){
+   e.tipsy=true;this.setFx({type:'drunk',x:o.x,y:o.y},1.3);this.cueSkill('drunk');this.event('skill','백미취사완료 · 상대가 비틀거린다','drunk');
+  }
  }
  reachable(i,remote=false){
   const b=this.ball,p=this.people[i];if(this.phase!=='rally'||!b||b.by===i||!b.crossed||b.y*p.side<.35||b.z>3.8||b.z<.08)return false;
   if(b.serve&&b.bounces===0)return false;
   if(i===1&&['fire','drop','vanish'].includes(b.power))return false;
-  return remote||Math.hypot(b.x-p.x,(b.y-p.y)*.85)<(1.13*PLAYERS[p.id].def/100+.20);
+  if(i===1&&b.hearts&&b.hearts.pick!==b.hearts.real)return false; // the opponent is after a fake heart
+  return remote||Math.hypot(b.x-p.x,(b.y-p.y)*.85)<this.reach(i);
  }
+ reach(i){return (1.13*PLAYERS[this.people[i].id].def/100+.20)*(i===1&&this.effects.tipsy?TIPSY_REACH:1);}
  stroke(i,kind='drive',aim={}){
-  const p=this.people[i];if(p.cool>0)return false;
+  const p=this.people[i];if(p.cool>0||(i===0&&this.wheel))return false;
   p.swing=.19;p.cool=.30;p.pose='swing';p.kind=kind;p.aim={...aim};
   const hand=this.ball&&this.ball.x<p.x? -1:1;this.animate(i,kind==='lob'?'lobWindup':'windup',.3,hand);
+  if(i===0&&this.effects.wheel&&!this.reachable(0,false)&&this.reachable(0,true)){
+   // 브롬톤앞바퀴: roll to the ball over WHEEL_TICKS steps, then swing. One draw decides a skid past it.
+   const r=this.rand(),miss=r<WHEEL_MISS;
+   this.wheel={n:WHEEL_TICKS,miss,off:miss?(r<WHEEL_MISS/2?-WHEEL_SKID:WHEEL_SKID):0};
+   p.swing=0;p.cool=WHEEL_TICKS*DT+.3;p.anim=null;p.pose='idle';
+   this.setFx({type:'wheel',x:p.x,y:p.y,toX:this.ball.x,toY:this.ball.y},.7);this.cueSkill('wheel');this.event('wheel','앞바퀴 출발');
+   return false;
+  }
   if(i===0&&this.effects.comet&&this.reachable(0,true)){
    this.setFx({type:'comet',x:p.x,y:p.y,toX:this.ball.x,toY:this.ball.y},.7);
    p.x=clamp(this.ball.x,-6.3,6.3);p.y=clamp(this.ball.y+.25*p.side,p.side===1?.8:-14.2,p.side===1?14.2:-.8);this.cueSkill('comet');
@@ -222,7 +254,7 @@ class Match{
   return {x:b.x+b.vx*t,y:b.y+b.vy*t,t};
  }
  move(i,dx,dy,dt){
-  const p=this.people[i],sp=4.9*PLAYERS[p.id].mov/100*this.level.speed*(i?1.06:1),len=Math.hypot(dx,dy)||1,ox=p.x,oy=p.y;
+  const p=this.people[i],sp=4.9*PLAYERS[p.id].mov/100*this.level.speed*(i?1.06:1)*(i===1&&this.effects.soaked?FLOOD_MOVE:1),len=Math.hypot(dx,dy)||1,ox=p.x,oy=p.y;
   if(len>1){dx/=len;dy/=len;}p.x=clamp(p.x+dx*sp*dt,-6.3,6.3);p.y=clamp(p.y+dy*sp*dt,p.side===1?.8:-14.2,p.side===1?14.2:-.8);
   const distance=Math.hypot(p.x-ox,p.y-oy);p.walk=distance>1e-6;
   if(p.walk){p.gait=(p.gait||0)+distance*2.2;p.moveX=Math.sign(dx);p.moveY=Math.sign(dy);}
@@ -244,10 +276,24 @@ class Match{
     // Approach first landing, then chase the ball. No teleporting in normal play.
     this.aiTarget={x:clamp(x+(this.rand()-.5)*this.level.error,-5.6,5.6),y:clamp(y+p.side*.75,p.side===1?1.1:-13.2,p.side===1?13.2:-1.1)};
     if(b.bounces>0){this.aiTarget.x=b.x;this.aiTarget.y=b.y;}
+    // 오마이갓: the opponent runs to the heart it picked, real or not.
+    if(b.hearts)this.aiTarget.x=clamp(this.aiTarget.x+(b.hearts.pick-b.hearts.real)*HEART_SPREAD,-5.6,5.6);
    }else this.aiTarget={x:0,y:p.side*9.5};
   }
   const target=this.aiTarget;
   if(this.effects.dance){this.move(1,-Math.sign(b.x-p.x),Math.sin(this.time*8)*.55,dt);p.pose='dance';return;}
+  if(this.effects.tipsy){
+   // 백미취사완료: a slow, swaying walk to the net; the ball is no longer followed, only swung at when it passes close.
+   const goal=p.side*1.5,sway=Math.sin(this.time*2.6)*.75+Math.sin(this.time*5.3)*.25;
+   this.move(1,sway*TIPSY_WALK,clamp((goal-p.y)*3,-1,1)*TIPSY_WALK,dt);
+   if(p.cool<=0&&!p.anim)p.pose='drunk';
+   if(this.reachable(1)&&p.cool<=0)this.stroke(1,this.rand()<.14?'lob':'drive');
+   return;
+  }
+  if(b.by===0&&b.hearts&&b.hearts.pick!==b.hearts.real&&!b.hearts.swung&&b.crossed&&p.cool<=0&&b.z<3.8&&(!b.serve||b.bounces>0)
+   &&Math.hypot(b.x+heartOffset(b,b.hearts.pick)-p.x,(b.y-p.y)*.85)<this.reach(1)){
+   b.hearts.swung=true;this.stroke(1,'drive');this.message='오마이갓 · 상대가 가짜 하트를 쳤다';this.event('skill',this.message,'heartPop');
+  }
   this.move(1,clamp((target.x-p.x)*3,-1,1),clamp((target.y-p.y)*3,-1,1),dt);
   if(this.reachable(1)&&p.cool<=0)this.stroke(1,this.rand()<.14?'lob':'drive');
  }
@@ -268,14 +314,15 @@ class Match{
     if(k==='fall')this.event('release','아잉뿌잉 해제 · 상대가 일어났다');
    }
   }
-  for(const p of this.people){p.cool=Math.max(0,p.cool-dt);p.swing=Math.max(0,p.swing-dt);if(p.anim){p.anim.time+=dt;if(p.anim.time>=p.anim.duration){p.anim=null;if(!['fall','dance','whiff'].includes(p.pose))p.pose=p.walk?'run':'idle';}}}
+  for(const p of this.people){p.cool=Math.max(0,p.cool-dt);p.swing=Math.max(0,p.swing-dt);if(p.anim){p.anim.time+=dt;if(p.anim.time>=p.anim.duration){p.anim=null;if(!['fall','dance','whiff','drunk'].includes(p.pose))p.pose=p.walk?'run':'idle';}}}
   if(this.phase==='match')return;
   if(this.phase==='point'||this.phase==='fault'){this.timer-=dt;if(this.timer<=0)this.setupPoint(this.phase==='fault');return;}
   const p=this.people[0];
   if(this.phase==='ready'&&this.server===0){
    const oldY=p.y;this.move(0,input.x||0,0,dt);p.y=oldY;
    const sign=((this.points[0]+this.points[1])%2?-1:1)*p.side;p.x=sign*clamp(Math.abs(p.x),.5,3.8);
-  }else if(!(this.phase==='toss'&&this.server===0)&&!(this.ball?.serveControl?.remaining>0))this.move(0,input.x||0,input.y||0,dt);
+  }else if(this.wheel)this.rideWheel();
+  else if(!(this.phase==='toss'&&this.server===0)&&!(this.ball?.serveControl?.remaining>0))this.move(0,input.x||0,input.y||0,dt);
   this.ai(dt);
   if(this.phase==='toss'){
    // Slow only the toss, not rally flight: 1 s up / 1 s down.
@@ -288,6 +335,21 @@ class Match{
   this.steerServe(dt,input.x||0);
   this.tryHit(0);
   this.physics(dt);
+ }
+ // One fixed step of the wheel ride: close an equal share of what is left, so it arrives exactly on the last step.
+ rideWheel(){
+  const w=this.wheel,p=this.people[0],b=this.ball;
+  if(!b||this.phase!=='rally'){this.wheel=null;return;}
+  const tx=clamp(b.x+w.off,-6.3,6.3),ty=clamp(b.y+.25*p.side,p.side===1?.8:-14.2,p.side===1?14.2:-.8),k=1/w.n,ox=p.x,oy=p.y;
+  p.x+=(tx-p.x)*k;p.y+=(ty-p.y)*k;w.n--;
+  p.walk=false;p.moveX=Math.sign(p.x-ox);p.moveY=Math.sign(p.y-oy);
+  if(w.n>0)return;
+  this.wheel=null;
+  if(w.miss){
+   p.cool=.35;this.setFx({type:'wheelMiss',x:p.x,y:p.y},.9);this.message='브롬톤앞바퀴 · 미끄러져 놓쳤다';this.event('skill',this.message,'wheelMiss');
+  }else{
+   p.swing=.19;p.cool=.30;p.pose='swing';this.animate(0,p.kind==='lob'?'lobWindup':'windup',.3,1);
+  }
  }
  steerServe(dt,axis){
   const b=this.ball,c=b?.serveControl;
@@ -314,6 +376,10 @@ class Match{
     b.crossed=true;
     if(b.z<NET-.07){if(b.serve)this.fault('네트');else this.point(1-b.by,'네트');return;}
     if(b.z<NET+.07){b.netTouch=true;b.vx*=.72;b.vy*=.72;b.vz=Math.max(b.vz,1.1);this.event('net','네트 코드');}
+    if(b.by===0&&b.flood&&!this.effects.soaked){ // 양재천범람: the wave goes over the net with the ball
+     this.effects.soaked=true;this.setFx({type:'flood',x:this.people[1].x,y:this.people[1].y,end:true},1.4);this.cueSkill('flood');
+     this.event('skill','양재천범람 · 상대가 물에 잠겼다','flood');
+    }
    }
    if(tb<=step+1e-8){
     b.z=.001;b.bounces++;this.event('bounce','바운드');
@@ -343,7 +409,7 @@ class Match{
  static restore(s){
   const bad=t=>{throw Error(t);},int=(v,a,b)=>Number.isInteger(v)&&v>=a&&v<=b,num=v=>typeof v==='number'&&Number.isFinite(v);
   if(!s||typeof s!=='object')bad('경기 정보가 없다.');
-  const c=s.config;if(!c||!int(c.player,0,6)||!int(c.level,0,2)||!int(c.court,0,3))bad('선수·난이도·경기장 정보가 맞지 않는다.');
+  const c=s.config;if(!c||!int(c.player,0,PLAYERS.length-1)||!int(c.level,0,2)||!int(c.court,0,3))bad('선수·난이도·경기장 정보가 맞지 않는다.');
   if(s.phase==='match')bad('이미 끝난 경기다.');
   if(!['ready','toss','rally','point','fault'].includes(s.phase))bad('경기 진행 정보가 맞지 않는다.');
   const pair=(a,max)=>Array.isArray(a)&&a.length===2&&a.every(v=>int(v,0,max));
@@ -356,13 +422,13 @@ class Match{
   const fits=(v,t,k)=>(v==null&&NULLS.includes(k))||(t==='n'?num(v):t==='b'?typeof v==='boolean':t==='s'?typeof v==='string'&&v.length<=60:Array.isArray(t)?t.includes(v)
    :!!v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).every(q=>Object.prototype.hasOwnProperty.call(t,q)&&fits(v[q],t[q],q)));
   const ANIM={name:['toss','serve','smash','windup','lobWindup','forehand','backhand','lob','volley','softVolley'],time:'n',duration:'n',hand:'n',height:'n',soft:'b'};
-  const PERSON={id:'n',x:'n',y:'n',side:'n',swing:'n',cool:'n',pose:['idle','run','toss','serve','swing','smash','volley','dance','fall','whiff'],kind:['drive','lob'],aim:{x:'n',y:'n'},walk:'b',moveX:'n',moveY:'n',gait:'n',anim:ANIM};
-  const BALL={x:'n',y:'n',z:'n',vx:'n',vy:'n',vz:'n',by:'n',bounces:'n',age:'n',flightTime:'n',crossed:'b',netTouch:'b',serve:'b',slow:'b',kind:['drive','lob','smash','volley','softVolley'],
+  const PERSON={id:'n',x:'n',y:'n',side:'n',swing:'n',cool:'n',pose:['idle','run','toss','serve','swing','smash','volley','dance','fall','whiff','drunk'],kind:['drive','lob'],aim:{x:'n',y:'n'},walk:'b',moveX:'n',moveY:'n',gait:'n',anim:ANIM};
+  const BALL={x:'n',y:'n',z:'n',vx:'n',vy:'n',vz:'n',by:'n',bounces:'n',age:'n',flightTime:'n',crossed:'b',netTouch:'b',serve:'b',slow:'b',flood:'b',hearts:{real:'n',pick:'n',swung:'b'},kind:['drive','lob','smash','volley','softVolley'],
    power:['fire','comet','wind','drop','vanish','serveVanish'],serveControl:{baseX:'n',remaining:'n',steer:'n'},serviceOriginX:'n',serviceTarget:{x:'n',y:'n',height:'n',quality:'n',startX:'n',steer:'n'}};
-  const FX={type:['wall','comet','fire','wind','drop','vanish','long','win','lose'],ttl:'n',duration:'n',x:'n',y:'n',toX:'n',toY:'n',toZ:'n',left:'n',end:'b'};
+  const FX={type:['wall','comet','fire','wind','drop','vanish','long','win','lose','flood','wheel','wheelMiss','hearts','drunk'],ttl:'n',duration:'n',x:'n',y:'n',toX:'n',toY:'n',toZ:'n',left:'n',end:'b'};
   const CUE={kind:kinds,prepared:'b',player:'n',slot:'n',name:'s',ttl:'n',duration:'n'};
   if(!Array.isArray(s.people)||s.people.length!==2||!s.people.every(p=>fits(p,PERSON)))bad('선수 정보가 맞지 않는다.');
-  if(c.opponent!==undefined&&(!int(c.opponent,0,6)||c.opponent===c.player))bad('상대 선수 정보가 맞지 않는다.');
+  if(c.opponent!==undefined&&(!int(c.opponent,0,PLAYERS.length-1)||c.opponent===c.player))bad('상대 선수 정보가 맞지 않는다.');
   if(s.people[0].id!==c.player||s.people[1].id!==(c.opponent??6))bad('선수 정보가 맞지 않는다.'); // saves before v0.10 always faced 슈슈
   s.people.forEach(p=>{if(!num(p.x)||!num(p.y)||Math.abs(p.x)>6.31||Math.abs(p.y)>14.21||![1,-1].includes(p.side)||!num(p.swing)||!num(p.cool))bad('선수 위치가 맞지 않는다.');
    if(p.anim!=null&&!(typeof p.anim.name==='string'&&num(p.anim.time)&&num(p.anim.duration)&&num(p.anim.hand)))bad('선수 동작 정보가 맞지 않는다.');});
@@ -370,11 +436,14 @@ class Match{
   const b=s.ball;
   if(['toss','rally'].includes(s.phase)!==(b!=null))bad('공 정보가 맞지 않는다.');
   if(b&&(!fits(b,BALL)||!['x','y','z','vx','vy','vz'].every(k=>num(b[k]))||!int(b.by,0,1)||!int(b.bounces,0,2)||(s.phase==='rally'&&!(num(b.age)&&num(b.flightTime)))))bad('공 정보가 맞지 않는다.');
+  if(b&&b.hearts!=null&&!(int(b.hearts.real,0,HEARTS-1)&&int(b.hearts.pick,0,HEARTS-1)&&typeof b.hearts.swung==='boolean'&&b.by===0))bad('공 정보가 맞지 않는다.');
+  const w=s.wheel;
+  if(w!=null&&!(typeof w==='object'&&!Array.isArray(w)&&Object.keys(w).length===3&&int(w.n,1,WHEEL_TICKS)&&typeof w.miss==='boolean'&&[0,WHEEL_SKID,-WHEEL_SKID].includes(w.off)&&(w.off!==0)===w.miss&&s.phase==='rally'&&SKILL_KINDS[c.player].includes('wheel')))bad('기술 진행 정보가 맞지 않는다.');
   if(s.armed!=null&&!SKILL_KINDS[c.player].includes(s.armed))bad('준비한 기술 정보가 맞지 않는다.');
   if(s.pendingSkills!==undefined&&(!s.pendingSkills||Array.isArray(s.pendingSkills)||typeof s.pendingSkills!=='object'||Object.entries(s.pendingSkills).some(([k,v])=>!['fire','drop','vanish','serveVanish'].includes(k)||!SKILL_KINDS[c.player].includes(k)||v!==true)))bad('준비한 기술 정보가 맞지 않는다.');
   const e=s.effects;if(!e||typeof e!=='object'||Array.isArray(e))bad('기술 효과 정보가 맞지 않는다.');
   for(const k of Object.keys(e)){
-   const v=e[k],ok=['dance','miss','predict','comet','wind','slow'].includes(k)?v===true:k==='long'?v===true||int(v,1,LONG_REACH):k==='fall'?v===true||(num(v)&&v>0&&v<=4):k==='whiff'?num(v)&&v>0&&v<=1.4:false;
+   const v=e[k],ok=['dance','miss','predict','comet','wind','slow','flood','wheel','hearts','drunk','soaked','tipsy'].includes(k)?v===true:k==='long'?v===true||int(v,1,LONG_REACH):k==='fall'?v===true||(num(v)&&v>0&&v<=4):k==='whiff'?num(v)&&v>0&&v<=1.4:false;
    if(!ok)bad('기술 효과 정보가 맞지 않는다.');
   }
   if(!s.aiTarget||!num(s.aiTarget.x)||!num(s.aiTarget.y))bad('상대 정보가 맞지 않는다.');
@@ -406,6 +475,6 @@ class Match{
   }
  }
 }
-const api={Match,PLAYERS,COURTS,LEVELS,SKILL_KINDS,LONG_REACH,BREAK_TIME,parse,G,NET,W,L,DT,clamp};
+const api={Match,PLAYERS,COURTS,LEVELS,SKILL_KINDS,LONG_REACH,BREAK_TIME,FLOOD_MOVE,WHEEL_TICKS,WHEEL_MISS,WHEEL_SKID,HEARTS,HEART_SPREAD,TIPSY_WALK,TIPSY_REACH,heartOffset,parse,G,NET,W,L,DT,clamp};
 if(typeof module==='object'&&module.exports)module.exports=api;else root.Te=api;
 })(typeof window!=='undefined'?window:globalThis);

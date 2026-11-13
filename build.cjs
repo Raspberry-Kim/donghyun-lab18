@@ -8,8 +8,8 @@ let html=src('index.html')
  .replace('__SERIES_NAV__',()=>src('series.html'))
  .replace('__BRAND_ICON__',()=>src('brand-icon.txt').trim())
  .replace('<link rel="stylesheet" href="./style.css">',()=>`<style>${css}</style>`);
-for(const file of ['donghyun.js','engine.js','shushu.js','render.js','crowd.js','app.js'])html=html.replace(`<script src="./${file}"></script>`,()=>'<script>'+src(file).replaceAll('</script','<\\/script')+'</script>');
-if(/src="\.\/(donghyun|engine|shushu|render|crowd|app)\.js"|__SERIES_NAV__|__BRAND_ICON__/.test(html))throw new Error('묶지 못한 자리표시가 남았다');
+for(const file of ['donghyun.js','engine.js','shushu.js','sprites.js','render.js','crowd.js','app.js'])html=html.replace(`<script src="./${file}"></script>`,()=>'<script>'+src(file).replaceAll('</script','<\\/script')+'</script>');
+if(/src="\.\/(donghyun|engine|shushu|sprites|render|crowd|app)\.js"|__SERIES_NAV__|__BRAND_ICON__/.test(html))throw new Error('묶지 못한 자리표시가 남았다');
 fs.writeFileSync(path.join(root,'index.html'),html);
 fs.rmSync(out,{recursive:true,force:true});fs.mkdirSync(out,{recursive:true});
 fs.writeFileSync(path.join(out,'index.html'),html);

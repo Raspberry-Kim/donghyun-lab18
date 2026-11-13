@@ -3,11 +3,11 @@ let count=0;const test=(n,f)=>{f();count++;console.log('ok',n);};
 const fresh=p=>new E.Match({player:p,level:1,court:0},123);
 const rally=(m,extra={})=>{m.phase='rally';m.people[0].x=0;m.people[0].y=8;m.people[0].cool=0;m.ball={x:0,y:8,z:1,vx:0,vy:3,vz:0,by:1,bounces:1,serve:false,crossed:true,age:0,flightTime:1,...extra};return m;};
 const tick=(m,n)=>{for(let i=0;i<n;i++)m.step(E.DT);};
-test('all 14 skills immediately affordable without manual energy injection',()=>{
- for(let p=0;p<7;p++)for(let s=0;s<2;s++){const m=fresh(p);assert.equal(m.energy,6);assert.ok(m.skill(s).ok);assert.equal(m.energy,6-E.PLAYERS[p].skills[s][1]);}
+test('all 18 skills immediately affordable without manual energy injection',()=>{
+ for(let p=0;p<9;p++)for(let s=0;s<2;s++){const m=fresh(p);assert.equal(m.energy,6);assert.ok(m.skill(s).ok);assert.equal(m.energy,6-E.PLAYERS[p].skills[s][1]);}
 });
 test('both slots coexist and duplicates cost nothing',()=>{
- for(const p of [0,2,3,4,5,6]){const m=fresh(p);assert.ok(m.skill(0).ok);assert.ok(m.skill(1).ok);const before=m.energy;assert.equal(m.skill(0).ok,false);assert.equal(m.skill(1).ok,false);assert.equal(m.energy,before);}
+ for(const p of [0,2,3,4,5,6,7,8]){const m=fresh(p);assert.ok(m.skill(0).ok);assert.ok(m.skill(1).ok);const before=m.energy;assert.equal(m.skill(0).ok,false);assert.equal(m.skill(1).ok,false);assert.equal(m.energy,before);}
 });
 test('comet, wind and long arm repeat across 8 hits in one rally',()=>{
  for(const [p,s,k] of [[0,1,'comet'],[2,0,'wind'],[6,0,'long']]){
@@ -56,7 +56,7 @@ test('preactivate during point break or fault; pause/match reject',()=>{
  m.paused=true;assert.equal(m.skill(0).ok,false);m.paused=false;m.finish(0,'done');assert.deepEqual(m.effects,{});assert.equal(m.skill(0).ok,false);
 });
 test('new saves round-trip; old numeric/armed v1 effects migrate',()=>{
- for(let p=0;p<7;p++){if(p===1)continue;const m=fresh(p);m.skill(0);m.skill(1);const r=E.Match.restore(m.snapshot());assert.deepEqual(r.snapshot(),m.snapshot());}
+ for(let p=0;p<9;p++){if(p===1)continue;const m=fresh(p);m.skill(0);m.skill(1);const r=E.Match.restore(m.snapshot());assert.deepEqual(r.snapshot(),m.snapshot());}
  const old=fresh(6).snapshot();delete old.pendingSkills;old.effects={long:2,fall:3};const r=E.Match.restore(old);assert.deepEqual(r.effects,{long:true,fall:true});
  const c=fresh(0).snapshot();delete c.pendingSkills;c.armed='comet';assert.equal(E.Match.restore(c).effects.comet,true);
  const bad=fresh(5).snapshot();bad.pendingSkills={fire:true};assert.throws(()=>E.Match.restore(bad),/기술/);

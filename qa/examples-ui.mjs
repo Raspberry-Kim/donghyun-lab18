@@ -7,15 +7,15 @@ for(const [w,h,dark] of [[1440,900,0],[375,812,0],[1440,900,1]]){
  const p=await b.newPage({viewport:{width:w,height:h}});const errs=[];p.on('pageerror',e=>errs.push(e.message));
  await p.goto(url);await p.waitForSelector('#example option',{state:'attached'});if(dark)await p.click('#theme');
  const opts=await p.$$eval('#example option',o=>o.map(x=>({v:x.value,t:x.textContent,g:x.parentElement.label})));
- assert.equal(opts.length,63);assert.deepEqual([...new Set(opts.map(o=>o.g))],['통상 · 난이도 2','프로 · 난이도 3','초보 · 난이도 1']);
- assert.deepEqual(opts.map(o=>o.g[0]).join(''),'통'.repeat(28)+'프'.repeat(28)+'초'.repeat(7));
+ assert.equal(opts.length,81);assert.deepEqual([...new Set(opts.map(o=>o.g))],['통상 · 난이도 2','프로 · 난이도 3','초보 · 난이도 1']);
+ assert.deepEqual(opts.map(o=>o.g[0]).join(''),'통'.repeat(36)+'프'.repeat(36)+'초'.repeat(9));
  // inside a group: player order, then court order; no combination twice
  {const ex=await p.evaluate(()=>TeApp.examples.map(e=>[e.l,e.p,e.c]));const rank=[2,0,1];
   for(let i=1;i<ex.length;i++){const a=ex[i-1],c=ex[i];assert.ok(rank[a[0]]<rank[c[0]]||(a[0]===c[0]&&(a[1]<c[1]||(a[1]===c[1]&&a[2]<c[2]))),'order '+i);}
-  assert.equal(new Set(ex.map(String)).size,63);}
+  assert.equal(new Set(ex.map(String)).size,81);}
  // Full Cartesian coverage for normal/pro, seven Wimbledon beginners.
  {const ex=await p.evaluate(()=>TeApp.examples.map(e=>({p:e.p,l:e.l,c:e.c,note:e.note})));
-  for(const l of [1,2,0])for(let pl=0;pl<7;pl++)for(const c of l===0?[0]:[0,1,2,3])assert.equal(ex.filter(e=>e.p===pl&&e.l===l&&e.c===c).length,1);
+  for(const l of [1,2,0])for(let pl=0;pl<9;pl++)for(const c of l===0?[0]:[0,1,2,3])assert.equal(ex.filter(e=>e.p===pl&&e.l===l&&e.c===c).length,1);
   assert.ok(ex.filter(e=>e.l===0).every(e=>e.c===0));}
  for(const o of opts){
   await p.selectOption('#example',o.v);
@@ -29,7 +29,7 @@ for(const [w,h,dark] of [[1440,900,0],[375,812,0],[1440,900,1]]){
   assert.ok(o.t.includes(pl)||(pl==='동현'&&!/뭉치|뚱띠|또치|포동이|꽥꽥|슈슈/.test(o.t)),o.t+' player '+r.desc);assert.ok(o.t.includes(ct)||o.t.includes(ct.replace(/ .*/,'')),o.t+' court '+r.desc);
   assert.ok(o.t.includes(lv)&&o.g.startsWith(lv)&&o.g.endsWith(lvl),o.t+' level '+r.desc);n++;
  }
- for(let pl=0;pl<7;pl++){ // roster buttons
+ for(let pl=0;pl<9;pl++){ // roster buttons
   await p.click('[data-tab=players]');await p.click(`[data-player="${pl}"]`);
   const d=await p.locator('#config-description').innerText(),name=await p.evaluate(n=>Te.PLAYERS[n].name,pl);
   assert.equal(d,`${name} · 초보 · 윔블던`);assert.equal(await p.locator('#stamp-player').innerText(),name+' 선수');n++;

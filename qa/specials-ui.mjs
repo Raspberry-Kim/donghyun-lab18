@@ -3,7 +3,7 @@ const fs=await import('node:fs');
 export async function checkSpecials(browser,url,out='/tmp/te-specials'){
  fs.mkdirSync(out,{recursive:true});
  const results=[];
- for(let player=0;player<7;player++)for(let slot=0;slot<2;slot++){
+ for(let player=0;player<9;player++)for(let slot=0;slot<2;slot++){
   const ctx=await browser.newContext({viewport:{width:1440,height:1000}});
   // Fixtures grant energy for exhaustive visual coverage. All actions use real keyboard input.
   await ctx.addInitScript(()=>{
