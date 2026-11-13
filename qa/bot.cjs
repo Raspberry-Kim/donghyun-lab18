@@ -1,6 +1,6 @@
 const E=require('../src/engine'),assert=require('assert/strict');
 let summaries=[],wins=0,returns=0;
-for(let player=0;player<7;player++)for(let level=0;level<3;level++)for(let court=0;court<4;court++){
+for(let player=0;player<9;player++)for(let level=0;level<3;level++)for(let court=0;court<4;court++){
  const m=new E.Match({player,level,court},1000+player*12+level*4+court);let pts=0,maxRally=0;
  for(let t=0;t<120000&&pts<12&&m.phase!=='match';t++){
   let input={x:0,y:0};const p=m.people[0],b=m.ball;

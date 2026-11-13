@@ -10,6 +10,8 @@ const heads=[
  ['...hhhhhhh...','..hhHHhhhhh..','.hhhhhhhhhhh.','hhhsshhhsshhh','hhssssssssshh','hhskwssskwshh','hhskkssskkshh','hhsbsssssbshh','.hsssnnnsshh.','..hhssssshh..','....sssss....']
 ];
 const SHORT=new Set([4,5]);
+// 큰 그림 선수(슈슈·이삐·빽빽): sprites.js의 28칸 그림을 2배 캔버스에 1:1로 그린다. 불러올 때는 건드리지 않는다.
+const big=id=>(window.TeSprites?window.TeSprites.sprites:{})[id];
 const palette={h:'#342e2c',s:'#e3b797',k:'#292e2b',w:'#f5efdd',n:'#ab725c',y:'#e6be62',o:'#c67d43',g:'#a6be7b'};
 const headPalettes=[
  {...palette,h:'#bfbdb5',H:'#dddbd3',D:'#a3a098',b:'#d88f82'}, // 동현: soft grey, white and dark strands blended
@@ -46,7 +48,11 @@ const skillStyles={
  vanish:['#d2dbff','사라지는 리턴','다음 리턴이 유효하게 튀면 포인트'],
  serveVanish:['#badff2','사라지는 서브','서비스 박스에 들어가면 포인트'],
  long:['#dff0ac','길어진 팔 · 랠리 내내','횟수 제한 없음 · 타격 입력은 필요'],
- predict:['#fff1a6','바운드 예측','이번 랠리 · 착지 표식을 보자']
+ predict:['#fff1a6','바운드 예측','이번 랠리 · 착지 표식을 보자'],
+ flood:['#9fd8f0','물결이 덮친다','이번 랠리 · 내 공이 네트를 넘으면 상대가 잠긴다'],
+ wheel:['#ffd27a','앞바퀴 순간이동','이번 랠리 · 먼 공으로 굴러가 친다 · 가끔 놓친다'],
+ hearts:['#ff9fc0','하트 다섯 갈래','이번 랠리 · 진짜 공은 하나뿐'],
+ drunk:['#f3e9c8','상대가 비틀거린다','이번 랠리 · 네트 쪽으로 걸어온다']
 };
 // Display-only half-turn at an end change. Court art/camera never moves.
 function viewMatch(m){
@@ -58,7 +64,7 @@ function viewMatch(m){
   if(a&&['forehand','backhand'].includes(a.name))a.name=a.hand<0?'backhand':'forehand';
   return {...xy(p),side:p.side*s,moveX:(p.moveX||0)*s,moveY:(p.moveY||0)*s,anim:a};
  });
- view.ball=m.ball?{...xy(m.ball),vx:m.ball.vx*s,vy:m.ball.vy*s}:null;
+ view.ball=m.ball?{...xy(m.ball),vx:m.ball.vx*s,vy:m.ball.vy*s,fan:s}:null;
  view.fx=m.fx?{...xy(m.fx),toX:m.fx.toX*s,toY:m.fx.toY*s}:null;
  view.predict=()=>xy(m.predict());return view;
 }
@@ -74,7 +80,7 @@ const gait=[
 ];
 /* Independent animation clock: hit windows/cooldowns do not decide what is visible. */
 function poseFrame(p,override){
- const a=p.anim,t=a?.time||0,kind=override||(['fall','dance','whiff'].includes(p.pose)?p.pose:a?.name)||'idle';
+ const a=p.anim,t=a?.time||0,kind=override||(['fall','dance','whiff','drunk'].includes(p.pose)?p.pose:a?.name)||'idle';
  const walk=p.walk&&kind!=='serve'&&kind!=='toss',f=Math.floor(p.gait||0)%6;
  const v={kind,frame:0,lean:0,lift:0,bob:walk&&[1,4].includes(f)?-1:0,
   left:[-4,-12,-4,-9],right:[4,-12,4,-10],racket:[10,-17,'tilt'],face:.85,
@@ -82,7 +88,7 @@ function poseFrame(p,override){
  if(walk){const sway=[-1,-2,-1,1,2,1][f],dir=Math.sign(p.moveX||0),bounce=Math.abs(sway)>1?-1:0;v.frame=f;v.lean=dir;
   v.left=[-4,-12,-4+sway,-9-sway];v.face=.8+.05*Math.abs(sway)/2;
   // ROM walk: the head rides behind the shoulder, opposite the run, at head height.
-  if(dir){const low=p.id===6?4:0; // Shushu's shoulder sits lower; keep the arm off her face
+  if(dir){const low=big(p.id)?.low||0; // 슈슈·빽빽's shoulder sits lower; keep the arm off the face
    v.right=[(2-dir*5)/2,-15+low,-dir*5,-16+low+bounce];v.racket=[-dir*11,-21+low+bounce,'tilt'];}
   else{v.right=[4,-12,4,-10+sway];v.racket=[10,-17+sway,'tilt'];}}
  if(kind==='toss'){
@@ -130,6 +136,10 @@ function poseFrame(p,override){
   v.racketState=t<.42?'whole':t<.92?'bent':t<1.7?'stub':'none';v.frame=Math.floor(t*10);
  }else if(kind==='dance'){
   v.frame=f;v.lean=f<3?-2:2;v.left=[-5,-16,-7,-20];v.right=[5,-17,7,-21];v.racket=[9,-24,'tilt'];v.feet=gait[f];
+ }else if(kind==='drunk'){
+  // 백미취사완료: both arms hang, the racket drags, and the body tips from side to side with each step.
+  const s=[-2,-1,1,2,1,-1][f];v.frame=f;v.lean=s;v.bob=Math.abs(s)>1?1:0;
+  v.left=[-5,-10,-7+s,-5];v.right=[5,-10,7+s,-4];v.racket=[12+s,3,'tilt'];v.face=.85;v.feet=gait[f];
  }
  if((kind==='toss'||kind==='serve')&&p.side===-1){
   for(const arm of [v.left,v.right]){arm[0]*=-1;arm[2]*=-1;}
@@ -139,8 +149,7 @@ function poseFrame(p,override){
 }
 class Renderer{
  constructor(canvas){this.canvas=canvas;this.g=canvas.getContext('2d');canvas.width=W*PIXEL;canvas.height=H*PIXEL;this.g.imageSmoothingEnabled=false; // 2x backing store: 슈슈 is drawn 1:1 from 동현파
-  this.shushu=[false,true].map(back=>{const c=document.createElement('canvas');c.width=28;c.height=45;const g=c.getContext('2d');
-   TeShushu.rows.forEach((row,y)=>[...row].forEach((ch,x)=>{if(back&&y>=12&&y<21&&'sewbm'.includes(ch))ch='H';const color=TeShushu.colors[ch];if(color){g.fillStyle=color;g.fillRect(x,y,1,1);}}));return c;});
+  this.big=TeSprites.build(document);
  }
  rect(x,y,w,h,c){const g=this.g;g.fillStyle=c;x=Math.round(x);y=Math.round(y);w=Math.ceil(w);h=Math.ceil(h);
   const t=g.getTransform();
@@ -160,7 +169,7 @@ class Renderer{
   for(let n=0;n<90;n++){this.rect(x0,y0,width,width,color);if(x0===x1&&y0===y1)break;const e2=2*e;if(e2>=dy){e+=dy;x0+=sx;}if(e2<=dx){e+=dx;y0+=sy;}}
  }
  player(p,time,role='',poseOverride=null,size=1,opt={}){
-  const g=this.g,pos=project(p.x,p.y),id=p.id,v=poseFrame(p,poseOverride),rear=opt.rear??rearFacing(p,v.kind),ink=id===6?TeShushu.colors.o:'#343c32',skin=id===4?'#f5efdd':id===6?TeShushu.colors.s:'#e3b797';
+  const g=this.g,pos=project(p.x,p.y),id=p.id,v=poseFrame(p,poseOverride),rear=opt.rear??rearFacing(p,v.kind),S=big(id),rows=S?S.rows.length:0,ink=S?S.colors.o:'#343c32',skin=id===4?'#f5efdd':S?S.colors.s:'#e3b797';
   g.save();g.translate(Math.round(pos.x),Math.round(pos.y));g.scale(size,size);g.imageSmoothingEnabled=false;
   this.rect(-4,0,9,1,'#172e3055');
   g.translate(0,v.lift);
@@ -170,21 +179,21 @@ class Renderer{
   }
   const feet=v.feet,lean=v.lean,bob=v.bob;
   const limb=(sx,sy,ex,ey,hx,hy,c=skin)=>{this.pixelLine(sx,sy,ex,ey,ink,2);this.pixelLine(ex,ey,hx,hy,ink,2);this.pixelLine(sx,sy,ex,ey,c);this.pixelLine(ex,ey,hx,hy,c);};
-  g.save();if(id!==6)g.scale(BODY_WIDTH,1);
-  if(id!==6){
+  g.save();if(!S)g.scale(BODY_WIDTH,1);
+  if(!S){
    limb(-1,-6,feet[2],feet[3],feet[0],feet[1]-1,ink);limb(1,-6,feet[6],feet[7],feet[4],feet[5]-1,ink);
    this.rect(feet[0]-1,feet[1],3,1,'#f2ead5');this.rect(feet[4]-1,feet[5],3,1,'#f2ead5');
   }else{
-   const img=this.shushu[rear?1:0],moving=p.walk&&!['serve','toss'].includes(v.kind);
-   g.drawImage(img,0,35,14,10,-7+(moving?Math.sign(feet[0])*1:0),-5+(moving?feet[1]:0),7,5);
-   g.drawImage(img,14,35,14,10,(moving?Math.sign(feet[4])*1:0),-5+(moving?feet[5]:0),7,5);
+   const img=this.big[id][rear?1:0],moving=p.walk&&!['serve','toss'].includes(v.kind);
+   g.drawImage(img,0,rows-10,14,10,-7+(moving?Math.sign(feet[0])*1:0),-5+(moving?feet[1]:0),7,5);
+   g.drawImage(img,14,rows-10,14,10,(moving?Math.sign(feet[4])*1:0),-5+(moving?feet[5]:0),7,5);
   }
   g.restore();
   g.save();g.translate(lean,bob);
-  const shoulder=id===6?-11:-14,L=v.left,R=v.right,armSide=['toss','serve'].includes(v.kind)?p.side:1;
+  const shoulder=S?S.shoulder:-14,L=v.left,R=v.right,armSide=['toss','serve'].includes(v.kind)?p.side:1;
   limb(-2*armSide,shoulder,...L); // far arm behind the body
-  g.save();if(id!==6)g.scale(BODY_WIDTH,1);
-  if(id===6){const img=this.shushu[rear?1:0];g.drawImage(img,0,0,28,35,-7,-22.5,14,17.5);}
+  g.save();if(!S)g.scale(BODY_WIDTH,1);
+  if(S){const img=this.big[id][rear?1:0];g.drawImage(img,0,0,28,rows-10,-7,-rows/2,14,(rows-10)/2);}
   else {
    this.rect(-3,-15,6,8,ink);this.rect(-2,-14,4,6,id===4?'#f5efdd':Te.PLAYERS[id].color);
    this.rect(-3,-8,6,2,'#eee8d4');if(!rear)this.rect(-1,-14,2,1,'#eee8d4');
@@ -214,7 +223,7 @@ class Renderer{
    g.beginPath();g.ellipse(0,0,minor,major,0,0,Math.PI*2);g.strokeStyle='#f5ecd2';g.lineWidth=1.25;g.stroke();g.restore();
   }
   g.restore();
-  if(role)this.rect(-1,(id===6?-26:SHORT.has(id)?-28:-30)+v.bob,2,1,role==='P'?'#f3d884':'#e9e9dc');
+  if(role)this.rect(-1,(S?S.mark:SHORT.has(id)?-28:-30)+v.bob,2,1,role==='P'?'#f3d884':'#e9e9dc');
   g.restore();
  }
  umpire(time){
@@ -252,6 +261,7 @@ class Renderer{
    if(me&&m.fx?.type==='lose')return this.player({...p,walk:false,anim:{name:'break',time:fxAge,duration:m.fx.duration,hand:1}},T,'P','break',1,{rear:this.started});
    this.player(p,T,me?'P':'C',null,1,me?{longArm:eff.long>0,hideArm:m.fx?.type==='long',rear:this.started}:{});
   };
+  this.water(m);
   for(const p of visible.filter(p=>p.y<0))person(p);
   const a=project(-5.7,0),b=project(5.7,0),nh=Math.round(Te.NET*Z_SCALE);
   this.rect(a.x,a.y-nh,b.x-a.x,nh,'#273f3ad9');
@@ -264,6 +274,15 @@ class Renderer{
   if(m.ball){
    const ball=m.ball,shadow=project(ball.x,ball.y),pos=ballVisual(ball),r=pos.radius;
    const groundRadius=ballVisual({...ball,z:0}).radius;
+   if(ball.hearts){ // 오마이갓: 다섯 하트가 부채꼴로 벌어진다. 상대가 헛친 가짜는 터져 사라진다.
+    const h=ball.hearts,fan=ball.fan||1;
+    for(let j=0;j<Te.HEARTS;j++){
+     if(j===h.real||(h.swung&&j===h.pick))continue;
+     const fake={...ball,x:ball.x+Te.heartOffset(ball,j)*fan},sh=project(fake.x,fake.y),q=ballVisual(fake);
+     g.fillStyle='#20383266';g.beginPath();g.ellipse(sh.x,sh.y,groundRadius*1.15,groundRadius*.4,0,0,Math.PI*2);g.fill();
+     this.heartBall(q.x,q.y,q.radius,'#ff9fc0');
+    }
+   }
    g.fillStyle='#203832a8';g.beginPath();g.ellipse(shadow.x,shadow.y,groundRadius*1.15,groundRadius*.4,0,0,Math.PI*2);g.fill();
    // Where the ball was i frames ago, from its own flight; trails never bend the real path.
    const past=tau=>ballVisual({x:ball.x-ball.vx*tau,y:ball.y-ball.vy*tau,z:Math.max(0,ball.z-ball.vz*tau-.5*Te.G*tau*tau)});
@@ -286,11 +305,41 @@ class Renderer{
     const a=still?-.6:T*1.6;g.beginPath();g.moveTo(pos.x,pos.y-r-6);g.lineTo(pos.x,pos.y-r-8);g.moveTo(pos.x,pos.y);g.lineTo(pos.x+Math.cos(a)*(r+5),pos.y+Math.sin(a)*(r+5));g.stroke();
    }
    const dim=power==='vanish'&&!still&&Math.sin(T*30)>0;
+   if(ball.hearts)this.heartBall(pos.x,pos.y,r,'#ff9fc0');
+   else{
    g.globalAlpha=dim?.45:1;g.beginPath();g.arc(pos.x,pos.y,r,0,Math.PI*2);g.fillStyle=power==='fire'?'#ffb347':'#f6db72';g.fill();g.strokeStyle='#394b32';g.lineWidth=1;g.stroke();
    g.save();g.clip();g.beginPath();g.arc(pos.x-r*.65,pos.y,r*.85,-1.25,1.25);g.strokeStyle='#fff8cf';g.lineWidth=1;g.stroke();
    g.beginPath();g.arc(pos.x-r*.3,pos.y-r*.35,Math.max(.8,r*.2),0,Math.PI*2);g.fillStyle='#ffffe3';g.fill();g.restore();g.globalAlpha=1;
+   }
   }
   if(m.fx)this.effect(m,fxAge);
+ }
+ // 오마이갓의 공: 공 크기에 맞춘 하트. 진짜와 가짜는 똑같이 그린다.
+ heartBall(x,y,r,c){
+  const g=this.g,k=Math.max(2.6,r)*1.15;g.beginPath();g.moveTo(x,y+k*.95);
+  g.bezierCurveTo(x-k*1.55,y-k*.05,x-k*.8,y-k*1.3,x,y-k*.4);g.bezierCurveTo(x+k*.8,y-k*1.3,x+k*1.55,y-k*.05,x,y+k*.95);
+  g.fillStyle=c;g.fill();g.strokeStyle='#8f3b5c';g.lineWidth=1;g.stroke();
+  g.fillStyle='#fff1f6';g.fillRect(Math.round(x-k*.55),Math.round(y-k*.45),Math.max(1,Math.round(k*.3)),Math.max(1,Math.round(k*.3)));
+ }
+ // 양재천범람: 공과 함께 가는 물마루, 그리고 물에 잠긴 상대 코트. 선수보다 먼저 그려 발목까지만 잠긴다.
+ water(m){
+  const g=this.g,e=m.effects||{},b=m.ball,T=m.time,still=this.reducedMotion,side=m.people[1].side;
+  if(e.soaked){
+   g.save();g.globalAlpha=.4;this.poly([project(-5.5,0),project(5.5,0),project(5.5,side*14.5),project(-5.5,side*14.5)],'#5fa9cf');g.globalAlpha=1;
+   for(let j=0;j<9;j++)for(let i=0;i<5;i++){
+    const x=-5.2+((i*2.1+j*.83+(still?0:T*.35))%10.2),q=project(x,side*(1+j*1.5));
+    this.rect(q.x,q.y+(still?0:Math.round(Math.sin(T*3+i+j))),(i+j)%3?4:6,1,(i+j)%2?'#d9f1fb':'#9fd8f0');
+   }
+   g.restore();
+  }
+  if(b&&b.flood&&b.by===0&&!e.soaked&&m.phase==='rally'){
+   for(let x=-5.4;x<5.4;x+=.42){
+    // 해일: 네트에 가까워질수록 높아지는 두 겹 물마루와 흰 거품
+    const q=project(x,b.y),grow=1-Math.min(1,Math.abs(b.y)/12),h=Math.round(6+grow*5+(still?0:Math.sin(T*10+x*2.3)*2));
+    this.rect(q.x,q.y-h,5,h,'#5fa9cf');this.rect(q.x,q.y-Math.round(h*.45),5,Math.round(h*.45),'#3f86b3');this.rect(q.x,q.y-h-1,5,2,'#e4f6fd');
+    if(Math.round(x*5)%3===0)this.rect(q.x+1,q.y-h-4,2,2,'#f1fbff');
+   }
+  }
  }
  spark(x,y,r,c){this.rect(x-r,y,r*2+1,1,c);this.rect(x,y-r,1,r*2+1,c);}
  glyph(rows,x,y,c){this.pixels(rows,Math.round(x)-(rows[0].length>>1),Math.round(y)-(rows.length>>1),{x:c});}
@@ -345,7 +394,33 @@ class Renderer{
    for(let j=0;j<3;j++){const ph=still?(j+1)/4:(T*.7+j/3)%1;g.globalAlpha=1-ph*.7;this.heart(o.x-10+j*10,o.y-13-ph*13,skillStyles.fall[0]);}g.globalAlpha=1;
    for(let j=0;j<4;j++){this.rect(o.x-11+j*6,o.y+4,5,4,'#203a32');this.rect(o.x-10+j*6,o.y+5,3,2,skillStyles.fall[0]);}
   }
+  // 이삐·빽빽: 켜 둔 기술은 내 발밑에, 걸린 효과는 상대 곁에 남는다.
+  if(e.flood&&live&&!e.soaked)for(let j=0;j<3;j++)this.glyph(['.xx...','x..xx.'],a.x-8+j*8,a.y+6+(still?0:Math.round(Math.sin(T*5+j))),skillStyles.flood[0]);
+  if(e.soaked&&live){ // 발목까지 잠긴 상대: 퍼지는 물결과 머리 위 물방울
+   this.rect(o.x-6,o.y-1,13,2,'#5fa9cf');this.rect(o.x-4,o.y-2,3,1,'#e4f6fd');this.rect(o.x+2,o.y-2,3,1,'#e4f6fd');
+   g.strokeStyle='#e4f6fd';for(let j=0;j<2;j++){const r=still?.3+j*.4:(T*.9+j/2)%1;g.globalAlpha=1-r;g.beginPath();g.ellipse(o.x,o.y+1,6+r*9,2+r*3,0,0,Math.PI*2);g.stroke();}g.globalAlpha=1;
+   for(let j=0;j<3;j++)this.glyph(['.x.','xxx','xxx'],o.x-13+j*13,o.y-31+(j%2)*3,skillStyles.flood[0]);
+  }
+  if(e.wheel&&live&&!m.wheel)this.wheelIcon(a.x+14,a.y-2,4,still?0:T*3);
+  if(m.wheel){ // 달리는 동안: 발밑에서 구르는 앞바퀴와 뒤로 흐르는 선
+   const dir=me.moveX||1;this.wheelIcon(a.x,a.y-3,7,still?0:T*24);
+   for(let j=0;j<4;j++)this.rect(a.x-dir*(11+j*5)-3,a.y-11+j*4,6,1,j%2?'#ffd27a':'#f08a4b');
+  }
+  if(e.hearts&&live)for(let j=0;j<5;j++)this.heart(a.x-12+j*6,a.y+7+(still?0:Math.round(Math.sin(T*6+j))),j%2?'#ffd0e0':skillStyles.hearts[0]);
+  if(e.drunk&&live&&!e.tipsy){ // 밥솥 김: 아직 상대에게 닿지 않았다
+   for(let j=0;j<4;j++){const ph=still?(j+1)/5:(T*.8+j/4)%1;g.globalAlpha=1-ph;this.rect(a.x-13+Math.round(Math.sin(ph*7+j)*2),a.y-6-ph*14,2,2,skillStyles.drunk[0]);}g.globalAlpha=1;
+  }
+  if(e.tipsy&&live){ // 비틀거리는 상대: 머리 위를 도는 고리와 방울
+   const sp=still?.6:T*5;g.strokeStyle=skillStyles.drunk[0];g.beginPath();g.ellipse(o.x,o.y-33,8,2.5,0,sp,sp+4.4);g.stroke();
+   for(let j=0;j<3;j++){const an=sp+j*2.1;this.rect(o.x+Math.cos(an)*8-1,o.y-33+Math.sin(an)*2.5-1,2,2,j?'#fff8e0':'#ef9a8b');}
+  }
   g.restore();
+ }
+ wheelIcon(x,y,r,rot){ // 브롬톤앞바퀴: 작은 바퀴, 주황 림과 살
+  const g=this.g;g.save();g.lineWidth=1;g.strokeStyle='#2a3a33';g.beginPath();g.arc(x,y,r+1,0,Math.PI*2);g.stroke();
+  g.strokeStyle='#f08a4b';g.beginPath();g.arc(x,y,r,0,Math.PI*2);g.stroke();
+  g.strokeStyle='#ffd27a';g.beginPath();for(let j=0;j<4;j++){const an=rot+j*Math.PI/4;g.moveTo(x-Math.cos(an)*(r-1),y-Math.sin(an)*(r-1));g.lineTo(x+Math.cos(an)*(r-1),y+Math.sin(an)*(r-1));}g.stroke();
+  g.fillStyle='#f5ecd2';g.fillRect(Math.round(x)-1,Math.round(y)-1,2,2);g.restore();
  }
  // Short results of a skill. Everything is local to the court; the camera and the frame stay put.
  effect(m,age){
@@ -392,6 +467,28 @@ class Renderer{
    const y=a.y-(me.id===0?37:35)-(still?0:Math.abs(Math.sin(T*5))*2);
    this.glyph(['x..x..x','xx.x.xx','xxxxxxx','xxxxxxx'],a.x,y,'#ffe49a');this.rect(a.x-3,y+1,1,1,'#ce6244');this.rect(a.x,y+1,1,1,'#597c9b');this.rect(a.x+3,y+1,1,1,'#ce6244');
    g.strokeStyle='#ffe49a';for(let j=0;j<8;j++){const an=j*Math.PI/4+(still?0:T*1.2),r0=17,r1=22+(j%2)*4;g.beginPath();g.moveTo(a.x+Math.cos(an)*r0,a.y-13+Math.sin(an)*r0*.8);g.lineTo(a.x+Math.cos(an)*r1,a.y-13+Math.sin(an)*r1*.8);g.stroke();}
+  }else if(fx.type==='flood'&&fx.end){ // 네트를 넘은 물결이 상대 코트를 끝까지 쓸고 간다
+   const side=m.people[1].side,k=still?.6:Math.min(1,age/.7);g.globalAlpha=fade;
+   for(let n=0;n<3;n++){const kk=k-n*.13;if(kk<=0)continue;
+    for(let x=-5.4;x<5.4;x+=.42){const q=project(x,side*kk*14),h=Math.round((7-n*2)*(1-kk*.45)+(still?0:Math.sin(T*12+x*2+n)*1.5));this.rect(q.x,q.y-h,5,h,n?'#9fd8f0':'#5fa9cf');this.rect(q.x,q.y-h-1,5,1,'#f1fbff');}}
+   for(let j=0;j<10;j++){const an=j*.63+.2,d=6+k*16;this.rect(at.x+Math.cos(an)*d,at.y-8-Math.abs(Math.sin(an))*d*.8,2,2,j%2?'#e4f6fd':'#9fd8f0');}
+  }else if(fx.type==='flood'){ // 치는 순간 발밑에서 솟는 물
+   g.globalAlpha=fade;for(let j=0;j<9;j++){const h=5+((j*5)%6)+(still?0:Math.sin(T*18+j*1.7)*3),x=at.x-12+j*3;this.rect(x,at.y-h,2,h,'#5fa9cf');this.rect(x,at.y-h-1,2,1,'#e4f6fd');}
+  }else if(fx.type==='wheel'){ // 주황 바퀴 자국이 공까지 이어진다(혜성 이동의 푸른 직선과 다른 모양)
+   const b=project(fx.toX,fx.toY),k=still?1:Math.min(1,age/(Te.WHEEL_TICKS*Te.DT)),n=Math.max(2,Math.round(Math.hypot(b.x-at.x,b.y-at.y)/5));g.globalAlpha=fade;
+   for(let j=0;j<=n*k;j++){const t=j/n;this.rect(at.x+(b.x-at.x)*t-1,at.y+(b.y-at.y)*t,3,1,j%2?'#f08a4b':'#ffd27a');}
+   for(let j=0;j<3;j++){g.fillStyle='#e9e2c9';g.globalAlpha=fade*Math.max(0,.6-age);g.beginPath();g.arc(at.x-4+j*4,at.y-1-age*8,2,0,Math.PI*2);g.fill();}
+  }else if(fx.type==='wheelMiss'){ // 미끄러져 지나쳤다: 굴러가 버리는 바퀴, 지그재그 자국, 느낌표
+   g.globalAlpha=fade;const d=still?8:Math.min(18,age*36);
+   this.wheelIcon(at.x+d+7,at.y-4,6,still?.5:age*14);
+   for(let j=0;j<6;j++)this.rect(at.x-12+j*4,at.y+(j%2?1:-1),4,1,'#f08a4b');
+   for(const x of [-2,2])this.glyph(['x','x','x','.','x'],at.x+x,at.y-33,'#ffd27a');
+  }else if(fx.type==='hearts'){ // 라켓에서 하트 다섯이 퍼진다
+   const k=still?.6:Math.min(1,age/.5);g.globalAlpha=fade;
+   for(let j=0;j<5;j++){const an=-Math.PI/2+(j-2)*.5,d=8+k*16;this.heart(at.x+Math.cos(an)*d,at.y-14+Math.sin(an)*d,j%2?'#ffd0e0':c);}
+  }else if(fx.type==='drunk'){ // 밥솥 김이 상대 머리 위로 피어오른다
+   for(let j=0;j<6;j++){const ph=still?(j+1)/7:(age*.9+j/6)%1;g.globalAlpha=(1-ph)*fade;g.fillStyle='#fff8e0';g.beginPath();g.arc(at.x-8+j*3.2+Math.sin(ph*6+j)*3,at.y-28-ph*16,2+ph*2.5,0,Math.PI*2);g.fill();}
+   g.globalAlpha=fade;this.glyph(['.x.x.x.','x.x.x..','.......','xxxxxxx','xxxxxxx','.xxxxx.','..xxx..'],at.x+(at.x>250?-17:17),at.y-20,c);
   }else if(fx.type==='lose')this.breakRacket(a,age,me.id===0?-28:-26);
   g.restore();
  }
@@ -442,7 +539,7 @@ class Renderer{
  skillBurst(m){
   const q=m.skillCue;if(!q)return;
   const g=this.g,s=skillStyles[q.kind],age=q.duration-q.ttl;
-  const target=['dance','miss','fall'].includes(q.kind)?m.people[1]:m.people[0];
+  const fx=m.effects||{},target=['dance','miss','fall'].includes(q.kind)||(q.kind==='flood'&&fx.soaked)||(q.kind==='drunk'&&fx.tipsy)?m.people[1]:m.people[0];
   const p=project(target.x,target.y),t=this.reducedMotion?.35:Math.min(1,age/.8);
   g.save();g.globalAlpha=Math.min(1,q.ttl/.25);
   g.strokeStyle=s[0];g.fillStyle=s[0];g.lineWidth=1.4;
@@ -489,6 +586,10 @@ class Renderer{
    case 'fall':line([[0,6],[-6,0],[-6,-4],[-3,-6],[0,-3],[3,-6],[6,-4],[6,0],[0,6]]);break;
    case 'vanish':case 'serveVanish':line([[-5,6],[-5,-3],[-2,-6],[2,-6],[5,-3],[5,6],[2,3],[0,6],[-2,3],[-5,6]]);this.rect(-3,-2,1,2,s[0]);this.rect(2,-2,1,2,s[0]);if(q.kind==='serveVanish')line([[7,2],[7,-5]]);break;
    case 'long':line([[-7,4],[-3,4],[0,-1],[4,-1],[6,-4]]);ring(5,-4,2);break;
+   case 'flood':for(const y of [-4,0,4])line([[-7,y+1],[-4,y-1],[-1,y+1],[2,y-1],[5,y+1],[7,y]]);break;
+   case 'wheel':ring(0,0,6);ring(0,0,1.5);for(let j=0;j<4;j++){const an=t*4+j*Math.PI/4;line([[-Math.cos(an)*6,-Math.sin(an)*6],[Math.cos(an)*6,Math.sin(an)*6]]);}break;
+   case 'hearts':line([[0,6],[-6,0],[-6,-4],[-3,-6],[0,-3],[3,-6],[6,-4],[6,0],[0,6]]);this.rect(-1,-1,2,2,s[0]);break;
+   case 'drunk':line([[-6,0],[6,0],[4,5],[-4,5],[-6,0]]);for(const x of [-3,0,3])line([[x,-2],[x+1,-4],[x-1,-6],[x,-8]]);break;
    case 'predict':ring(0,0,5);ring(0,0,2);line([[-8,0],[-4,0]]);line([[4,0],[8,0]]);line([[0,-8],[0,-4]]);line([[0,4],[0,8]]);break;
   }
   g.restore();

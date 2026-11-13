@@ -1,7 +1,7 @@
 const assert=require('assert/strict'),E=require('../src/engine');
-const kinds=[['fire','comet'],['win','lose'],['wind','slow'],['drop','dance'],['miss','fall'],['vanish','serveVanish'],['long','predict']];
+const kinds=[['fire','comet'],['win','lose'],['wind','slow'],['drop','dance'],['miss','fall'],['vanish','serveVanish'],['long','predict'],['flood','wheel'],['hearts','drunk']];
 let checks=0;
-for(let player=0;player<7;player++)for(let slot=0;slot<2;slot++){
+for(let player=0;player<9;player++)for(let slot=0;slot<2;slot++){
  const m=new E.Match({player,level:0,court:0});m.energy=6;
  if(kinds[player][slot]==='slow'){m.phase='rally';m.ball={by:1};}
  const seed=m.seed,res=m.skill(slot);

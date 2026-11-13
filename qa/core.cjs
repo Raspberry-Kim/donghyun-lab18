@@ -8,9 +8,9 @@ function rally(m,o={}){
  m.phase='rally';m.ball={x:0,y:8,z:1,vx:0,vy:3,vz:0,by:1,bounces:1,serve:false,crossed:true,age:0,...o};m.people[0].x=0;m.people[0].y=8;m.people[0].cool=0;m.energy=6;return m;
 }
 function point(m,w){m.phase='rally';m.point(w,'test');}
-test('84 configurations · real Donghyun interpreter',()=>{for(let p=1;p<=7;p++)for(let l=1;l<=3;l++)for(let c=1;c<=4;c++){const code='나는 동현이냐?\n'+[p,l,c].map(n=>'뿡뿡 도'+'오'.repeat(n-1)+'옹~뿡뿡뿡').join('\n')+'\n동현이구나';assert.deepEqual(E.parse(D.run(code).output),{player:p-1,level:l-1,court:c-1});}});
-test('invalid config rejected',()=>{for(const str of ['', '1 1', '8 1 1','1 0 1','1 1 5','1.5 1 1','1 1 1 1','x 1 1'])assert.throws(()=>E.parse(str));});
-test('stats exact',()=>assert.deepEqual(E.PLAYERS.map(p=>[p.atk,p.def,p.mov]),[[100,100,100],[90,90,90],[120,80,110],[90,90,120],[80,80,130],[80,90,90],[90,100,80]]));
+test('108 configurations · real Donghyun interpreter',()=>{for(let p=1;p<=9;p++)for(let l=1;l<=3;l++)for(let c=1;c<=4;c++){const code='나는 동현이냐?\n'+[p,l,c].map(n=>'뿡뿡 도'+'오'.repeat(n-1)+'옹~뿡뿡뿡').join('\n')+'\n동현이구나';assert.deepEqual(E.parse(D.run(code).output),{player:p-1,level:l-1,court:c-1});}});
+test('invalid config rejected',()=>{for(const str of ['', '1 1', '10 1 1','1 0 1','1 1 5','1.5 1 1','1 1 1 1','x 1 1'])assert.throws(()=>E.parse(str));});
+test('stats exact',()=>assert.deepEqual(E.PLAYERS.map(p=>[p.atk,p.def,p.mov]),[[100,100,100],[90,90,90],[120,80,110],[90,90,120],[80,80,130],[80,90,90],[90,100,80],[70,90,100],[90,100,110]]));
 test('toss repeat without fault',()=>{const m=fresh();m.toss();step(m,280);assert.equal(m.phase,'ready');assert.equal(m.faults,0);});
 test('good serve crosses and is returned by CPU',()=>{const m=fresh();m.toss();descend(m);m.serve('drive');step(m,190);assert.equal(m.phase,'rally');assert.equal(m.ball.by,1);});
 test('double fault awards receiver',()=>{const m=fresh();m.fault('test');assert.equal(m.faults,1);m.setupPoint();m.fault('test');assert.equal(m.points[1],1);});
@@ -31,7 +31,7 @@ test('tiebreak first one then two service and seven by two',()=>{const m=fresh()
 test('pause freezes all engine state',()=>{const m=rally(fresh());m.paused=true;const s=JSON.stringify(m);step(m,120);assert.equal(JSON.stringify(m),s);});
 test('body hit loses receiver',()=>{const m=rally(fresh(),{z:.7,y:8,vx:0,vy:0});m.physics(.01);assert.equal(m.points[1],1);});
 test('energy earned and capped',()=>{const m=fresh();assert.equal(m.energy,6);m.energy=0;point(m,0);assert.equal(m.energy,2);for(let i=0;i<8;i++)point(m,1);assert.equal(m.energy,6);});
-test('14 skills activate and charge once',()=>{for(let p=0;p<7;p++)for(let s=0;s<2;s++){const m=rally(fresh(p));if(p===5&&s===1){m.setupPoint();m.server=0;}const r=m.skill(s);assert.equal(r.ok,true,`${p}/${s} ${r.why}`);assert.equal(m.energy,6-E.PLAYERS[p].skills[s][1]);}});
+test('18 skills activate and charge once',()=>{for(let p=0;p<9;p++)for(let s=0;s<2;s++){const m=rally(fresh(p));if(p===5&&s===1){m.setupPoint();m.server=0;}const r=m.skill(s);assert.equal(r.ok,true,`${p}/${s} ${r.why}`);assert.equal(m.energy,6-E.PLAYERS[p].skills[s][1]);}});
 test('skill failures consume no charge',()=>{const m=fresh();m.energy=0;assert.equal(m.skill(0).ok,false);assert.equal(m.energy,0);m.energy=6;m.skill(0);const n=m.energy;assert.equal(m.skill(0).ok,false);assert.equal(m.energy,n);});
 test('fire valid shot forces winner and wall effect',()=>{const m=rally(fresh());m.skill(0);m.stroke(0);assert.equal(m.ball.power,'fire');assert.equal(m.reachable(1,true),false);step(m,350);assert.equal(m.points[0],1);});
 test('comet moves across court on stroke only',()=>{const m=rally(fresh(),{x:-3});m.people[0].x=3;m.skill(1);assert.equal(m.people[0].x,3);m.stroke(0);assert.equal(m.people[0].x,-3);assert.equal(m.ball.by,0);});

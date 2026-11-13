@@ -39,8 +39,8 @@ console.log('Rotation regression',JSON.stringify(render));
 // Whole-body fall sheet includes original Shushu (drawImage path), front and back.
 const sheet=await p.evaluate(()=>{
  const c=document.createElement('canvas'),r=new TeRender.Renderer(c);
- c.width=1120;c.height=400;r.g.fillStyle='#6f9274';r.g.fillRect(0,0,1120,400);
- for(let rear=0;rear<2;rear++)for(let id=0;id<7;id++){
+ c.width=1440;c.height=400;r.g.fillStyle='#6f9274';r.g.fillRect(0,0,1440,400);
+ for(let rear=0;rear<2;rear++)for(let id=0;id<9;id++){
   r.g.save();r.g.translate(id*160+15,rear*200+95);r.g.scale(4,4);
   const pos=TeRender.project(0,0);r.g.translate(-pos.x,-pos.y);
   r.player({id,x:0,y:0,side:-1,pose:'fall',cool:0},0,'',null,1,{rear:!!rear});r.g.restore();
