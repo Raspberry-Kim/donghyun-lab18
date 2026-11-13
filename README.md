@@ -6,7 +6,7 @@
 
 [바로 하기](https://raspberry-kim.github.io/donghyun-lab18/) · [GitHub](https://github.com/Raspberry-Kim/donghyun-lab18)
 
-모든 판을 묶는 DOI는 [`10.5281/zenodo.24133576`](https://doi.org/10.5281/zenodo.24133576)이다. 이번 v0.13의 [Zenodo 보관본](https://zenodo.org/records/24183790)은 DOI [`10.5281/zenodo.24183790`](https://doi.org/10.5281/zenodo.24183790)이고, 보관본 ZIP은 v0.13 태그와 같은 내용이다. [v0.13 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.13)에서 바뀐 점을 볼 수 있다. 앞선 v0.12의 [Zenodo 보관본](https://zenodo.org/records/24159947)은 DOI `10.5281/zenodo.24159947`로, v0.11의 [Zenodo 보관본](https://zenodo.org/records/24157838)은 DOI `10.5281/zenodo.24157838`로, v0.10의 [Zenodo 보관본](https://zenodo.org/records/24152944)은 DOI `10.5281/zenodo.24152944`로 남아 있다.
+모든 판을 묶는 DOI는 [`10.5281/zenodo.24133576`](https://doi.org/10.5281/zenodo.24133576)이다. 이번 v0.14의 [Zenodo 보관본](https://zenodo.org/records/24184356)은 DOI [`10.5281/zenodo.24184356`](https://doi.org/10.5281/zenodo.24184356)이고, 보관본 ZIP은 v0.14 태그와 같은 내용이다. [v0.14 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.14)에서 바뀐 점을 볼 수 있다. 앞선 v0.13의 [Zenodo 보관본](https://zenodo.org/records/24183790)은 DOI `10.5281/zenodo.24183790`로, v0.12의 [Zenodo 보관본](https://zenodo.org/records/24159947)은 DOI `10.5281/zenodo.24159947`로, v0.11의 [Zenodo 보관본](https://zenodo.org/records/24157838)은 DOI `10.5281/zenodo.24157838`로, v0.10의 [Zenodo 보관본](https://zenodo.org/records/24152944)은 DOI `10.5281/zenodo.24152944`로 남아 있다.
 
 v0.14에서는 동현이 남색 야구모자를 거꾸로 썼다. 앞에서는 이마 위 조임 띠 구멍으로 흰머리가 살짝 보이고, 뒤에서는 챙이 목 쪽으로 나온다. 샤아자쿠의 발동 표지와 코트 테두리, 공 쪽으로 달려가는 궤적은 하늘색에서 붉은 계열로 바뀌었다.
 
