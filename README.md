@@ -6,7 +6,7 @@
 
 [바로 하기](https://raspberry-kim.github.io/donghyun-lab18/) · [GitHub](https://github.com/Raspberry-Kim/donghyun-lab18)
 
-모든 판을 묶는 DOI는 [`10.5281/zenodo.24133576`](https://doi.org/10.5281/zenodo.24133576)이다. [v0.13 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.13)에서 바뀐 점을 볼 수 있다. 앞선 v0.12의 [Zenodo 보관본](https://zenodo.org/records/24159947)은 DOI `10.5281/zenodo.24159947`로, v0.11의 [Zenodo 보관본](https://zenodo.org/records/24157838)은 DOI `10.5281/zenodo.24157838`로, v0.10의 [Zenodo 보관본](https://zenodo.org/records/24152944)은 DOI `10.5281/zenodo.24152944`로 남아 있다.
+모든 판을 묶는 DOI는 [`10.5281/zenodo.24133576`](https://doi.org/10.5281/zenodo.24133576)이다. 이번 v0.13의 [Zenodo 보관본](https://zenodo.org/records/24183790)은 DOI [`10.5281/zenodo.24183790`](https://doi.org/10.5281/zenodo.24183790)이고, 보관본 ZIP은 v0.13 태그와 같은 내용이다. [v0.13 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.13)에서 바뀐 점을 볼 수 있다. 앞선 v0.12의 [Zenodo 보관본](https://zenodo.org/records/24159947)은 DOI `10.5281/zenodo.24159947`로, v0.11의 [Zenodo 보관본](https://zenodo.org/records/24157838)은 DOI `10.5281/zenodo.24157838`로, v0.10의 [Zenodo 보관본](https://zenodo.org/records/24152944)은 DOI `10.5281/zenodo.24152944`로 남아 있다.
 
 v0.13에서는 선수 둘이 더 왔다. **이삐**는 꽥꽥만 한 키의 단발 어린 소녀로, 얼굴은 슈슈를 닮았다(공격 70 · 수비 90 · 이동 100). S **양재천범람**을 켜면 내가 친 공과 함께 물결이 네트를 넘어 상대를 덮치고, 젖은 상대의 이동은 90% 느려진다. A **브롬톤앞바퀴**는 닿지 않는 공에 타격 키를 누르면 앞바퀴를 타고 0.2초 동안 굴러가 친다. 동현의 샤아자쿠보다 조금 느리고, 다섯 번에 한 번꼴로 공 옆으로 미끄러져 놓친다. **빽빽**은 슈슈와 거의 같은 모습에 똥머리와 연보라 원피스만 다르다(공격 90 · 수비 100 · 이동 110). S **오마이갓**을 켜면 내가 친 공이 하트 다섯 갈래로 갈라지는데 진짜는 무작위 하나뿐이다. 상대가 우연히 진짜를 고르면 랠리가 이어진다. A **백미취사완료**를 켜면 내가 공을 칠 때부터 상대가 취한 듯 비틀거리며 네트 쪽으로 걸어온다. 선수는 아홉, 기술은 열여덟, 예제는 81개가 됐다.
 
