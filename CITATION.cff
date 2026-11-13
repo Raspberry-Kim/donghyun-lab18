@@ -2,9 +2,9 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it using the metadata below."
 title: "Donghyunte (동현테): a fixed-view single-player tennis laboratory configured through Donghyun-lang"
 type: software
-version: "0.12"
+version: "0.13"
 doi: "10.5281/zenodo.24133576"
-date-released: "2026-11-12"
+date-released: "2026-11-13"
 authors:
   - family-names: Kim
     given-names: Dong Hyun
@@ -15,18 +15,22 @@ repository-code: "https://github.com/Raspberry-Kim/donghyun-lab18"
 url: "https://raspberry-kim.github.io/donghyun-lab18/"
 abstract: >-
   Donghyunte is a browser-based single-player singles tennis game. Programs
-  written in Donghyun-lang select one of seven players, three difficulties,
+  written in Donghyun-lang select one of nine players, three difficulties,
   and four courts. Keyboard and standard-mapped gamepads control play; mouse
   and touch do not control the match. The fixed camera keeps the player at
   the bottom even after a change of ends. The game includes a two-stage serve,
-  differentiated strokes and lobs, fourteen special abilities, deuce,
+  differentiated strokes and lobs, eighteen special abilities, deuce,
   tiebreaks, and best-of-three sets. A match in progress can be saved to
   three browser slots or a .dhsave file and restored exactly. Game Boy Tennis (1989) was run and observed
   as a reference; its machine code was not reverse-engineered, and the physics
   constants and hit rules of this independent implementation do not
   numerically match the original. In-app "Why Open?" and "Mathematical
   principles" pages explain the history of open tennis and the engine's
-  equations. Version 0.12 corrects the smash row of the in-app mathematics
+  equations. Version 0.13 adds two players, Ippi and Ppaekppaek, with four
+  new rally-long abilities (a flood that slows the opponent, a front-wheel
+  dash that can skid past the ball, five hearts of which one is the real
+  ball, and a tipsy walk toward the net) and expands the examples to 81.
+  Version 0.12 corrects the smash row of the in-app mathematics
   table and lets long equations wrap on narrow screens instead of being cut
   off. Version 0.11 redraws Podongi with white ears at Quackquack's
   height, fixes pixel seams in fallen sprites, and adds original procedural
