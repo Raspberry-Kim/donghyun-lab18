@@ -311,7 +311,7 @@ kbd{display:inline-flex;align-items:center;justify-content:center;min-width:1.8e
 .kbd-arrows{display:inline-flex;gap:2px;margin-right:5px;vertical-align:middle}.kbd-arrows kbd{margin:0;min-width:1.6em;padding:0}
 .keys>span{display:inline-flex;align-items:center;gap:4px}
 /* ---- 동현테: 시리즈 판 틀 안의 경기 화면 ---- */
-/* 코트 그림·HUD의 녹색은 경기 화면 안에만 둔다. 바깥 틀·단추·글은 시리즈 종이색과 노란 강조를 따른다. */
+/* 코트 그림·HUD의 녹색은 경기 화면 안에만 둔다. 바깥 틀·버튼·글은 시리즈 종이색과 노란 강조를 따른다. */
 .court-wrap{padding:10px 12px}
 .stage{position:relative;outline:none;border-radius:10px;overflow:hidden;background:#244337}
 .court-wrap:focus-within{border-color:#c9a43c}
