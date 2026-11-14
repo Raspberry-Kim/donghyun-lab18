@@ -316,7 +316,7 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden){keys.clear
 function pollPad(){
  let pad;try{pad=Array.from(navigator.getGamepads?.()||[]).find(Boolean);}catch(e){return;}
  if(!pad){padAxes={x:0,y:0};oldPad=[];if($('#pad-status').textContent!=='연결된 패드 없음')$('#pad-status').textContent='연결된 패드 없음';return;}
- const padText=pad.id+(pad.mapping==='standard'?' · 표준 매핑':' · 비표준 매핑: 실제 단추를 확인하자.');
+ const padText=pad.id+(pad.mapping==='standard'?' · 표준 매핑':' · 비표준 매핑: 실제 버튼을 확인하자.');
  if($('#pad-status').textContent!==padText)$('#pad-status').textContent=padText;
  const down=n=>!!pad.buttons[n]?.pressed;
  padAxes={x:down(14)?-1:down(15)?1:Math.abs(pad.axes[0])>.22?pad.axes[0]:0,y:down(12)?-1:down(13)?1:Math.abs(pad.axes[1])>.22?pad.axes[1]:0};

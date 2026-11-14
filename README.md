@@ -1,4 +1,4 @@
-# 동현테 v0.15
+# 동현테 v0.16
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24133576.svg)](https://doi.org/10.5281/zenodo.24133576)
 
@@ -6,7 +6,9 @@
 
 [바로 하기](https://raspberry-kim.github.io/donghyun-lab18/) · [GitHub](https://github.com/Raspberry-Kim/donghyun-lab18)
 
-모든 판을 묶는 DOI는 [`10.5281/zenodo.24133576`](https://doi.org/10.5281/zenodo.24133576)이다. 이번 판은 [v0.15 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.15)·[Zenodo 보관본](https://zenodo.org/records/24221442)(DOI `10.5281/zenodo.24221442`)이고, 보관본 ZIP은 v0.15 태그와 같은 내용이다. 앞선 판은 [v0.14 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.14)·[Zenodo 보관본](https://zenodo.org/records/24184356)(DOI `10.5281/zenodo.24184356`), [v0.13 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.13)·[Zenodo 보관본](https://zenodo.org/records/24183790)(DOI `10.5281/zenodo.24183790`), [v0.12 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.12)·[Zenodo 보관본](https://zenodo.org/records/24159947)(DOI `10.5281/zenodo.24159947`), [v0.11 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.11)·[Zenodo 보관본](https://zenodo.org/records/24157838)(DOI `10.5281/zenodo.24157838`), [v0.10 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.10)·[Zenodo 보관본](https://zenodo.org/records/24152944)(DOI `10.5281/zenodo.24152944`)에 남아 있다.
+모든 판을 묶는 DOI는 [`10.5281/zenodo.24133576`](https://doi.org/10.5281/zenodo.24133576)이다. 이번 판은 [v0.16 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.16)이고, Zenodo 보관본은 위 DOI의 최신 판이다. 앞선 판은 [v0.15 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.15)·[Zenodo 보관본](https://zenodo.org/records/24221442)(DOI `10.5281/zenodo.24221442`), [v0.14 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.14)·[Zenodo 보관본](https://zenodo.org/records/24184356)(DOI `10.5281/zenodo.24184356`), [v0.13 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.13)·[Zenodo 보관본](https://zenodo.org/records/24183790)(DOI `10.5281/zenodo.24183790`), [v0.12 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.12)·[Zenodo 보관본](https://zenodo.org/records/24159947)(DOI `10.5281/zenodo.24159947`), [v0.11 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.11)·[Zenodo 보관본](https://zenodo.org/records/24157838)(DOI `10.5281/zenodo.24157838`), [v0.10 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.10)·[Zenodo 보관본](https://zenodo.org/records/24152944)(DOI `10.5281/zenodo.24152944`)에 남아 있다.
+
+v0.16에서는 설명 글을 다듬었다. ‘단추’는 ‘버튼’으로 쓰고, ‘수학적 원리’ 머리말과 ‘모델과 출처’에서 평가하는 꾸밈말을 덜어 냈다. 규칙과 판정은 그대로다.
 
 v0.15에서는 ‘수학적 원리’의 말을 다듬었다. 화면 투영 절은 코트 좌표가 화면 어디에 어떤 크기로 놓이는지 풀어 썼고, 특수기술이 언제 꺼지고 언제 남는지도 특수기술 말로 다시 적었다. 식과 규칙은 그대로다.
 
@@ -18,7 +20,7 @@ v0.12에서는 ‘수학적 원리’를 처음부터 다시 맞춰 봤다. 스�
 
 v0.11에서는 포동이 얼굴을 시리즈 머리글 아이콘처럼 둥글게 다듬고 귀를 흰색으로 맞췄다. 까만 눈과 코, 작은 입을 넣었고 키는 꽥꽥만큼 작다. 몸과 동작은 그대로이며, 쓰러진 자세의 머리에 생기던 줄무늬도 고쳤다.
 
-관중석에서는 작은 웅성거림이 들리고, 득점에는 박수, 긴 랠리와 스매시에는 환호가 이어진다. 라켓이 부러지거나 게임을 내주면 항의성 소음도 들린다. 모두 녹음 없이 합성한 소리다. 머리글 소리 단추나 M으로 함께 끌 수 있고, 메뉴를 열거나 다른 탭으로 이동하면 관객 소리도 멈춘다.
+관중석에서는 작은 웅성거림이 들리고, 득점에는 박수, 긴 랠리와 스매시에는 환호가 이어진다. 라켓이 부러지거나 게임을 내주면 항의성 소음도 들린다. 모두 녹음 없이 합성한 소리다. 머리글 소리 버튼이나 M으로 함께 끌 수 있고, 메뉴를 열거나 다른 탭으로 이동하면 관객 소리도 멈춘다.
 
 v0.10에서는 상대가 경기마다 바뀐다. 내 선수를 뺀 여섯 명 가운데 무작위로 정해지므로 같은 선수끼리는 만나지 않는다. 동현의 뒤통수는 검은 점을 줄인 부드러운 회색으로 바꿨다. 화면을 두 배 해상도로 그려 슈슈를 동현파 원본 도트 그대로(1:1) 보여 주고, 다른 여섯 선수는 크기와 모양을 그대로 둔 채 도트 사이 틈만 없앴다.
 
@@ -30,7 +32,7 @@ v0.08은 머리 중심의 둥근 캐릭터를 그렸다. 동현은 흰 머리 �
 
 v0.07에서는 메뉴에 **왜 ‘Open’일까?**와 **수학적 원리**를 더했다. 앞의 것은 아마추어의 어원, 프로의 메이저 배제, 1968년 오픈 에라와 상금, 골프 디 오픈과의 비교를 출처와 함께 싣는다. 뒤의 것은 120 Hz 고정 틱, 가상 Z축 포물선과 그림자, 목표점·비행시간으로 푸는 타격 속도, 네트·바운드 사건 시각, 코트별 반발, 서브 타점 품질, 타격 상태 머신, 동현AI™ 예측, 고정 화면 투영을 엔진 코드의 식 그대로 설명한다. 경기 규칙·물리·저장 형식은 바꾸지 않았다.
 
-v0.06에서는 코트를 세로로 조금 길게 하고 선수의 몸·머리 폭을 약 10% 줄였다. 공은 상대 코트로 갈수록 작아지고 바닥에 닿을 때도 더 작아진다. 높이 올라가면 커지는 표현은 그대로다. 전체 화면 단추는 코트·키 안내와 간격을 두었고 좁은 전체 화면의 코트 비율을 바로잡았다. 카메라는 고정되어 있고 타격·점수·특수기술·저장 규칙은 v0.05와 같다.
+v0.06에서는 코트를 세로로 조금 길게 하고 선수의 몸·머리 폭을 약 10% 줄였다. 공은 상대 코트로 갈수록 작아지고 바닥에 닿을 때도 더 작아진다. 높이 올라가면 커지는 표현은 그대로다. 전체 화면 버튼은 코트·키 안내와 간격을 두었고 좁은 전체 화면의 코트 비율을 바로잡았다. 카메라는 고정되어 있고 타격·점수·특수기술·저장 규칙은 v0.05와 같다.
 
 경기 중 Enter 메뉴에서 브라우저 칸 3개나 `.dhsave` 파일로 저장하고 불러온다. 예제 81개는 통상(01–36) · 프로(37–72) · 초보(73–81) 순서다. 지속형 기술은 랠리가 끝날 때까지 남고, 필승형 네 기술은 성공할 때까지 다음 랠리에도 준비가 남는다. 액슬로즈는 라켓을 두 번 내리쳐 부수고 지금 게임만 내준다. 기술 칸에는 준비됨·발동 중·유지 조건이 표시된다.
 
@@ -53,7 +55,7 @@ v0.03에서는 특수기술을 쓸 때 코트 위에 선수·기술명·준비/�
 | M | 소리 전환 |
 | Ctrl+Enter | 코드로 새 경기 시작, 진행 중이면 확인 |
 
-메뉴에서는 ↑↓로 고르고 Enter·X로 선택, Z·Esc로 뒤로 간다. 게임패드는 십자키·왼 스틱 위아래, 오른쪽 단추·Start 선택, 아래 단추 뒤로다.
+메뉴에서는 ↑↓로 고르고 Enter·X로 선택, Z·Esc로 뒤로 간다. 게임패드는 십자키·왼 스틱 위아래, 오른쪽 버튼·Start 선택, 아래 버튼 뒤로다.
 
 GB A는 X, GB B는 Z다. X는 가로로 미는 스트로크, Z는 아래에서 위로 띄우는 로브로 자세·궤적을 구별한다. 라켓 타원의 긴 축은 손잡이와 이어지고, 회전 중 면 너비도 달라진다.
 
