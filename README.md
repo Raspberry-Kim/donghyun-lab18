@@ -6,7 +6,7 @@
 
 [바로 하기](https://raspberry-kim.github.io/donghyun-lab18/) · [GitHub](https://github.com/Raspberry-Kim/donghyun-lab18)
 
-모든 판을 묶는 DOI는 [`10.5281/zenodo.24133576`](https://doi.org/10.5281/zenodo.24133576)이다. 이번 v0.15의 Zenodo 보관본은 이 DOI의 가장 최근 판이다. [v0.15 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.15)에서 바뀐 점을 볼 수 있다. 앞선 v0.14의 [Zenodo 보관본](https://zenodo.org/records/24184356)은 DOI `10.5281/zenodo.24184356`로, v0.13의 [Zenodo 보관본](https://zenodo.org/records/24183790)은 DOI `10.5281/zenodo.24183790`로, v0.12의 [Zenodo 보관본](https://zenodo.org/records/24159947)은 DOI `10.5281/zenodo.24159947`로, v0.11의 [Zenodo 보관본](https://zenodo.org/records/24157838)은 DOI `10.5281/zenodo.24157838`로, v0.10의 [Zenodo 보관본](https://zenodo.org/records/24152944)은 DOI `10.5281/zenodo.24152944`로 남아 있다.
+모든 판을 묶는 DOI는 [`10.5281/zenodo.24133576`](https://doi.org/10.5281/zenodo.24133576)이다. 이번 v0.15의 [Zenodo 보관본](https://zenodo.org/records/24221442)은 DOI [`10.5281/zenodo.24221442`](https://doi.org/10.5281/zenodo.24221442)이고, 보관본 ZIP은 v0.15 태그와 같은 내용이다. [v0.15 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.15)에서 바뀐 점을 볼 수 있다. 앞선 v0.14의 [Zenodo 보관본](https://zenodo.org/records/24184356)은 DOI `10.5281/zenodo.24184356`로, v0.13의 [Zenodo 보관본](https://zenodo.org/records/24183790)은 DOI `10.5281/zenodo.24183790`로, v0.12의 [Zenodo 보관본](https://zenodo.org/records/24159947)은 DOI `10.5281/zenodo.24159947`로, v0.11의 [Zenodo 보관본](https://zenodo.org/records/24157838)은 DOI `10.5281/zenodo.24157838`로, v0.10의 [Zenodo 보관본](https://zenodo.org/records/24152944)은 DOI `10.5281/zenodo.24152944`로 남아 있다.
 
 v0.15에서는 ‘수학적 원리’의 말을 다듬었다. 화면 투영 절은 코트 좌표가 화면 어디에 어떤 크기로 놓이는지 풀어 썼고, 특수기술이 언제 꺼지고 언제 남는지도 특수기술 말로 다시 적었다. 식과 규칙은 그대로다.
 
