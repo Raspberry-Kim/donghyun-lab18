@@ -5,6 +5,8 @@
 - 단위 검사: core40·skill-rules16·skill-cues18·mungchi10·motion10·round7·serve-timing6·racket-input11·rally-skills13·new-skills13 통과. 일반 자동 진행 108설정·1,296포인트·4,320리턴, 리턴 없는 설정 0.
 - Chromium(dist): 예제270·레이아웃/전체화면40·저장20·가상 패드7·관객/그림18·전체 기술18·뭉치 S/A 6흐름 통과. 선수 카드 새 설명·머리 판 v0.19 확인, pageerror 0.
 - 미확인: v0.18과 같음(실물 게임패드·Safari/Firefox·실제 음향 청취·사람의 장시간 균형 평가).
+- 공개 후: [v0.19 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.19) `d76e4bc`, [Pages 작업](https://github.com/Raspberry-Kim/donghyun-lab18/actions/runs/43666393327) 성공. 공개 HTML SHA-256 `3c36a2c350c4d2c0d4b190ba2429857f04abb23ad719f250d08a71d5d50e285f` = dist. 시리즈 19곳 머리·바닥 판 표시 확인(동현테 v0.19, 1280·390px).
+- 보관: [Zenodo 24237531](https://zenodo.org/records/24237531), DOI `10.5281/zenodo.24237531`. ZIP MD5 `9acce6b7a76b69c8bbdefb88e2ce3b28`. git archive v0.19와 파일 차이 0, ROM·에뮬레이터 상태 확장자 파일 0. 기존 태그 변경 0. v0.18 릴리스 노트는 본문만 고침. 본 공개 결과 문단은 태그 뒤 문서 기록임.
 
 ## v0.18 · 2026-11-15 · 뭉치 새 기술
 - 개발 중 발견·수정: 네트 평면에서 자동 리턴한 공의 crossed 상태, 도주 경로의 한 대각선 방향 누락. S 중 수동 서브·타격·서브 조향 입력 차단.
