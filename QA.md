@@ -9,6 +9,8 @@
 - 화면: 라켓을 올린 뱀춤의 좌우 포즈, 반복 내리치기, 상대 팔·겁먹은 얼굴·버린 라켓 확인. 기록된 pageerror 0. 첨부 GIF·프레임은 비공개 참고만 사용.
 - 보존: 다른 선수 능력·코트·일반 타격·저장 외부 형식. 옛 라켓 파손 저장의 이미 기록된 점수와 남은 연출 복원 검사.
 - 미확인: 실물 게임패드·휴대폰 외부 키보드·Safari/Firefox·실제 음향 청취·사람의 장시간 균형 평가. 모바일 검사는 Chromium 화면 너비 검사임.
+- 공개 후: [v0.18 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.18) `6a63d97`, [Pages 작업](https://github.com/Raspberry-Kim/donghyun-lab18/actions/runs/43664843098) 성공. 공개 HTML SHA-256 `e74b6fdb2ef3481035200671ed9ef469ff00ad523ca84155ff682d503e060c8e` = dist. 공개판 mungchi-ui 6흐름 재통과, 새 미리보기 컨텍스트 S/A·득점·pageerror 0 확인.
+- 보관: [Zenodo 24237360](https://zenodo.org/records/24237360), DOI `10.5281/zenodo.24237360`. ZIP MD5 `e83eb63b1a89310f4fd5c0d978018731` = 공개 체크섬. git archive v0.18과 파일 차이 0, ROM·에뮬레이터 상태 확장자 파일 0. 기존 태그 변경 0. 본 공개 결과 문단은 태그 뒤 문서 기록임.
 
 2026-11-11 검사 기록. 아래의 기존 미리보기 검사는 당시의 기록이며, 공개 준비 검사는 별도로 구별한다. 원작과 물리 수치가 같은 완전 이식으로 판정하지 않았다.
 
