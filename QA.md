@@ -5,6 +5,8 @@
 - 단위 검사: core40·skill-rules16·skill-cues18·mungchi10·motion10·round7·serve-timing6·racket-input11·rally-skills13·new-skills13 통과. 일반 자동 진행 108설정·1,296포인트·4,320리턴, 리턴 없는 설정 0.
 - Chromium(dist): 예제270·레이아웃/전체화면40·저장20·가상 패드7·관객/그림18·전체 기술18·뭉치 S/A 6흐름 통과. 머리·바닥 판 v0.20, pageerror 0.
 - 미확인: v0.19와 같음(실물 게임패드·Safari/Firefox·실제 음향 청취·사람의 장시간 균형 평가).
+- 공개 후: [v0.20 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.20) `e2a9cbf`, [Pages 작업](https://github.com/Raspberry-Kim/donghyun-lab18/actions/runs/43703465983) 성공. 공개 HTML SHA-256 `a867fcf90f69d8c023f9d3284422d628d7dd1e04e34c61b532106883d27d7f3a` = dist.
+- 보관: [Zenodo 24244099](https://zenodo.org/records/24244099), DOI `10.5281/zenodo.24244099`. git archive v0.20과 파일 차이 0, ROM·에뮬레이터 상태 확장자 파일 0. 기존 태그 변경 0. 본 공개 결과 문단은 태그 뒤 문서 기록임.
 
 ## v0.19 · 2026-11-15 · 커트코베인 설명 정리
 - 누락 점검: src·README·FLOWS·CREDITS·시리즈 기록에서 즉시 승리·게임 내주기·두 번 내리치기·‘내 한 포인트’ 표현 검색. 고친 곳은 선수 카드 설명, 기술 표지 보조 문구, 수학적 원리 9절, README 관중 소리·커트코베인 문단. 옛 저장 복원용 win/lose 표지·concede 처리와 동현랭 오겡끼데스까는 의도적으로 유지.
