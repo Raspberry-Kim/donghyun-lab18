@@ -1,5 +1,5 @@
 const assert=require('assert/strict'),E=require('../src/engine');
-const kinds=[['fire','comet'],['win','lose'],['wind','slow'],['drop','dance'],['miss','fall'],['vanish','serveVanish'],['long','predict'],['flood','wheel'],['hearts','drunk']];
+const kinds=[['fire','comet'],['snake','rage'],['wind','slow'],['drop','dance'],['miss','fall'],['vanish','serveVanish'],['long','predict'],['flood','wheel'],['hearts','drunk']];
 let checks=0;
 for(let player=0;player<9;player++)for(let slot=0;slot<2;slot++){
  const m=new E.Match({player,level:0,court:0});m.energy=6;

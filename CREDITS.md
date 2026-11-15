@@ -5,6 +5,7 @@
 - **참조 자료**: 사용자가 제공한 Game Boy TENNIS 롬을 비공개 분석에 사용. 조작 설명은 [Nintendo Tennis 원작 설명서](https://www.thegameisafootarcade.com/wp-content/uploads/2017/04/Tennis-Game-Manual.pdf) 참조.
 - **캐릭터**: 시리즈의 이름·색·포동이 귀와 주둥이·꽥꽥·잔 다르크 모티프를 테니스용 도트로 단순화. 포동이 얼굴은 시리즈 머리글의 포동이 아이콘을 본떠 새로 찍은 도트(아이콘 이미지를 그대로 쓰지 않음). 슈슈는 동현파 `src/sprites.js`의 `GIRL_ROWS`와 `GIRL_COLORS`를 변경 없이 `src/shushu.js`로 가져와 축소·분절 동작에 사용. 이삐는 슈슈의 눈·볼·입 도트를 본떠 단발과 하늘빛 원피스로 새로 찍은 28×50칸 도트(`src/sprites.js`). 빽빽은 `src/shushu.js`의 슈슈 도트에서 머리 윗부분만 똥머리로 바꾸고 옷·신발 색을 바꾼 것. 선충 라이언과 구별한다.
 - **그래픽·오디오**: 원작 이미지·음원 추출물 없음. Canvas 도트와 Web Audio 합성음으로 작성. 관객 웅성거림·박수·환호·항의성 소음도 `src/crowd.js`에서 합성하며 사람 목소리 녹음·외부 음원은 사용하지 않음.
+- **뭉치 동작**: 제공된 뱀춤 GIF의 팔·상체·골반 움직임을 참고하여 제자리 춤을 코드로 작성. GIF·영상 프레임·음악은 저장소와 배포물에 포함하지 않음. 액슬로즈·커트코베인은 게임 내 기술 이름이며 실제 인물의 행동이나 공식 제휴를 나타내지 않음.
 - **코드**: MIT, `LICENSE` 참조.
 - **글꼴**: Pretendard, Black Han Sans, Nanum Gothic Coding. 동봉한 OFL 문서 참조.
 

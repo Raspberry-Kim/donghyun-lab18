@@ -24,8 +24,8 @@ export async function checkSpecials(browser,url,out='/tmp/te-specials'){
   assert.equal(await p.locator('#skill-cue-name').innerText(),state.skillCue.name);
   assert.equal(await p.locator('#skill-cue').isVisible(),true);
   await p.locator('#stage').screenshot({path:`${out}/${player}-${slot}.png`});
-  if(player===1&&slot===1){ // 액슬로즈: only this game is conceded, and the racket break plays to the end
-   assert.equal(state.phase,'point');assert.deepEqual(state.games,[0,1]);assert.deepEqual(state.sets,[0,0]);assert.equal(state.fx.type,'lose');assert.equal(state.winner,null);
+  if(player===1&&slot===1){ // 커트코베인: score stays unchanged until the whole animation ends
+   assert.equal(state.phase,'rage');assert.deepEqual(state.games,[0,0]);assert.deepEqual(state.sets,[0,0]);assert.equal(state.fx.type,'rage');assert.equal(state.winner,null);
    assert.ok((await p.locator('#skill2').innerText()).includes('라켓 파손'));
   }
   if(state.phase!=='match'){
@@ -36,7 +36,7 @@ export async function checkSpecials(browser,url,out='/tmp/te-specials'){
   }
   await p.evaluate(()=>advanceTime(2100));assert.equal(await p.locator('#skill-cue').isVisible(),false);
   if(state.phase==='match')assert.equal(await p.locator('#end-card').isVisible(),true);
-  if(player===1&&slot===1){await p.evaluate(()=>advanceTime(1500));const after=JSON.parse(await p.evaluate(()=>render_game_to_text()));assert.equal(after.fx,null);assert.ok(['ready','toss','rally'].includes(after.phase),after.phase);assert.equal(await p.locator('#end-card').isVisible(),false);}
+  if(player===1&&slot===1){await p.evaluate(()=>advanceTime(6300));const after=JSON.parse(await p.evaluate(()=>render_game_to_text()));assert.equal(after.fx,null);assert.equal(after.phase,'point');assert.deepEqual(after.score,['15','0']);assert.equal(await p.locator('#end-card').isVisible(),false);}
   assert.deepEqual(errors,[]);results.push({player,slot,name:state.skillCue.name,kind:state.skillCue.kind});
   await ctx.close();
  }

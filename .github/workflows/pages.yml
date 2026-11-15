@@ -25,6 +25,8 @@ jobs:
           node qa/skill-cues.cjs
           node qa/skill-rules.cjs
           node qa/rally-skills.cjs
+          node qa/new-skills.cjs
+          node qa/mungchi.cjs
           node build.cjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

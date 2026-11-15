@@ -49,27 +49,29 @@ test('더블 폴트·포인트가 끝나면 지속 효과만 풀리고 필승 �
 test('와루이지와나: 내 리턴은 정상 속도이고 효과는 유지된다',()=>{
  const m=rally(fresh(2));m.energy=6;m.skill(1);assert.equal(m.ball.slow,true);m.stroke(0);assert.equal(m.ball.by,0);assert.equal(m.ball.slow,false);assert.equal(m.effects.slow,true);
 });
-test('액슬로즈: 이번 게임만 내주고 경기는 이어진다',()=>{
+test('커트코베인: 연출 뒤 한 포인트를 얻고 경기는 이어진다',()=>{
  const m=fresh(1);m.energy=3;m.points=[3,0];m.games=[2,1];m.totalGames=3;const side=m.people[0].side,server=m.server;
  assert.equal(m.skill(1).ok,true);
- assert.equal(m.phase,'point');assert.equal(m.winner,null);assert.deepEqual(m.games,[2,2]);assert.deepEqual(m.points,[0,0]);assert.deepEqual(m.sets,[0,0]);
- assert.equal(m.energy,2,'에너지는 1칸만 쓰고 포인트 보상은 없다');assert.equal(m.server,1-server);assert.equal(m.totalGames,4);assert.equal(m.people[0].side,side,'짝수 게임 뒤에는 코트를 바꾸지 않는다');
- assert.equal(m.fx.type,'lose');assert.equal(m.skill(1).ok,false,'부수는 동안 다시 쓸 수 없다');
- const ev=[];for(let i=0;i<Math.round((E.BREAK_TIME+.4)*120);i++){m.step(E.DT,{});ev.push(...m.events.splice(0).map(e=>e.type));}
- assert.ok(ev.includes('smash')&&ev.includes('crack'));assert.equal(m.phase,'ready');assert.equal(m.fx,null);assert.equal(m.message.includes('서브')||m.message.includes('토스'),true);
+ assert.equal(m.phase,'rage');assert.equal(m.winner,null);assert.deepEqual(m.games,[2,1]);assert.deepEqual(m.points,[3,0]);assert.deepEqual(m.sets,[0,0]);
+ assert.equal(m.energy,2);assert.equal(m.server,server);assert.equal(m.totalGames,3);assert.equal(m.people[0].side,side);
+ assert.equal(m.fx.type,'rage');assert.equal(m.skill(1).ok,false,'부수는 동안 다시 쓸 수 없다');
+ const ev=[];for(let i=0;i<Math.round((E.RAGE_TIME+.1)*120);i++){m.step(E.DT,{});ev.push(...m.events.splice(0).map(e=>e.type));}
+ assert.equal(ev.filter(e=>e==='smash').length,11);assert.equal(ev.filter(e=>e==='crack').length,1);
+ assert.equal(m.phase,'point');assert.deepEqual(m.games,[3,1]);assert.deepEqual(m.points,[0,0]);assert.equal(m.energy,4);assert.equal(m.fx,null);
+ step(m,310);assert.ok(['ready','toss','rally'].includes(m.phase));
 });
-test('액슬로즈: 랠리 중에 써도 공·준비 기술이 정리된다',()=>{
- const m=rally(fresh(1));m.energy=1;m.skill(1);assert.equal(m.ball,null);assert.equal(m.phase,'point');assert.deepEqual(m.games,[0,1]);assert.equal(m.people[0].side,-1,'홀수 게임 뒤 코트 교대');
+test('커트코베인: 랠리 공은 멈추고 게임 대신 한 포인트',()=>{
+ const m=rally(fresh(1));m.energy=1;m.skill(1);assert.equal(m.ball,null);assert.equal(m.phase,'rage');step(m,1010);assert.deepEqual(m.games,[0,0]);assert.deepEqual(m.points,[1,0]);assert.equal(m.people[0].side,1);
 });
-test('액슬로즈: 상대의 세트·경기 포인트 게임이면 세트·경기를 내준다',()=>{
- const a=fresh(1);a.energy=1;a.games=[3,5];a.totalGames=8;a.skill(1);assert.deepEqual(a.sets,[0,1]);assert.deepEqual(a.history,[[3,6]]);assert.equal(a.phase,'point');assert.equal(a.winner,null);
- const b=fresh(1);b.energy=1;b.sets=[0,1];b.history=[[2,6]];b.games=[4,5];b.totalGames=17;b.skill(1);assert.equal(b.phase,'match');assert.equal(b.winner,1);assert.equal(b.fx.type,'lose');
+test('커트코베인: 세트·경기 포인트도 연출 뒤 정상 득점',()=>{
+ const a=fresh(1);a.energy=1;a.games=[5,3];a.points=[3,0];a.totalGames=8;a.skill(1);step(a,1010);assert.deepEqual(a.sets,[1,0]);assert.deepEqual(a.history,[[6,3]]);assert.equal(a.phase,'point');assert.equal(a.winner,null);
+ const b=fresh(1);b.energy=1;b.sets=[1,0];b.history=[[6,2]];b.games=[5,4];b.points=[3,0];b.totalGames=17;b.skill(1);assert.equal(b.phase,'rage');step(b,1010);assert.equal(b.phase,'match');assert.equal(b.winner,0);assert.equal(b.fx,null);
 });
-test('액슬로즈: 타이브레이크는 한 게임으로 내준다',()=>{
- const m=fresh(1);m.energy=1;m.games=[6,6];m.totalGames=12;m.tb=true;m.tbFirst=0;m.points=[3,2];m.skill(1);
- assert.deepEqual(m.history,[[6,7]]);assert.deepEqual(m.sets,[0,1]);assert.equal(m.tb,false);assert.equal(m.totalGames,13);assert.equal(m.server,1);assert.equal(m.people[0].side,-1);
+test('커트코베인: 타이브레이크도 한 포인트',()=>{
+ const m=fresh(1);m.energy=1;m.games=[6,6];m.totalGames=12;m.tb=true;m.tbFirst=0;m.points=[3,2];m.skill(1);step(m,1010);
+ assert.deepEqual(m.history,[]);assert.deepEqual(m.sets,[0,0]);assert.equal(m.tb,true);assert.equal(m.totalGames,12);assert.deepEqual(m.points,[4,2]);assert.equal(m.people[0].side,-1);
 });
-test('오겡끼데스까는 그대로 즉시 승리',()=>{const m=fresh(1);m.energy=6;m.skill(0);assert.equal(m.phase,'match');assert.equal(m.winner,0);});
+test('액슬로즈: 즉시 경기 승리가 아니라 제자리 자동 리턴',()=>{const m=fresh(1);m.energy=6;m.skill(0);assert.equal(m.phase,'ready');assert.equal(m.winner,null);assert.equal(m.effects.snake,true);assert.equal(m.energy,3);});
 test('저장 → 복원 뒤 같은 입력이면 틱마다 같은 경기',()=>{
  for(const [p,seed] of [[0,11],[2,22],[4,33],[6,44],[1,55]]){
   const m=fresh(p,1,p%4,seed);let k=seed;const rnd=()=>{k=(k*1103515245+12345)&0x7fffffff;return k/0x7fffffff;};
@@ -113,7 +115,7 @@ test('저장: 잘못된 자료는 거부한다',()=>{
  const extra=good();extra.step=1;extra.skill='x';extra.court={bounce:99};extra.winner=0;extra.paused=true;const r=E.Match.restore(extra);
  assert.equal(typeof r.step,'function');assert.equal(typeof r.skill,'function');assert.equal(r.court,E.COURTS[0]);assert.equal(r.winner,null);assert.equal(r.paused,false);
  assert.deepEqual(Object.keys(fresh(0).snapshot()).sort(),Object.keys(fresh(0)).filter(k=>!['level','court'].includes(k)).sort());
- const ended=fresh(1);ended.energy=6;ended.skill(0);assert.throws(()=>E.Match.restore(ended.snapshot()),/끝난 경기/);
+ const ended=fresh(1);ended.finish(0,'검사');assert.throws(()=>E.Match.restore(ended.snapshot()),/끝난 경기/);
 });
 test('무작위 기술 사용 240분: 포인트마다 효과가 비고 값이 유한하다',()=>{
  let points=0,uses=0,longest=0;
