@@ -1,5 +1,11 @@
 # 동현테 첫 구현·검사 기록
 
+## v0.20 · 2026-11-15 · 또치 둥근 머리·가장 작은 포동이
+- 그림 대조: 아홉 선수 앞·뒷모습을 v0.19 render.js와 나란히 그려 비교. 또치 머리 앞·뒤 둥근 윤곽 확인. 화면 키(라켓 제외) v0.19 → v0.20: 동현 28·뭉치 27·뚱띠 27·또치 27·포동이 26→20·꽥꽥 25·슈슈 22·이삐 25·빽빽 25. 포동이 최소.
+- 단위 검사: core40·skill-rules16·skill-cues18·mungchi10·motion10·round7·serve-timing6·racket-input11·rally-skills13·new-skills13 통과. 일반 자동 진행 108설정·1,296포인트·4,320리턴, 리턴 없는 설정 0.
+- Chromium(dist): 예제270·레이아웃/전체화면40·저장20·가상 패드7·관객/그림18·전체 기술18·뭉치 S/A 6흐름 통과. 머리·바닥 판 v0.20, pageerror 0.
+- 미확인: v0.19와 같음(실물 게임패드·Safari/Firefox·실제 음향 청취·사람의 장시간 균형 평가).
+
 ## v0.19 · 2026-11-15 · 커트코베인 설명 정리
 - 누락 점검: src·README·FLOWS·CREDITS·시리즈 기록에서 즉시 승리·게임 내주기·두 번 내리치기·‘내 한 포인트’ 표현 검색. 고친 곳은 선수 카드 설명, 기술 표지 보조 문구, 수학적 원리 9절, README 관중 소리·커트코베인 문단. 옛 저장 복원용 win/lose 표지·concede 처리와 동현랭 오겡끼데스까는 의도적으로 유지.
 - 단위 검사: core40·skill-rules16·skill-cues18·mungchi10·motion10·round7·serve-timing6·racket-input11·rally-skills13·new-skills13 통과. 일반 자동 진행 108설정·1,296포인트·4,320리턴, 리턴 없는 설정 0.
