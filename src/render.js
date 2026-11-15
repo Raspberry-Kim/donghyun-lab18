@@ -5,13 +5,17 @@ const heads=[
  ['...AAAAAAA...','..AAGGAAAAA..','.AAGAAhAAAAA.','hAAAAhhhAAAAh','hhssssssssshh','hsssssssssssh','ssskwssskwsss','ssskkssskksss','.sbssssssbs..','.ssssnsssss..','..sssssssss..','...ssnnnss...','....sssss....'],
  ['....hhhhh....','..hhhhhhhhh..','.hhHHhhhhhhh.','hhhhhhhhhhhhh','hhhsshhhsshhh','hhssssssssshh','hhskwssskwshh','hhskkssskkshh','hhsbsssssbshh','hhsssnnnssshh','.hhsssssshh..','...hssssh....'],
  ['...hhhhhhhh...','..hhhhhhhhhh..','.hhHHhhhhhhhh.','hhhhhhhhhhhhhh','hhsssssssssshh','hssskksskksssh','ssskwsssswksss','ssskksssskksss','ssssssssssssss','.sbsssnsssbs..','.sssssssssss..','..sssnnnnsss..','...ssssssss...'],
- ['....hhh....','...hhHhh...','..hHHhhhh..','.hhhhhhhhh.','.hhssssshh.','hhssssssssh','.skwssskws.','.skkssskks.','.sbsssssb..','..sssnnss..','..sssssss..','...sssss...'],
- ['....wwwwwww....','..wwwwwwwwwww..','.wwwwwwwwwwwww.','ccwwwwwwwwwwwcc','ccwkkwwwwwkkwcc','ccwkkwwwwwkkwcc','ccdwwwwwwwwwdcc','ccdwwwkkkwwwdcc','ccdwwwwmwwwwdcc','.cc.wwwwwww.cc.','.....wwwww.....'], // 포동이: series icon face (drooping ears, round eyes, button nose), 꽥꽥's height
+ ['....hhhhh....','..hhhHHhhhh..','.hhHHhhhhhhh.','.hhhhhhhhhhh.','hhhssssssshhh','hsssssssssssh','sskwssssskwss','sskkssssskkss','.sbsssssssbs.','.ssssnnnssss.','..sssssssss..','....sssss....'], // 또치: 13×12 round head (×0.9 body width ≈ 11.7×12, front and back)
+ ['..wwwwwww..','.wwwwwwwww.','ccwwwwwwwcc','ccwkwwwkwcc','ccwkwwwkwcc','ccdwwkwwdcc','.cdwwmwwdc.','..c.www.c..'], // 포동이: series icon face (drooping ears, round eyes, button nose) in 11×8, drawn at full pixel size on the ×0.82 body
  ['...hhhhhhh...','..hhHHhhhhh..','.hhhhhhhhhhh.','hhhsshhhsshhh','hhssssssssshh','hhskwssskwshh','hhskkssskkshh','hhsbsssssbshh','.hsssnnnsshh.','..hhssssshh..','....sssss....']
 ];
 // 동현의 거꾸로 쓴 야구모자: 앞에서는 조임 띠 구멍, 뒤(내 선수 뒷모습)에서는 챙이 목 쪽으로 나온다.
 const CAP_REAR=['...AAAAAAA...','..AAAAGAAAA..','.AAAAwwAAAAA.','hAAAAAAAAAAAh','FFFFFFFFFFFFF','.FFFFFFFFFFF.'];
 const SHORT=new Set([4,5]);
+// 포동이는 가장 작은 선수다. 몸(다리·몸통·팔·라켓)은 ×0.82로 그리고, 머리는 11×8 그림을 제 크기로 그린다(v0.19의 15×11보다 가로·세로 약 27% 작다).
+const PODONG=.82;
+const headTopOf=id=>id===4?-23:SHORT.has(id)?-25:-27; // 몸 좌표의 머리 위 끝(포동이는 ×0.82 몸 좌표에서 -23 ≈ 제 크기 -19)
+const PODONG_HEAD_TOP=-19; // 포동이 머리는 제 크기로 그리므로 몸통 위 끝(-15 × 0.82 ≈ -12)에 아래 줄이 걸치도록 -19에서 시작한다
 // 큰 그림 선수(슈슈·이삐·빽빽): sprites.js의 28칸 그림을 2배 캔버스에 1:1로 그린다. 불러올 때는 건드리지 않는다.
 const big=id=>(window.TeSprites?window.TeSprites.sprites:{})[id];
 const palette={h:'#342e2c',s:'#e3b797',k:'#292e2b',w:'#f5efdd',n:'#ab725c',y:'#e6be62',o:'#c67d43',g:'#a6be7b'};
@@ -193,6 +197,7 @@ class Renderer{
   g.save();g.translate(Math.round(pos.x),Math.round(pos.y));g.scale(size,size);g.imageSmoothingEnabled=false;
   this.rect(-4,0,9,1,'#172e3055');
   g.translate(0,v.lift);
+  if(id===4)g.scale(PODONG,PODONG);
   if(v.kind==='fall'){g.rotate(Math.PI/2);g.translate(-6,0);}
   if(opt.longArm&&v.kind==='idle'){ // 울트라롱팔: the racket arm visibly hangs long while the effect lasts
    const wob=this.reducedMotion?0:Math.round(Math.sin(time*6)*1.5);v.right=[11,-12+wob,20,-11-wob];v.racket=[29,-14-wob,'tilt'];
@@ -217,17 +222,19 @@ class Renderer{
   else {
    this.rect(-3,-15,6,8,ink);this.rect(-2,-14,4,6,id===4?'#f5efdd':Te.PLAYERS[id].color);
    this.rect(-3,-8,6,2,'#eee8d4');if(!rear)this.rect(-1,-14,2,1,'#eee8d4');
-   const headTop=SHORT.has(id)?-25:-27; // 포동이·꽥꽥 are the short ones
+   const headTop=id===4?PODONG_HEAD_TOP:headTopOf(id); // 포동이·꽥꽥 are the short ones
    const rows=heads[id].map((row,y)=>[...(id===0&&rear&&CAP_REAR[y]||row)].map((ch,x)=>{const c=rear&&ch!=='.'&&!(id===0&&CAP_REAR[y])?(id===4?(ch==='c'||ch==='d'?ch:'w'):y<row.length-3?'h':'s'):ch;return id===0&&c==='h'?saltPepper(x,y):c;}).join(''));
+   if(id===4){g.save();g.scale(1/(BODY_WIDTH*PODONG),1/PODONG);g.scale(BODY_WIDTH,1);} // 머리(윤곽 포함)만 제 크기 픽셀로
    if(id===0||id===4){
     const mask=rows.map(row=>row.replace(/[^.]/g,'q')),hp={q:headPalettes[id].q||'#9a9685'},hx=-Math.floor(rows[0].length/2);
     for(const [dx,dy] of [[-1,0],[1,0],[0,-1],[0,1]])this.pixels(mask,hx+dx,headTop+dy,hp);
    }
    this.pixels(rows,-Math.floor(rows[0].length/2),headTop,headPalettes[id]);
+   if(id===4)g.restore();
   }
   g.restore();
   if(v.kind==='panic'){ // wide eyes, open mouth and sweat, for every opponent sprite
-   const hy=S?-rows/2+6:(SHORT.has(id)?-25:-27)+6;
+   const hy=S?-rows/2+6:headTopOf(id)+(id===4?5:6);
    this.rect(-4,hy,3,3,'#fff8ec');this.rect(2,hy,3,3,'#fff8ec');
    this.rect(-3,hy+1,1,2,'#242e32');this.rect(3,hy+1,1,2,'#242e32');this.rect(-1,hy+5,3,3,'#392f35');
    this.rect(8,hy+1,1,3,'#a9e5f5');this.rect(-9,hy-1,1,2,'#a9e5f5');
@@ -249,7 +256,7 @@ class Renderer{
    g.beginPath();g.ellipse(0,0,minor,major,0,0,Math.PI*2);g.strokeStyle='#f5ecd2';g.lineWidth=1.25;g.stroke();g.restore();
   }
   g.restore();
-  if(role)this.rect(-1,(S?S.mark:SHORT.has(id)?-28:-30)+v.bob,2,1,role==='P'?'#f3d884':'#e9e9dc');
+  if(role)this.rect(-1,(S?S.mark:headTopOf(id)-3)+v.bob,2,1,role==='P'?'#f3d884':'#e9e9dc');
   g.restore();
  }
  umpire(time){

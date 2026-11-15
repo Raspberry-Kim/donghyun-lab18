@@ -1,4 +1,4 @@
-# 동현테 v0.19
+# 동현테 v0.20
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24133576.svg)](https://doi.org/10.5281/zenodo.24133576)
 
@@ -6,11 +6,13 @@
 
 [바로 하기](https://raspberry-kim.github.io/donghyun-lab18/) · [GitHub](https://github.com/Raspberry-Kim/donghyun-lab18)
 
-모든 판을 묶는 DOI는 [`10.5281/zenodo.24133576`](https://doi.org/10.5281/zenodo.24133576)이다. 이번 판은 [v0.19 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.19)이며 Zenodo 보관본은 위 개념 DOI의 최신 판에서 확인할 수 있다. 앞선 판은 [v0.16 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.16)·[Zenodo 보관본](https://zenodo.org/records/24226005)(DOI `10.5281/zenodo.24226005`), [v0.15 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.15)·[Zenodo 보관본](https://zenodo.org/records/24221442)(DOI `10.5281/zenodo.24221442`), [v0.14 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.14)·[Zenodo 보관본](https://zenodo.org/records/24184356)(DOI `10.5281/zenodo.24184356`), [v0.13 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.13)·[Zenodo 보관본](https://zenodo.org/records/24183790)(DOI `10.5281/zenodo.24183790`), [v0.12 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.12)·[Zenodo 보관본](https://zenodo.org/records/24159947)(DOI `10.5281/zenodo.24159947`), [v0.11 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.11)·[Zenodo 보관본](https://zenodo.org/records/24157838)(DOI `10.5281/zenodo.24157838`), [v0.10 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.10)·[Zenodo 보관본](https://zenodo.org/records/24152944)(DOI `10.5281/zenodo.24152944`)에 남아 있다.
+모든 판을 묶는 DOI는 [`10.5281/zenodo.24133576`](https://doi.org/10.5281/zenodo.24133576)이다. 이번 판은 [v0.20 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.20)이며 Zenodo 보관본은 위 개념 DOI의 최신 판에서 확인할 수 있다. 앞선 판은 [v0.16 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.16)·[Zenodo 보관본](https://zenodo.org/records/24226005)(DOI `10.5281/zenodo.24226005`), [v0.15 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.15)·[Zenodo 보관본](https://zenodo.org/records/24221442)(DOI `10.5281/zenodo.24221442`), [v0.14 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.14)·[Zenodo 보관본](https://zenodo.org/records/24184356)(DOI `10.5281/zenodo.24184356`), [v0.13 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.13)·[Zenodo 보관본](https://zenodo.org/records/24183790)(DOI `10.5281/zenodo.24183790`), [v0.12 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.12)·[Zenodo 보관본](https://zenodo.org/records/24159947)(DOI `10.5281/zenodo.24159947`), [v0.11 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.11)·[Zenodo 보관본](https://zenodo.org/records/24157838)(DOI `10.5281/zenodo.24157838`), [v0.10 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.10)·[Zenodo 보관본](https://zenodo.org/records/24152944)(DOI `10.5281/zenodo.24152944`)에 남아 있다.
 
-바로 앞 판은 [v0.18 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.18)·[Zenodo 보관본](https://zenodo.org/records/24237360)(DOI `10.5281/zenodo.24237360`)이다. v0.18은 v0.16에서 두 단계 올린 판이며 v0.17은 따로 공개하지 않았다.
+그 앞 판은 [v0.18 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.18)·[Zenodo 보관본](https://zenodo.org/records/24237360)(DOI `10.5281/zenodo.24237360`)이다. v0.18은 v0.16에서 두 단계 올린 판이며 v0.17은 따로 공개하지 않았다.
 
-v0.19의 [Zenodo 보관본](https://zenodo.org/records/24237531)은 DOI `10.5281/zenodo.24237531`이며, ZIP의 모든 파일을 v0.19 태그와 대조해 차이 없음을 확인했다. DOI와 공개 검사 결과는 태그 발행 뒤 문서에 기록했으며, 태그와 보관본 자체는 옮기거나 바꾸지 않았다.
+바로 앞 판 v0.19는 [v0.19 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.19)·[Zenodo 보관본](https://zenodo.org/records/24237531)(DOI `10.5281/zenodo.24237531`)이다. ZIP의 모든 파일을 v0.19 태그와 대조해 차이 없음을 확인했다.
+
+v0.20에서는 또치의 머리를 앞에서도 뒤에서도 동그랗게 그렸다. 가로가 좁아 보이던 11×12 그림을 13×12로 넓혀, 화면에서 가로·세로가 거의 같다. 포동이는 모든 선수 가운데 가장 작게 줄였다. 머리는 15×11에서 11×8 그림으로 가로·세로 약 27% 작아졌고, 몸·팔·라켓은 0.82배(18% 작게)로 그린다. 머리는 제 크기 픽셀로 그려 눈·코·귀가 흐려지지 않는다. 키는 20칸으로 슈슈(22칸)보다 작다. 그림만 바뀌었으며, 타격 범위·능력치·기술·저장 형식은 v0.19와 같다.
 
 v0.19에서는 커트코베인 설명을 ‘결국 뭉치가 포인트를 얻는다’로 고치고, 관중 소리 설명에서 지금은 없는 ‘게임을 내주는’ 동작을 뺐다. 기술의 동작·비용·점수 규칙은 v0.18과 같다.
 
