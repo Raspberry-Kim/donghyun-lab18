@@ -65,6 +65,8 @@ const skillSounds={
  fire:()=>{[220,330,494,740].forEach((f,i)=>tone(f,.09,'sawtooth',.022,i*.045));noise(.25,.03,.12,900);},
  comet:()=>[659,988,1319,1976].forEach((f,i)=>tone(f,.08,'sine',.035,i*.04)),
  win:()=>[523,659,784,1047,1319].forEach((f,i)=>tone(f,.2,'triangle',.04,i*.11)),
+ snake:()=>[330,392,330,440,392,330].forEach((f,i)=>tone(f,.10,'triangle',.03,i*.10)),
+ rage:()=>[147,110,82].forEach((f,i)=>tone(f,.18,'sawtooth',.03,i*.14)),
  lose:()=>[196,185,165].forEach((f,i)=>tone(f,.16,'sawtooth',.03,i*.1)),
  wind:()=>{noise(.5,.035,0,600);[392,330,392,330].forEach((f,i)=>tone(f,.09,'triangle',.02,i*.08));},
  slow:()=>[660,494,370,277].forEach((f,i)=>tone(f,.16,'sine',.035,i*.12)),
@@ -351,6 +353,8 @@ function draw(){
   const k=E.SKILL_KINDS[cfg.player][i];
   if(!active)return ['',`${sk[1]}칸`];
   if(match.hasPrepared(k))return ['armed','준비됨 · '+(k==='serveVanish'?'내 서브까지 유지':'성공할 때까지 유지')];
+  if(k==='snake'&&eff.snake)return ['on','뱀춤 · 득점까지 자동 리턴'];
+  if(k==='rage'&&fx?.type==='rage')return ['on','라켓 파손 · 상대 도주'];
   if(eff[k])return ['on',['ready','toss','point','fault'].includes(match.phase)?'준비됨 · 다음 랠리 끝까지':'발동 중 · 랠리 끝까지'];
   if(k==='lose'&&fx?.type==='lose')return ['on','라켓 파손'];
   return ['',`${sk[1]}칸 · ${match.energy>=sk[1]?'사용 가능':'충전 필요'}`];

@@ -3,7 +3,7 @@
 'use strict';
 const PLAYERS=[
  {name:'동현',atk:100,def:100,mov:100,color:'#b95648',skills:[['샤아아즈나블',1,'불꽃 리턴이 유효하게 바운드하면 포인트. 성공 전까지 다음 랠리에도 준비가 남는다.'],['샤아자쿠',1,'이번 랠리 동안 타격 입력마다 공으로 혜성 이동하여 리턴한다.']]},
- {name:'뭉치',atk:90,def:90,mov:90,color:'#aa6454',skills:[['오겡끼데스까',3,'경기를 끝내고 즉시 승리한다.'],['액슬로즈',1,'라켓을 두 번 내리쳐 부수고 이번 게임을 내준다. 경기는 이어진다.']]},
+ {name:'뭉치',atk:90,def:90,mov:90,color:'#aa6454',skills:[['액슬로즈',3,'라켓을 치켜들고 제자리 뱀춤. 네트를 넘은 공을 자동으로 어려운 구석에 빠르게 되돌린다. 상대가 놓쳐 득점할 때까지 계속한다.'],['커트코베인',1,'8.4초 동안 라켓을 반복해서 부순다. 상대는 라켓을 버리고 겁에 질려 뛰어다니며, 끝에 내 한 포인트가 된다.']]},
  {name:'뚱띠',atk:120,def:80,mov:110,color:'#aa7041',skills:[['사세보후우샤',1,'이번 랠리 동안 모든 리턴을 바람에 실어 네트 앞에 떨어뜨린다.'],['와루이지와나',1,'이번 랠리 동안 상대가 치는 모든 공의 시간이 느려진다. 미리 켜 둘 수 있다.']]},
  {name:'또치',atk:90,def:90,mov:120,color:'#458878',skills:[['구마몬기쥬츠',1,'상대 반대편 드롭이 유효하게 바운드하면 포인트. 성공 전까지 다음 랠리에도 남는다.'],['컴온스펜서',1,'상대가 이번 랠리 동안 공 반대편으로 춤추며 간다.']]},
  {name:'포동이',atk:80,def:80,mov:130,color:'#d5bb82',skills:[['멍멍',1,'이번 랠리 동안 상대의 모든 리턴이 헛스윙이 된다.'],['아잉뿌잉',1,'이번 랠리 동안 상대가 귀여움에 쓰러진다. 포인트가 끝나면 일어난다.']]},
@@ -19,8 +19,9 @@ const COURTS=[
  {name:'프랑스',surface:'클레이',bounce:.83,retain:.72,ground:'#b7795b',outer:'#405f55',line:'#f2dfc9',accent:'#d3b594',desc:'속도는 줄고 높이 튀는 공'}
 ];
 const LEVELS=[{name:'초보',speed:.88,react:.24,error:.65},{name:'통상',speed:1,react:.14,error:.32},{name:'프로',speed:1.13,react:.07,error:.13}];
-const SKILL_KINDS=[['fire','comet'],['win','lose'],['wind','slow'],['drop','dance'],['miss','fall'],['vanish','serveVanish'],['long','predict'],['flood','wheel'],['hearts','drunk']];
+const SKILL_KINDS=[['fire','comet'],['snake','rage'],['wind','slow'],['drop','dance'],['miss','fall'],['vanish','serveVanish'],['long','predict'],['flood','wheel'],['hearts','drunk']];
 const G=13,NET=.92,W=4.115,L=11.885,DT=1/120,LONG_REACH=3,BREAK_TIME=2.8;
+const RAGE_TIME=8.4,RAGE_CYCLE=.7;
 // 이삐·빽빽: all four are rally effects. FLOOD_MOVE scales the soaked opponent's speed; the wheel ride takes
 // WHEEL_TICKS fixed steps (0.2 s) and skids past the ball with probability WHEEL_MISS; five hearts fan out
 // HEART_SPREAD metres apart at the first bounce; a tipsy opponent walks at TIPSY_WALK of full speed with TIPSY_REACH of the reach.
@@ -84,7 +85,7 @@ class Match{
  // One-shot winners are consumed only by a successful legal landing, not by a missed chance.
  endRally(timer){
   this.faults=0;this.phase='point';this.timer=timer;this.ball=null;this.pendingServe=null;this.effects={};this.wheel=null;
-  for(const p of this.people)if(['fall','dance','whiff','drunk'].includes(p.pose))p.pose='idle';
+  for(const p of this.people)if(['fall','dance','whiff','drunk','snake','panic'].includes(p.pose))p.pose='idle';
  }
  winGame(w){
   this.games[w]++;this.points=[0,0];this.totalGames++;this.server=1-this.server;
@@ -93,24 +94,27 @@ class Match{
   if(this.games[w]>=6&&this.games[w]-this.games[1-w]>=2)this.winSet(w);
   else if(this.games[0]===6&&this.games[1]===6){this.tb=true;this.tbFirst=this.server;this.message='타이브레이크 · 7점, 두 점 차';}
  }
- // 액슬로즈: hand the current game (a tiebreak counts as one game) to the opponent. No point, no energy.
- concedeGame(name){
-  if(['point','fault','match'].includes(this.phase))return false;
-  const p=this.people[0];p.anim=null;p.pose='idle';p.walk=false;p.swing=0;p.cool=0;
-  this.endRally(BREAK_TIME+.2);
-  if(this.tb){
-   const n=this.points[0]+this.points[1];this.games[1]++;this.totalGames++;
-   if(n===0||n%6!==0)this.swapEnds();
-   this.server=1-this.tbFirst;this.winSet(1);
-  }else this.winGame(1);
-  if(this.phase!=='match'){this.timer=Math.max(this.timer,BREAK_TIME+.2);this.message=name+' · 이번 게임을 내줬다';}
-  this.event('concede',this.message);return true;
+ // 커트코베인: freeze the rally, not the animation. Award exactly one point only after the full performance.
+ startRage(){
+  const p=this.people[0],o=this.people[1];
+  this.phase='rage';this.ball=null;this.pendingServe=null;this.wheel=null;
+  for(const q of this.people){q.anim=null;q.swing=0;q.cool=0;q.walk=false;}
+  this.setFx({type:'rage',x:p.x,y:p.y,toX:o.x,toY:o.y},RAGE_TIME);
+ }
+ rageStep(dt){
+  const f=this.fx,o=this.people[1],age=f.duration-f.ttl;
+  // Fixed alternating destinations: unrelated to ball/AI targets, no random-number consumption.
+  const paths=[[-5.3,-2.2],[4.8,-12.8],[-5.5,-13.7],[5.4,-3.0],[0,-13.0],[-5.2,-4.5],[4.8,-10.7]];
+  const q=paths[Math.floor(age/.6)%paths.length],side=this.people[0].side;
+  this.move(1,clamp((q[0]*side-o.x)*4,-1,1),clamp((q[1]*side-o.y)*4,-1,1),dt*1.8);
+  o.pose='panic';this.people[0].walk=false;
  }
  finish(w,why){this.phase='match';this.winner=w;this.message=why+' · '+(w===0?'승리':'패배');this.ball=null;this.armed=null;this.pendingSkills={};this.effects={};this.wheel=null;this.event('match',this.message);}
  point(w,why){
   if(['point','match'].includes(this.phase))return;
   this.points[w]++;this.energy=clamp(this.energy+2,0,6);this.message=why+' · '+(w===0?'내':'상대')+' 포인트';this.event('point',this.message);
-  this.endRally(1.7);
+  const snake=this.effects.snake&&w!==0;
+  this.endRally(1.7);if(snake)this.effects.snake=true; // S ends with my point, not a timer or a missed serve.
   const endSet=this.tb?(this.points[w]>=7&&this.points[w]-this.points[1-w]>=2):false;
   if(this.tb){
    const n=this.points[0]+this.points[1];
@@ -185,6 +189,7 @@ class Match{
  }
  reach(i){return (1.13*PLAYERS[this.people[i].id].def/100+.20)*(i===1&&this.effects.tipsy?TIPSY_REACH:1);}
  stroke(i,kind='drive',aim={}){
+  if(this.phase==='rage'||(i===0&&this.effects.snake))return false;
   const p=this.people[i];if(p.cool>0||(i===0&&this.wheel))return false;
   p.swing=.19;p.cool=.30;p.pose='swing';p.kind=kind;p.aim={...aim};
   const hand=this.ball&&this.ball.x<p.x? -1:1;this.animate(i,kind==='lob'?'lobWindup':'windup',.3,hand);
@@ -203,6 +208,7 @@ class Match{
   return this.tryHit(i);
  }
  tryHit(i){
+  if(this.phase==='rage'||(i===0&&this.effects.snake))return false;
   const p=this.people[i],b=this.ball;
   if(p.swing<=0)return false;
   // The long-arm animation is used only beyond normal reach; the effect lasts for the rally.
@@ -234,19 +240,48 @@ class Match{
   this.message=isSmash?'스매시':isVolley?(kind==='lob'?'약한 발리':'강한 발리'):kind==='lob'?'로브 · 높게 띄워 치기':'스트로크 · 가로로 밀어 치기';return true;
  }
  skill(slot){
-  if(this.paused||this.phase==='match')return {ok:false,why:'경기를 계속할 때 쓰자.'};
+  if(this.paused||this.phase==='match'||this.phase==='rage')return {ok:false,why:'경기를 계속할 때 쓰자.'};
   const id=this.people[0].id,sk=PLAYERS[id].skills[slot];if(!sk)return {ok:false,why:'없는 기술'};
   if(this.energy<sk[1])return {ok:false,why:`기술 에너지 ${sk[1]}칸이 필요하다.`};
   let kind=SKILL_KINDS[id][slot];
   const arm=['fire','drop','vanish','serveVanish'].includes(kind);
   if(this.hasPrepared(kind)||this.effects[kind])return {ok:false,why:'이미 준비했거나 효과가 남아 있다.'};
-  if(['win','lose'].includes(kind)&&['point','fault'].includes(this.phase))return {ok:false,why:'다음 서브 준비 때 쓰자.'};
+  if(kind==='rage'&&['point','fault'].includes(this.phase))return {ok:false,why:'다음 서브 준비 때 쓰자.'};
   this.energy-=sk[1];this.event('skill',sk[0],kind);this.message=sk[0];this.cueSkill(kind,arm);
   if(arm){this.pendingSkills[kind]=true;if(!this.armed)this.armed=kind;}
-  else if(kind==='win'){this.setFx({type:'win'},3);this.finish(0,sk[0]);}
-  else if(kind==='lose'){this.concedeGame(sk[0]);this.setFx({type:'lose'},BREAK_TIME);}
+  else if(kind==='rage')this.startRage();
+  else if(kind==='snake'){this.effects.snake=true;const p=this.people[0];p.anim=null;p.swing=0;p.cool=0;p.walk=false;p.pose='snake';}
   else {this.effects[kind]=true;if(kind==='slow'&&this.phase==='rally'&&this.ball?.by===1)this.ball.slow=true;}
   return {ok:true,why:sk[0]};
+ }
+ // Four legal corners. Difficulty = opponent travel time minus the ball's flight time.
+ // Use the existing strongest volley-smash time (attack × .80 × .74, .5 s floor in launch), never a new speed stat.
+ snakeTarget(){
+  const b=this.ball,p=this.people[0],o=this.people[1],sp=4.9*PLAYERS[o.id].mov/100*this.level.speed*1.06;
+  let best=null;
+  for(const x of [-W+.22,W-.22])for(const depth of [1.7,L-.3]){
+   const y=-p.side*depth;
+   let t=Math.max(.78,Math.abs(b.y-y)/(12.5*PLAYERS[p.id].atk/100))*.80*.74;
+   // A low service bounce needs more arc to clear the net. Choose the fastest legal trajectory,
+   // not a lower/faster arc that would award the opponent a net error.
+   const a=-b.y/(y-b.y),z=clamp(b.z,.25,3.4);
+   if(a>0&&a<1)t=Math.max(t,this.level.speed*Math.sqrt(Math.max(0,2*(NET+.10-z*(1-a))/(G*a*(1-a)))));
+   const flight=Math.max(.5,t)/this.level.speed;
+   const score=(Math.hypot(x-o.x,y-o.y)-this.reach(1))/sp-flight;
+   if(!best||score>best.score)best={x,y,t,score};
+  }
+  return best;
+ }
+ snakeReturn(){
+  const b=this.ball;
+  if(!this.effects.snake||this.phase!=='rally'||!b||b.by!==1||!b.crossed||b.bounces>=2||(b.serve&&b.bounces===0))return false;
+  const q=this.snakeTarget();
+  this.launch(0,q.x,q.y,q.t,'smash');
+  if(Math.abs(this.ball.y)<1e-7)this.ball.crossed=true; // Returned exactly on the net plane, already on its way out.
+  this.people[0].pose='snake';this.people[0].anim=null;this.people[0].swing=0;
+  this.rally++;this.returns++;if(this.returns%2===0)this.energy=clamp(this.energy+1,0,6);
+  this.message='액슬로즈 · 제자리 뱀춤 · 자동 구석 리턴';this.event('snake',this.message);
+  return true;
  }
  predict(){
   const b=this.ball;if(!b||this.phase!=='rally')return null;
@@ -254,6 +289,7 @@ class Match{
   return {x:b.x+b.vx*t,y:b.y+b.vy*t,t};
  }
  move(i,dx,dy,dt){
+  if(i===0&&this.effects.snake)return;
   const p=this.people[i],sp=4.9*PLAYERS[p.id].mov/100*this.level.speed*(i?1.06:1)*(i===1&&this.effects.soaked?FLOOD_MOVE:1),len=Math.hypot(dx,dy)||1,ox=p.x,oy=p.y;
   if(len>1){dx/=len;dy/=len;}p.x=clamp(p.x+dx*sp*dt,-6.3,6.3);p.y=clamp(p.y+dy*sp*dt,p.side===1?.8:-14.2,p.side===1?14.2:-.8);
   const distance=Math.hypot(p.x-ox,p.y-oy);p.walk=distance>1e-6;
@@ -305,8 +341,13 @@ class Match{
    const f=this.fx,was=(f.duration||0)-f.ttl;f.ttl-=dt;
    // Sound cues for the two racket slams; presentation only.
    if(f.type==='lose'){const now=f.duration-f.ttl;if(was<.42&&now>=.42)this.event('smash','쾅');if(was<.92&&now>=.92)this.event('crack','라켓이 부러졌다');}
-   if(f.ttl<=0)this.fx=null;
+   if(f.type==='rage'){
+    const now=f.duration-f.ttl;
+    for(let n=0;n<12;n++){const hit=.42+n*RAGE_CYCLE;if(was<hit&&now>=hit)this.event(n===11?'crack':'smash',n===11?'라켓이 부러졌다':'쾅');}
+   }
+   if(f.ttl<=0){this.fx=null;if(this.phase==='rage'){this.point(0,'커트코베인 · 상대가 라켓을 버리고 도망쳤다');return;}}
   }
+  if(this.phase==='rage'){this.rageStep(dt);return;}
   for(const k of ['whiff'])if(this.effects[k]>0){
    this.effects[k]-=dt;
    if(this.effects[k]<=0){ // never leave a negative, truthy timer behind
@@ -318,6 +359,11 @@ class Match{
   if(this.phase==='match')return;
   if(this.phase==='point'||this.phase==='fault'){this.timer-=dt;if(this.timer<=0)this.setupPoint(this.phase==='fault');return;}
   const p=this.people[0];
+  if(this.effects.snake){
+   p.pose='snake';p.walk=false;p.anim=null;p.swing=0;
+   if(this.phase==='ready'&&this.server===0){this.toss();return;}
+   if(this.phase==='toss'&&this.server===0&&this.ball.vz<0&&this.ball.z<=2.35&&this.ball.z>1.5){this.serve('drive');return;}
+  }
   if(this.phase==='ready'&&this.server===0){
    const oldY=p.y;this.move(0,input.x||0,0,dt);p.y=oldY;
    const sign=((this.points[0]+this.points[1])%2?-1:1)*p.side;p.x=sign*clamp(Math.abs(p.x),.5,3.8);
@@ -332,8 +378,8 @@ class Match{
    return;
   }
   if(this.phase!=='rally'||!this.ball)return;
-  this.steerServe(dt,input.x||0);
-  this.tryHit(0);
+  this.steerServe(dt,this.effects.snake?0:input.x||0);
+  if(!this.snakeReturn())this.tryHit(0);
   this.physics(dt);
  }
  // One fixed step of the wheel ride: close an equal share of what is left, so it arrives exactly on the last step.
@@ -376,6 +422,7 @@ class Match{
     b.crossed=true;
     if(b.z<NET-.07){if(b.serve)this.fault('네트');else this.point(1-b.by,'네트');return;}
     if(b.z<NET+.07){b.netTouch=true;b.vx*=.72;b.vy*=.72;b.vz=Math.max(b.vz,1.1);this.event('net','네트 코드');}
+    if(b.by===1&&!b.serve&&this.snakeReturn())return;
     if(b.by===0&&b.flood&&!this.effects.soaked){ // 양재천범람: the wave goes over the net with the ball
      this.effects.soaked=true;this.setFx({type:'flood',x:this.people[1].x,y:this.people[1].y,end:true},1.4);this.cueSkill('flood');
      this.event('skill','양재천범람 · 상대가 물에 잠겼다','flood');
@@ -396,6 +443,7 @@ class Match{
       this.setFx({type:b.power==='fire'?'wall':b.power,x:b.x,y:b.y,end:true},1.6);this.point(0,b.power==='fire'?'샤아아즈나블':b.power==='drop'?'구마몬기쥬츠':'비밀이야');return;
      }
      b.vz=-b.vz*this.court.bounce;b.vx*=this.court.retain;b.vy*=this.court.retain;
+     if(b.by===1&&this.snakeReturn())return;
     }else {this.point(b.by,'두 번 바운드');return;}
    }
   }
@@ -411,21 +459,21 @@ class Match{
   if(!s||typeof s!=='object')bad('경기 정보가 없다.');
   const c=s.config;if(!c||!int(c.player,0,PLAYERS.length-1)||!int(c.level,0,2)||!int(c.court,0,3))bad('선수·난이도·경기장 정보가 맞지 않는다.');
   if(s.phase==='match')bad('이미 끝난 경기다.');
-  if(!['ready','toss','rally','point','fault'].includes(s.phase))bad('경기 진행 정보가 맞지 않는다.');
+  if(!['ready','toss','rally','point','fault','rage'].includes(s.phase))bad('경기 진행 정보가 맞지 않는다.');
   const pair=(a,max)=>Array.isArray(a)&&a.length===2&&a.every(v=>int(v,0,max));
   if(!pair(s.points,99)||!pair(s.games,7)||!pair(s.sets,1))bad('점수 정보가 맞지 않는다.');
   if(!Array.isArray(s.history)||s.history.length>2||!s.history.every(h=>pair(h,7)))bad('세트 기록이 맞지 않는다.');
   if(!int(s.server,0,1)||!int(s.tbFirst,0,1)||!int(s.energy,0,6)||!int(s.totalGames,0,40)||!int(s.faults,0,1)||typeof s.tb!=='boolean')bad('서브·에너지 정보가 맞지 않는다.');
   if(!int(s.seed,1,4294967295)||!num(s.time)||!int(s.tick,0,1e9)||!num(s.timer)||!num(s.aiClock)||!int(s.returns,0,1e7)||!int(s.rally,0,1e7)||!int(s.totalHits,0,1e7))bad('시계 정보가 맞지 않는다.');
   // Every nested value is checked against the shape the engine itself writes; unknown keys are refused.
-  const NULLS=['power','serveControl','serviceOriginX','anim','height'],kinds=SKILL_KINDS.flat();
+  const NULLS=['power','serveControl','serviceOriginX','anim','height'],kinds=[...SKILL_KINDS.flat(),'win','lose']; // old saved presentation cues
   const fits=(v,t,k)=>(v==null&&NULLS.includes(k))||(t==='n'?num(v):t==='b'?typeof v==='boolean':t==='s'?typeof v==='string'&&v.length<=60:Array.isArray(t)?t.includes(v)
    :!!v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).every(q=>Object.prototype.hasOwnProperty.call(t,q)&&fits(v[q],t[q],q)));
   const ANIM={name:['toss','serve','smash','windup','lobWindup','forehand','backhand','lob','volley','softVolley'],time:'n',duration:'n',hand:'n',height:'n',soft:'b'};
-  const PERSON={id:'n',x:'n',y:'n',side:'n',swing:'n',cool:'n',pose:['idle','run','toss','serve','swing','smash','volley','dance','fall','whiff','drunk'],kind:['drive','lob'],aim:{x:'n',y:'n'},walk:'b',moveX:'n',moveY:'n',gait:'n',anim:ANIM};
+  const PERSON={id:'n',x:'n',y:'n',side:'n',swing:'n',cool:'n',pose:['idle','run','toss','serve','swing','smash','volley','dance','fall','whiff','drunk','snake','panic'],kind:['drive','lob'],aim:{x:'n',y:'n'},walk:'b',moveX:'n',moveY:'n',gait:'n',anim:ANIM};
   const BALL={x:'n',y:'n',z:'n',vx:'n',vy:'n',vz:'n',by:'n',bounces:'n',age:'n',flightTime:'n',crossed:'b',netTouch:'b',serve:'b',slow:'b',flood:'b',hearts:{real:'n',pick:'n',swung:'b'},kind:['drive','lob','smash','volley','softVolley'],
    power:['fire','comet','wind','drop','vanish','serveVanish'],serveControl:{baseX:'n',remaining:'n',steer:'n'},serviceOriginX:'n',serviceTarget:{x:'n',y:'n',height:'n',quality:'n',startX:'n',steer:'n'}};
-  const FX={type:['wall','comet','fire','wind','drop','vanish','long','win','lose','flood','wheel','wheelMiss','hearts','drunk'],ttl:'n',duration:'n',x:'n',y:'n',toX:'n',toY:'n',toZ:'n',left:'n',end:'b'};
+  const FX={type:['wall','comet','fire','wind','drop','vanish','long','win','lose','rage','flood','wheel','wheelMiss','hearts','drunk'],ttl:'n',duration:'n',x:'n',y:'n',toX:'n',toY:'n',toZ:'n',left:'n',end:'b'};
   const CUE={kind:kinds,prepared:'b',player:'n',slot:'n',name:'s',ttl:'n',duration:'n'};
   if(!Array.isArray(s.people)||s.people.length!==2||!s.people.every(p=>fits(p,PERSON)))bad('선수 정보가 맞지 않는다.');
   if(c.opponent!==undefined&&(!int(c.opponent,0,PLAYERS.length-1)||c.opponent===c.player))bad('상대 선수 정보가 맞지 않는다.');
@@ -443,11 +491,13 @@ class Match{
   if(s.pendingSkills!==undefined&&(!s.pendingSkills||Array.isArray(s.pendingSkills)||typeof s.pendingSkills!=='object'||Object.entries(s.pendingSkills).some(([k,v])=>!['fire','drop','vanish','serveVanish'].includes(k)||!SKILL_KINDS[c.player].includes(k)||v!==true)))bad('준비한 기술 정보가 맞지 않는다.');
   const e=s.effects;if(!e||typeof e!=='object'||Array.isArray(e))bad('기술 효과 정보가 맞지 않는다.');
   for(const k of Object.keys(e)){
-   const v=e[k],ok=['dance','miss','predict','comet','wind','slow','flood','wheel','hearts','drunk','soaked','tipsy'].includes(k)?v===true:k==='long'?v===true||int(v,1,LONG_REACH):k==='fall'?v===true||(num(v)&&v>0&&v<=4):k==='whiff'?num(v)&&v>0&&v<=1.4:false;
+   const v=e[k],ok=['snake','dance','miss','predict','comet','wind','slow','flood','wheel','hearts','drunk','soaked','tipsy'].includes(k)?v===true:k==='long'?v===true||int(v,1,LONG_REACH):k==='fall'?v===true||(num(v)&&v>0&&v<=4):k==='whiff'?num(v)&&v>0&&v<=1.4:false;
    if(!ok)bad('기술 효과 정보가 맞지 않는다.');
   }
   if(!s.aiTarget||!num(s.aiTarget.x)||!num(s.aiTarget.y))bad('상대 정보가 맞지 않는다.');
   if(s.fx!=null&&!(fits(s.fx,FX)&&num(s.fx.ttl)&&num(s.fx.duration)))bad('연출 정보가 맞지 않는다.');
+  if(e.snake&&c.player!==1)bad('기술 효과 정보가 맞지 않는다.');
+  if((s.phase==='rage')!==(s.fx?.type==='rage')||(s.phase==='rage'&&(c.player!==1||s.fx.duration!==RAGE_TIME||s.fx.ttl<=0||s.fx.ttl>RAGE_TIME||!['x','y','toX','toY'].every(k=>num(s.fx[k])))))bad('기술 진행 정보가 맞지 않는다.');
   if(s.skillCue!=null&&!(fits(s.skillCue,CUE)&&num(s.skillCue.ttl)&&num(s.skillCue.duration)&&typeof s.skillCue.name==='string'))bad('연출 정보가 맞지 않는다.');
   if(s.pendingServe!=null&&!(['drive','lob'].includes(s.pendingServe.kind)&&s.pendingServe.aim&&num(s.pendingServe.aim.x)&&num(s.pendingServe.aim.y)&&Object.keys(s.pendingServe).length===2&&Object.keys(s.pendingServe.aim).length===2))bad('서브 정보가 맞지 않는다.');
   if(typeof s.message!=='string'||s.message.length>80)bad('경기 안내 정보가 맞지 않는다.');
@@ -469,12 +519,13 @@ class Match{
   if(this.paused)return;
   if(key==='skill1'||key==='skill2')return this.skill(key==='skill1'?0:1);
   if(key==='drive'||key==='lob'){
+   if(this.effects.snake||this.phase==='rage')return;
    if(this.phase==='ready'&&this.server===0){if(key==='drive')this.toss();}
    else if(this.phase==='toss'&&this.server===0)this.serve(key,aim);
    else if(this.phase==='rally')this.stroke(0,key,aim);
   }
  }
 }
-const api={Match,PLAYERS,COURTS,LEVELS,SKILL_KINDS,LONG_REACH,BREAK_TIME,FLOOD_MOVE,WHEEL_TICKS,WHEEL_MISS,WHEEL_SKID,HEARTS,HEART_SPREAD,TIPSY_WALK,TIPSY_REACH,heartOffset,parse,G,NET,W,L,DT,clamp};
+const api={Match,PLAYERS,COURTS,LEVELS,SKILL_KINDS,LONG_REACH,BREAK_TIME,RAGE_TIME,RAGE_CYCLE,FLOOD_MOVE,WHEEL_TICKS,WHEEL_MISS,WHEEL_SKID,HEARTS,HEART_SPREAD,TIPSY_WALK,TIPSY_REACH,heartOffset,parse,G,NET,W,L,DT,clamp};
 if(typeof module==='object'&&module.exports)module.exports=api;else root.Te=api;
 })(typeof window!=='undefined'?window:globalThis);

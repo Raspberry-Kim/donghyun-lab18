@@ -37,6 +37,8 @@ function ballVisual(ball){
  return {...project(ball.x,ball.y,ball.z),radius:(2.2+Math.min(3.6,Math.max(0,ball.z))*1.1)*depth};
 }
 const skillStyles={
+ snake:['#ffe49a','제자리 뱀춤 · 자동 리턴','상대가 놓쳐 득점할 때까지'],
+ rage:['#f4b6a0','라켓 파손 · 상대 도주','반복해서 부순 뒤 내 한 포인트'],
  fire:['#ffd080','불꽃 리턴','다음 리턴에 불꽃을 싣는다'],
  comet:['#ff6a5c','혜성 이동','이번 랠리 · 타격 입력마다 이동'],
  win:['#ffe49a','즉시 승리','뭉치의 특별한 승리'],
@@ -82,7 +84,7 @@ const gait=[
 ];
 /* Independent animation clock: hit windows/cooldowns do not decide what is visible. */
 function poseFrame(p,override){
- const a=p.anim,t=a?.time||0,kind=override||(['fall','dance','whiff','drunk'].includes(p.pose)?p.pose:a?.name)||'idle';
+ const a=p.anim,t=a?.time||0,kind=override||(['fall','dance','whiff','drunk','snake','panic'].includes(p.pose)?p.pose:a?.name)||'idle';
  const walk=p.walk&&kind!=='serve'&&kind!=='toss',f=Math.floor(p.gait||0)%6;
  const v={kind,frame:0,lean:0,lift:0,bob:walk&&[1,4].includes(f)?-1:0,
   left:[-4,-12,-4,-9],right:[4,-12,4,-10],racket:[10,-17,'tilt'],face:.85,
@@ -129,8 +131,24 @@ function poseFrame(p,override){
   v.right=[4*hand,-13,...wrists[n]];v.left=[-4,-13,-5,-15];v.face=kind==='windup'?[.22,.4,.9,.85][n]:[.95,.25,.18,.85][n];
   v.lean=n===3?0:hand*(n===0?1:2);v.bob=n===2?1:0;
   if(!walk&&n<3)v.feet=[-3,0,-2,-3,3,0,2,-4];
+ }else if(kind==='snake'){
+  // Arms overhead; shoulders and hips sway in opposite directions. Feet stay at the activation spot.
+  const u=t*5.4,s=Math.sin(u),h=Math.sin(u+1.2);
+  v.frame=Math.floor(t*12)%12;v.lean=Math.round(s*4);v.bob=Math.round(Math.cos(u*2));
+  v.left=[-7,-25,-5-Math.round(h*2),-33];v.right=[7,-25,6-Math.round(h*2),-33];
+  v.racket=[7-Math.round(h*3),-43,'upright'];v.face=.7;
+  v.feet=[-4,0,-3-Math.round(s*2),-4,4,0,3-Math.round(s*2),-4];
+ }else if(kind==='panic'){
+  v.frame=f;v.lean=Math.sign(p.moveX||1)*3;v.bob=f%2?-2:0;
+  v.left=[-6,-19,-9,-23+(f%2)*3];v.right=[6,-19,9,-23-(f%2)*3];v.feet=gait[f];v.racketState='none';
+ }else if(kind==='rage'){
+  const u=t%Te.RAGE_CYCLE,up=u<.30;
+  v.frame=Math.floor(t/Te.RAGE_CYCLE);v.lean=up?-2:3;v.bob=up?-1:2;
+  v.right=up?[5,-22,2,-30]:[6,-11,9,-6];v.left=up?[-4,-21,0,-29]:[-2,-11,6,-7];
+  v.racket=up?[2,-39,'upright']:[16,-1,'wide'];v.face=.9;
+  v.feet=[-4,0,-3,-2,4,0,3,-2];v.racketState=t<1.12?'whole':t<7.9?'bent':'stub';
  }else if(kind==='break'){
-  // 액슬로즈: two overhead slams; the second snaps the head off. t = seconds since the skill.
+  // Legacy saved racket-break presentation; its already-recorded score is left untouched.
   const up=t<.30||(t>=.42&&t<.80),down=(t>=.30&&t<.42)||(t>=.80&&t<1.25);
   if(up){const k=Math.min(1,(t<.30?t:t-.42)/.2);v.right=[5,-18,3,-22-2*k];v.left=[-3,-18,1,-22-2*k];v.racket=[2,-31-2*k,'upright'];v.face=.9;v.lean=-1;v.bob=-1;v.feet=[-3,0,-2,-3,3,0,2,-3];}
   else if(down){v.right=[6,-11,9,-6];v.left=[-2,-11,6,-7];v.racket=[16,-1,'wide'];v.face=.9;v.lean=2;v.bob=2;v.feet=[-4,0,-3,-2,4,0,3,-2];}
@@ -208,6 +226,12 @@ class Renderer{
    this.pixels(rows,-Math.floor(rows[0].length/2),headTop,headPalettes[id]);
   }
   g.restore();
+  if(v.kind==='panic'){ // wide eyes, open mouth and sweat, for every opponent sprite
+   const hy=S?-rows/2+6:(SHORT.has(id)?-25:-27)+6;
+   this.rect(-4,hy,3,3,'#fff8ec');this.rect(2,hy,3,3,'#fff8ec');
+   this.rect(-3,hy+1,1,2,'#242e32');this.rect(3,hy+1,1,2,'#242e32');this.rect(-1,hy+5,3,3,'#392f35');
+   this.rect(8,hy+1,1,3,'#a9e5f5');this.rect(-9,hy-1,1,2,'#a9e5f5');
+  }
   const racketState=opt.hideArm?'none':v.racketState||'whole';
   if(!opt.hideArm)limb(2*armSide,shoulder,...R);
   if(racketState==='stub'){ // snapped shaft: grip plus two jagged splinters
@@ -260,6 +284,8 @@ class Renderer{
   const T=m.time,still=this.reducedMotion,eff=m.effects||{},fxAge=m.fx?(still&&m.fx.type==='lose'?2.4:(m.fx.duration||m.fx.ttl)-m.fx.ttl):0;
   const person=p=>{
    const me=p===m.people[0];
+   if(me&&m.fx?.type==='rage')return this.player({...p,walk:false,anim:{time:still?.5:fxAge}},T,'P','rage',1,{rear:this.started});
+   if(me&&eff.snake)return this.player({...p,walk:false,anim:{time:still?0:T}},T,'P','snake',1,{rear:this.started});
    if(me&&m.fx?.type==='lose')return this.player({...p,walk:false,anim:{name:'break',time:fxAge,duration:m.fx.duration,hand:1}},T,'P','break',1,{rear:this.started});
    this.player(p,T,me?'P':'C',null,1,me?{longArm:eff.long>0,hideArm:m.fx?.type==='long',rear:this.started}:{});
   };
@@ -491,10 +517,17 @@ class Renderer{
   }else if(fx.type==='drunk'){ // 밥솥 김이 상대 머리 위로 피어오른다
    for(let j=0;j<6;j++){const ph=still?(j+1)/7:(age*.9+j/6)%1;g.globalAlpha=(1-ph)*fade;g.fillStyle='#fff8e0';g.beginPath();g.arc(at.x-8+j*3.2+Math.sin(ph*6+j)*3,at.y-28-ph*16,2+ph*2.5,0,Math.PI*2);g.fill();}
    g.globalAlpha=fade;this.glyph(['.x.x.x.','x.x.x..','.......','xxxxxxx','xxxxxxx','.xxxxx.','..xxx..'],at.x+(at.x>250?-17:17),at.y-20,c);
+  }else if(fx.type==='rage'){
+   // Reuse dust/crack drawing each slam, while the opponent's discarded racket stays at its launch spot.
+   this.breakRacket(a,age%Te.RAGE_CYCLE+.01,me.id===0?-28:-26);
+   if(age>=7.9)this.breakRacket(a,.92+age-7.9,me.id===0?-28:-26);
+   const d=project(fx.toX,fx.toY),u=Math.min(1,age/.6),x=d.x+u*20,y=d.y-Math.sin(u*Math.PI)*23;
+   g.save();g.translate(x,y);g.rotate(u*5);g.strokeStyle='#efe3ba';g.lineWidth=2;
+   g.beginPath();g.moveTo(0,0);g.lineTo(0,-8);g.stroke();g.beginPath();g.ellipse(0,-13,3.5,5,0,0,Math.PI*2);g.stroke();g.restore();
   }else if(fx.type==='lose')this.breakRacket(a,age,me.id===0?-28:-26);
   g.restore();
  }
- // 액슬로즈: raise, slam (the frame bends), raise, slam again — the head snaps off and stays on the court.
+ // Racket impact drawing, also retained for legacy saved animations.
  breakRacket(a,t,headY){
   const g=this.g,still=this.reducedMotion,dir=a.x>244?-1:1,ix=a.x+17,iy=a.y,red='#ef6a5c',wood='#cdb87b',cream='#f5ecd2';
   if(t<.30||(t>=.42&&t<.80)){ // anger mark and shaking lines while the racket is overhead
@@ -571,10 +604,11 @@ class Renderer{
   const ring=(x,y,r)=>{g.beginPath();g.arc(x,y,r,0,Math.PI*2);g.stroke();};
   g.fillStyle=s[0];
   switch(q.kind){
+   case 'snake':line([[-5,6],[-2,2],[2,0],[-2,-3],[1,-6],[5,-7]]);ring(5,-7,2);break;
    case 'fire':line([[-5,5],[-6,0],[-2,-5],[-1,-1],[3,-7],[5,0],[4,5],[-5,5]]);break;
    case 'comet':ring(3,2,3);line([[-7,-6],[0,0]]);line([[-7,-1],[-2,3]]);break;
    case 'win':line([[-6,-4],[-3,0],[0,-6],[3,0],[6,-4],[5,5],[-5,5],[-6,-4]]);break;
-   case 'lose':{ // whole racket until the second blow lands, then the same racket in two pieces
+   case 'rage':case 'lose':{ // racket emblem; the actual long performance has its own frame clock
     const broken=this.reducedMotion||age>=.92,k=broken?Math.min(1,this.reducedMotion?1:(age-.92)/.25):0;
     line([[-7,6],[-2-k,1+k]]);
     g.save();g.translate(k*1.5,-k*1.5);g.rotate(k*.35);g.beginPath();g.ellipse(3,-3,3,4.2,.8,0,Math.PI*2);g.stroke();line([[1,-5],[5,-1]]);line([[4,-6],[1,0]]);if(!broken)line([[-2,1],[1,-1]]);else line([[0,0],[1,-1]]);g.restore();
