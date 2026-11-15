@@ -1,4 +1,4 @@
-# 동현테 v0.18
+# 동현테 v0.19
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24133576.svg)](https://doi.org/10.5281/zenodo.24133576)
 
@@ -6,11 +6,11 @@
 
 [바로 하기](https://raspberry-kim.github.io/donghyun-lab18/) · [GitHub](https://github.com/Raspberry-Kim/donghyun-lab18)
 
-모든 판을 묶는 DOI는 [`10.5281/zenodo.24133576`](https://doi.org/10.5281/zenodo.24133576)이다. 이번 판은 [v0.18 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.18)이며 Zenodo 보관본은 위 개념 DOI의 최신 판에서 확인할 수 있다. v0.16에서 두 단계 올렸으며 v0.17은 따로 공개하지 않았다. 앞선 판은 [v0.15 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.15)·[Zenodo 보관본](https://zenodo.org/records/24221442)(DOI `10.5281/zenodo.24221442`), [v0.14 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.14)·[Zenodo 보관본](https://zenodo.org/records/24184356)(DOI `10.5281/zenodo.24184356`), [v0.13 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.13)·[Zenodo 보관본](https://zenodo.org/records/24183790)(DOI `10.5281/zenodo.24183790`), [v0.12 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.12)·[Zenodo 보관본](https://zenodo.org/records/24159947)(DOI `10.5281/zenodo.24159947`), [v0.11 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.11)·[Zenodo 보관본](https://zenodo.org/records/24157838)(DOI `10.5281/zenodo.24157838`), [v0.10 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.10)·[Zenodo 보관본](https://zenodo.org/records/24152944)(DOI `10.5281/zenodo.24152944`)에 남아 있다.
+모든 판을 묶는 DOI는 [`10.5281/zenodo.24133576`](https://doi.org/10.5281/zenodo.24133576)이다. 이번 판은 [v0.19 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.19)이며 Zenodo 보관본은 위 개념 DOI의 최신 판에서 확인할 수 있다. 앞선 판은 [v0.16 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.16)·[Zenodo 보관본](https://zenodo.org/records/24226005)(DOI `10.5281/zenodo.24226005`), [v0.15 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.15)·[Zenodo 보관본](https://zenodo.org/records/24221442)(DOI `10.5281/zenodo.24221442`), [v0.14 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.14)·[Zenodo 보관본](https://zenodo.org/records/24184356)(DOI `10.5281/zenodo.24184356`), [v0.13 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.13)·[Zenodo 보관본](https://zenodo.org/records/24183790)(DOI `10.5281/zenodo.24183790`), [v0.12 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.12)·[Zenodo 보관본](https://zenodo.org/records/24159947)(DOI `10.5281/zenodo.24159947`), [v0.11 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.11)·[Zenodo 보관본](https://zenodo.org/records/24157838)(DOI `10.5281/zenodo.24157838`), [v0.10 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.10)·[Zenodo 보관본](https://zenodo.org/records/24152944)(DOI `10.5281/zenodo.24152944`)에 남아 있다.
 
-바로 앞 판은 [v0.16 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.16)·[Zenodo 보관본](https://zenodo.org/records/24226005)(DOI `10.5281/zenodo.24226005`)이다.
+바로 앞 판은 [v0.18 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.18)·[Zenodo 보관본](https://zenodo.org/records/24237360)(DOI `10.5281/zenodo.24237360`)이다. v0.18은 v0.16에서 두 단계 올린 판이며 v0.17은 따로 공개하지 않았다.
 
-v0.18의 [Zenodo 보관본](https://zenodo.org/records/24237360)은 DOI `10.5281/zenodo.24237360`이며, ZIP의 모든 파일을 v0.18 태그와 대조해 차이 없음을 확인했다. DOI와 공개 검사 결과는 태그 발행 뒤 문서에 기록했으며, 태그와 보관본 자체는 옮기거나 바꾸지 않았다.
+v0.19에서는 커트코베인 설명을 ‘결국 뭉치가 포인트를 얻는다’로 고치고, 관중 소리 설명에서 지금은 없는 ‘게임을 내주는’ 동작을 뺐다. 기술의 동작·비용·점수 규칙은 v0.18과 같다.
 
 v0.18에서는 뭉치의 S를 새 액슬로즈, A를 커트코베인으로 바꿨다. 액슬로즈는 제자리 뱀춤과 자동 구석 리턴, 커트코베인은 긴 라켓 파손과 상대 도주 뒤 한 포인트 획득이다. 다른 선수·코트·일반 타격 규칙은 그대로다.
 
@@ -26,7 +26,7 @@ v0.12에서는 ‘수학적 원리’를 처음부터 다시 맞춰 봤다. 스�
 
 v0.11에서는 포동이 얼굴을 시리즈 머리글 아이콘처럼 둥글게 다듬고 귀를 흰색으로 맞췄다. 까만 눈과 코, 작은 입을 넣었고 키는 꽥꽥만큼 작다. 몸과 동작은 그대로이며, 쓰러진 자세의 머리에 생기던 줄무늬도 고쳤다.
 
-관중석에서는 작은 웅성거림이 들리고, 득점에는 박수, 긴 랠리와 스매시에는 환호가 이어진다. 라켓이 부러지거나 게임을 내주면 항의성 소음도 들린다. 모두 녹음 없이 합성한 소리다. 머리글 소리 버튼이나 M으로 함께 끌 수 있고, 메뉴를 열거나 다른 탭으로 이동하면 관객 소리도 멈춘다.
+관중석에서는 작은 웅성거림이 들리고, 득점에는 박수, 긴 랠리와 스매시에는 환호가 이어진다. 라켓이 부러지면 항의성 소음도 들린다. 모두 녹음 없이 합성한 소리다. 머리글 소리 버튼이나 M으로 함께 끌 수 있고, 메뉴를 열거나 다른 탭으로 이동하면 관객 소리도 멈춘다.
 
 v0.10에서는 상대가 경기마다 바뀐다. 내 선수를 뺀 여섯 명 가운데 무작위로 정해지므로 같은 선수끼리는 만나지 않는다. 동현의 뒤통수는 검은 점을 줄인 부드러운 회색으로 바꿨다. 화면을 두 배 해상도로 그려 슈슈를 동현파 원본 도트 그대로(1:1) 보여 주고, 다른 여섯 선수는 크기와 모양을 그대로 둔 채 도트 사이 틈만 없앴다.
 
@@ -87,7 +87,7 @@ GB A는 X, GB B는 Z다. X는 가로로 미는 스트로크, Z는 아래에서 �
 
 구석은 좌우 ±3.895 m와 상대 코트의 앞 1.7 m·뒤 11.585 m를 조합한 네 곳이다. 상대의 이동거리에서 닿는 거리를 빼고 이동속력으로 나눈 뒤 공의 비행시간을 뺀 값이 가장 큰 곳을 고른다. 실제 최적 전술을 보장하는 계산은 아니며 받기 어려움을 정한 게임용 기준이다. 공격력 90과 기존 강한 발리·스매시 시간 배수 0.80 × 0.74를 사용하고, 비행시간 하한은 0.5초/난이도 속도다. 낮은 공은 네트 위 0.10 m를 통과하는 데 필요한 만큼만 시간을 늘린다. 상대는 보통 이동·타격 판정으로 받을 수 있고, 첫 바운드만으로 강제 득점하지 않는다.
 
-**커트코베인(A)**은 8.4초 동안 라켓을 열두 번 내리쳐 부순다. 상대는 라켓을 버리고 겁먹은 얼굴로 사방으로 방향을 바꿔 뛰며, 공이나 경기 전술을 따라가지 않는다. 연출 중에는 점수가 바뀌지 않고, 끝나면 내 한 포인트가 된다. 타이브레이크도 한 포인트이며, 그 득점이 게임·세트·경기를 끝내면 평소 득점 규칙을 따른다. 연출 도중의 재사용은 막으며 일시정지·저장·불러오기가 된다.
+**커트코베인(A)**은 8.4초 동안 라켓을 열두 번 내리쳐 부순다. 상대는 라켓을 버리고 겁먹은 얼굴로 사방으로 방향을 바꿔 뛰며, 공이나 경기 전술을 따라가지 않는다. 연출 중에는 점수가 바뀌지 않고, 끝나면 결국 뭉치가 한 포인트를 얻는다. 타이브레이크도 한 포인트이며, 그 득점이 게임·세트·경기를 끝내면 평소 득점 규칙을 따른다. 연출 도중의 재사용은 막으며 일시정지·저장·불러오기가 된다.
 
 예제 제목은 모두 ‘번호 · 선수 · 난이도 · 코트’ 순서다. 예제 선택 칸 아래 설명에서 속도 배율, 상대 재판단 간격과 바운드 전 좌우 목표 오차, 수직 반발과 수평 속도 유지율을 확인하자. 수직 반발 계수는 바운드 직후 속도의 비율이지 높이의 비율은 아니다. 이 수치는 원작에서 추출한 값이 아닌 동현테의 자체 설정이다.
 
