@@ -7,6 +7,8 @@
 - 단위 검사: core40·skill-rules16·skill-cues18·mungchi10·motion10·round7·serve-timing6·racket-input11·rally-skills13·new-skills13 통과. 일반 자동 진행 리턴 없는 설정 0.
 - Chromium(dist): 예제270·레이아웃/전체화면53·저장20·가상 패드7·관객/그림18·전체 기술18·뭉치 S/A 6흐름·윈도우 동작26 통과. pageerror 0.
 - 미확인: 실제 맥의 ⌘ 키·실제 아이폰과 안드로이드 휴대폰의 가로 전체 화면(검사는 Chromium·WebKit·Firefox에 화면 크기를 준 것). 아이폰 Safari는 요소 전체 화면을 지원하지 않아 창을 채우는 방식으로 열리며 주소 표시줄 높이에 따라 코트가 조금 작아질 수 있음. 그 밖은 v0.21과 같음(실물 게임패드·실제 음향 청취·사람의 장시간 균형 평가).
+- 공개 후: [v0.22 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.22) `0af19b2`, [Pages 작업](https://github.com/Raspberry-Kim/donghyun-lab18/actions/runs/44029863909) 성공. 공개 HTML SHA-256 `add1951f396f98bbcfaf3f80c7872b3698b971f2f0f7e553155bdeb5268b4692` = dist. 공개판에서 run-key 9검사·레이아웃/전체화면 53검사 재통과.
+- 보관: [Zenodo 24299745](https://zenodo.org/records/24299745), DOI `10.5281/zenodo.24299745`. ZIP MD5 `1e358d7dc75bc50abdc36eb3f609dfd6`. git archive v0.22와 파일 차이 0(58개), ROM·에뮬레이터 상태 확장자 파일 0. 기존 태그 변경 0. 본 공개 결과 문단은 태그 뒤 문서 기록임.
 
 ## v0.21 · 2026-11-17 · 윈도우 동작 줄이기 상태의 특수기술 동작
 - 재현: v0.20을 Chromium에 윈도우 크롬 UA·동작 줄이기(prefers-reduced-motion: reduce)로 열고 열여덟 기술을 실제 S/A 키로 사용. 50ms 간격 40장면 가운데 다른 그림: 열넷 기술 6가지(통상 25~40가지). 액슬로즈 뱀춤·커트코베인 내리치기는 자세 시각이 1가지(통상 48·21가지). UA만 바꾼 조건은 통상과 같음. pageerror 0.
