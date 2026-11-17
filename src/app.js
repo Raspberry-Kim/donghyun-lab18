@@ -291,7 +291,7 @@ function command(key){
 }
 const actionKeys={KeyX:'drive',KeyZ:'lob',KeyS:'skill1',KeyA:'skill2',Enter:'pause'};
 window.addEventListener('keydown',e=>{
- if(e.ctrlKey&&e.code==='Enter'){e.preventDefault();run();return;}
+ if((e.ctrlKey||e.metaKey)&&(e.code==='Enter'||e.code==='NumpadEnter')){e.preventDefault();run();return;}   // 맥의 ⌘+Enter도 같은 출전
  if(isEdit(e.target))return;
  if(!$('#confirm-panel').hidden){
   if(e.code==='Escape')$('#confirm-no').click();

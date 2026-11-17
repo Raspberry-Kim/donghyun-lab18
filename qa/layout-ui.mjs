@@ -4,7 +4,7 @@ const require=createRequire(import.meta.url),{chromium}=require('playwright'),as
 const url=process.argv[2]||'http://127.0.0.1:3018/',out=process.argv[3]||'/tmp/te-layout';
 fs.mkdirSync(out,{recursive:true});
 const b=await chromium.launch({headless:true,channel:'chromium'});let n=0;
-const viewports=[[1440,900],[1280,800],[1024,768],[768,1024],[375,812],[320,740],[844,390],[1440,600]];
+const viewports=[[1440,900],[1280,800],[1024,768],[768,1024],[375,812],[320,740],[844,390],[734,343],[568,320],[1440,600]];
 try{
 for(const [width,height] of viewports){
  const p=await b.newPage({viewport:{width,height}}),errors=[];
@@ -30,6 +30,8 @@ for(const [width,height] of viewports){
  assert.ok(m.full);assert.ok(Math.abs(m.canvas.w/m.canvas.h-320/304)<.002,JSON.stringify(m));
  assert.ok(m.shell.y>=0&&m.skill.bottom<=m.vh+1,JSON.stringify(m));
  assert.ok(m.scoreOverflow<=1,JSON.stringify(m));
+ // v0.22: 휴대폰 가로 전체 화면은 코트가 왼쪽에 세로 가득, 점수판·기술 줄은 오른쪽.
+ if(width>height&&height<=520){assert.ok(m.canvas.h>=m.vh*.9,JSON.stringify(m));assert.ok(m.score.x>=m.canvas.right-1&&m.skill.x>=m.canvas.right-1&&m.skill.right<=m.vw+1&&m.close.y>=0&&m.close.bottom<=m.vh,JSON.stringify(m));n++;}
  assert.ok(m.close.x>=0&&m.close.right<=m.vw+1);n++;
  await p.screenshot({path:`${out}/${width}-${height}-full.png`});
  await p.click('#full-close');assert.ok(!(await metrics()).full);
