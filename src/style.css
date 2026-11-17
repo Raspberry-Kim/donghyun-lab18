@@ -405,6 +405,15 @@ kbd{display:inline-flex;align-items:center;justify-content:center;min-width:1.8e
  .stage.is-full{padding:6px}.stage.is-full .canvas-shell{width:min(100%,calc((100dvh - 174px)*320/304))}
 }
 @media(max-width:480px){.court-cards{grid-template-columns:1fr}}
+/* v0.22: 휴대폰 가로(낮고 넓은 화면)의 전체 화면. 코트를 왼쪽에 세로 가득 두고 점수판·상태·기술 줄을 오른쪽에 쌓는다. */
+@media(orientation:landscape) and (max-height:520px){
+ .stage.is-full{display:grid;grid-template-columns:auto minmax(0,360px);grid-template-rows:auto auto auto;column-gap:8px;row-gap:0;align-content:center;justify-content:center;align-items:stretch;padding:6px max(6px,env(safe-area-inset-right)) 6px max(6px,env(safe-area-inset-left))}
+ .stage.is-full .canvas-shell{grid-column:1;grid-row:1/span 3;align-self:center;width:min(calc((100dvh - 12px)*320/304),calc(100vw - 232px))}
+ .stage.is-full .scoreboard{grid-column:2;grid-row:1;width:100%;flex-wrap:wrap;row-gap:4px;padding:6px 8px;gap:10px}
+ .stage.is-full .match-status{grid-column:2;grid-row:2;width:100%}
+ .stage.is-full .skill-strip{grid-column:2;grid-row:3;width:100%;flex-wrap:wrap;row-gap:6px}
+ .stage.is-full #full-close{order:-1;flex:1 0 100%;margin-left:0;min-height:36px}
+}
 
 /* ---- v0.05: Enter 메뉴 · 저장 칸 · 기술 상태 ---- */
 .game-menu.center{left:50%;top:50%;transform:translate(-50%,-50%);min-width:220px;max-width:92%;z-index:5;color:var(--ink)}
