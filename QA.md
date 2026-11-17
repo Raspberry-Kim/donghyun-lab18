@@ -6,6 +6,8 @@
 - 단위 검사: core40·skill-rules16·skill-cues18·mungchi10·motion10·round7·serve-timing6·racket-input11·rally-skills13·new-skills13 통과. 일반 자동 진행 리턴 없는 설정 0.
 - Chromium(dist): 예제270·레이아웃/전체화면53·저장20·가상 패드7·관객/그림18·뭉치 S/A 6흐름·윈도우 동작26·run-key 9 통과. pageerror 0.
 - 미확인: 실제 맥·윈도우·아이폰·안드로이드 기기의 화면에서 보는 깜빡임(검사는 Chromium·WebKit·Firefox). 그 밖은 v0.22와 같음.
+- 공개 후: [v0.23 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.23) `b031d54`, [Pages 작업](https://github.com/Raspberry-Kim/donghyun-lab18/actions/runs/44114900855) 성공. 공개 HTML SHA-256 `05395f2ef9855f4bdd2844efefe6570dcba349f1292532f03e35cbfd0319488e` = dist. 공개판에서 note-blink 7묶음 재통과(Chromium).
+- 보관: [Zenodo 24316563](https://zenodo.org/records/24316563), DOI `10.5281/zenodo.24316563`. ZIP MD5 `0bdbeae55e153bafb424eb6ad5cced02`. git archive v0.23과 파일 차이 0(59개), ROM·에뮬레이터 상태 확장자 파일 0. 기존 태그 변경 0. 본 공개 결과 문단은 태그 뒤 문서 기록임.
 
 ## v0.22 · 2026-11-17 · ⌘+Enter 출전·휴대폰 가로 전체 화면
 - 재현: 공개 v0.21에서 편집기에 초점을 두고 ⌘+Enter(Meta+Enter)를 눌러도 출전 준비 상태 그대로. Ctrl+Enter는 출전. 화면 안내는 Ctrl/⌘+Enter. 휴대폰 가로 734×343의 전체 화면에서 코트 178×169.
