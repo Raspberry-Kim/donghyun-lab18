@@ -7,6 +7,8 @@
 - Chromium(dist): 예제270·레이아웃/전체화면40·저장20·가상 패드7·관객/그림18·전체 기술18·뭉치 S/A 6흐름 통과. pageerror 0.
 - 입력: 조작 키는 자판 위치(code)로 읽어 한글 입력 상태와 무관함을 코드로 확인.
 - 미확인: 실제 윈도우 PC의 크롬·엣지(검사는 Chromium에 윈도우 UA와 동작 줄이기 조건을 준 것). 그 밖은 v0.20과 같음(실물 게임패드·Safari/Firefox·실제 음향 청취·사람의 장시간 균형 평가).
+- 공개 후: [v0.21 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.21) `82321bd`, [Pages 작업](https://github.com/Raspberry-Kim/donghyun-lab18/actions/runs/44000986179) 성공. 공개 HTML SHA-256 `dc724ac246a7c1b6e9bf14a18108088869feff0bf1ea81dc251c175aae8dd265` = dist.
+- 보관: [Zenodo 24296294](https://zenodo.org/records/24296294), DOI `10.5281/zenodo.24296294`. ZIP MD5 `d5ff8757abab8111facc0ff73410d764`. git archive v0.21과 파일 차이 0, ROM·에뮬레이터 상태 확장자 파일 0. 기존 태그 변경 0. 본 공개 결과 문단은 태그 뒤 문서 기록임.
 
 ## v0.20 · 2026-11-15 · 또치 둥근 머리·가장 작은 포동이
 - 그림 대조: 아홉 선수 앞·뒷모습을 v0.19 render.js와 나란히 그려 비교. 또치 머리 앞·뒤 둥근 윤곽 확인. 화면 키(라켓 제외) v0.19 → v0.20: 동현 28·뭉치 27·뚱띠 27·또치 27·포동이 26→20·꽥꽥 25·슈슈 22·이삐 25·빽빽 25. 포동이 최소.
