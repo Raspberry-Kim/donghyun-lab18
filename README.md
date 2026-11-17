@@ -1,4 +1,4 @@
-# 동현테 v0.22
+# 동현테 v0.23
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24133576.svg)](https://doi.org/10.5281/zenodo.24133576)
 
@@ -6,7 +6,7 @@
 
 [바로 하기](https://raspberry-kim.github.io/donghyun-lab18/) · [GitHub](https://github.com/Raspberry-Kim/donghyun-lab18)
 
-모든 판을 묶는 DOI는 [`10.5281/zenodo.24133576`](https://doi.org/10.5281/zenodo.24133576)이다. 이번 판은 [v0.22 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.22)이며 Zenodo 보관본은 위 개념 DOI의 최신 판에서 확인할 수 있다. 앞선 판은 [v0.16 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.16)·[Zenodo 보관본](https://zenodo.org/records/24226005)(DOI `10.5281/zenodo.24226005`), [v0.15 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.15)·[Zenodo 보관본](https://zenodo.org/records/24221442)(DOI `10.5281/zenodo.24221442`), [v0.14 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.14)·[Zenodo 보관본](https://zenodo.org/records/24184356)(DOI `10.5281/zenodo.24184356`), [v0.13 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.13)·[Zenodo 보관본](https://zenodo.org/records/24183790)(DOI `10.5281/zenodo.24183790`), [v0.12 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.12)·[Zenodo 보관본](https://zenodo.org/records/24159947)(DOI `10.5281/zenodo.24159947`), [v0.11 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.11)·[Zenodo 보관본](https://zenodo.org/records/24157838)(DOI `10.5281/zenodo.24157838`), [v0.10 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.10)·[Zenodo 보관본](https://zenodo.org/records/24152944)(DOI `10.5281/zenodo.24152944`)에 남아 있다.
+모든 판을 묶는 DOI는 [`10.5281/zenodo.24133576`](https://doi.org/10.5281/zenodo.24133576)이다. 이번 판은 [v0.23 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.23)이며 Zenodo 보관본은 위 개념 DOI의 최신 판에서 확인할 수 있다. 앞선 판은 [v0.16 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.16)·[Zenodo 보관본](https://zenodo.org/records/24226005)(DOI `10.5281/zenodo.24226005`), [v0.15 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.15)·[Zenodo 보관본](https://zenodo.org/records/24221442)(DOI `10.5281/zenodo.24221442`), [v0.14 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.14)·[Zenodo 보관본](https://zenodo.org/records/24184356)(DOI `10.5281/zenodo.24184356`), [v0.13 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.13)·[Zenodo 보관본](https://zenodo.org/records/24183790)(DOI `10.5281/zenodo.24183790`), [v0.12 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.12)·[Zenodo 보관본](https://zenodo.org/records/24159947)(DOI `10.5281/zenodo.24159947`), [v0.11 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.11)·[Zenodo 보관본](https://zenodo.org/records/24157838)(DOI `10.5281/zenodo.24157838`), [v0.10 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.10)·[Zenodo 보관본](https://zenodo.org/records/24152944)(DOI `10.5281/zenodo.24152944`)에 남아 있다.
 
 그 앞 판은 [v0.18 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.18)·[Zenodo 보관본](https://zenodo.org/records/24237360)(DOI `10.5281/zenodo.24237360`)이다. v0.18은 v0.16에서 두 단계 올린 판이며 v0.17은 따로 공개하지 않았다.
 
@@ -14,9 +14,11 @@ v0.19는 [v0.19 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/relea
 
 v0.20은 [v0.20 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.20)·[Zenodo 보관본](https://zenodo.org/records/24244099)(DOI `10.5281/zenodo.24244099`)이다. ZIP의 모든 파일을 v0.20 태그와 대조해 차이 없음을 확인했다.
 
-바로 앞 판 v0.21은 [v0.21 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.21)·[Zenodo 보관본](https://zenodo.org/records/24296294)(DOI `10.5281/zenodo.24296294`)이다. ZIP의 모든 파일을 v0.21 태그와 대조해 차이 없음을 확인했다.
+v0.21은 [v0.21 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.21)·[Zenodo 보관본](https://zenodo.org/records/24296294)(DOI `10.5281/zenodo.24296294`)이다. ZIP의 모든 파일을 v0.21 태그와 대조해 차이 없음을 확인했다.
 
-v0.22의 [Zenodo 보관본](https://zenodo.org/records/24299745)은 DOI `10.5281/zenodo.24299745`이며, ZIP의 모든 파일을 v0.22 태그와 대조해 차이 없음을 확인했다. DOI와 공개 검사 결과는 태그 발행 뒤 문서에 기록했으며, 태그와 보관본 자체는 옮기거나 바꾸지 않았다.
+바로 앞 판 v0.22는 [v0.22 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.22)·[Zenodo 보관본](https://zenodo.org/records/24299745)(DOI `10.5281/zenodo.24299745`)이다. ZIP의 모든 파일을 v0.22 태그와 대조해 차이 없음을 확인했다.
+
+v0.23에서는 코트 위 ‘데스크톱 권장’ 안내 상자의 테두리를 빨간색 점멸로 바꿨다. 옅은 점선 1px이던 테두리가 빨간 실선 2px가 되어 1초에 한 번 깜빡인다(켜짐 0.5초·꺼짐 0.5초). 상자 크기와 아래 배치는 그대로다. 기기의 동작 줄이기 설정과 무관하게 깜빡이며, 주소 끝에 `?motion=reduce`를 붙이면 깜빡이지 않는 빨간 테두리로 보인다. 문구·규칙·능력치·기술·저장 형식은 v0.22와 같다.
 
 v0.22에서는 두 가지를 고쳤다. 맥에서 `⌘+Enter`를 눌러도 출전이 되지 않던 오류를 고쳐, `Ctrl+Enter`와 같게 동작한다. 화면의 안내에는 처음부터 두 키가 함께 적혀 있었다. 휴대폰을 가로로 눕힌 전체 화면에서는 코트를 왼쪽에 세로 가득 두고 점수판·상태·기술 줄을 오른쪽에 쌓는다. 734×343 화면에서 코트가 178×169에서 348×331로 커진다. 세로 화면과 데스크톱의 전체 화면은 그대로다. 규칙·능력치·기술·저장 형식은 v0.21과 같다. 터치 조작판은 여전히 없으며 조작은 키보드와 게임패드로 한다.
 
@@ -145,6 +147,7 @@ node qa/layout-ui.mjs
 node qa/mungchi-ui.mjs http://127.0.0.1:3118/
 node qa/windows-motion.mjs http://127.0.0.1:3118/
 node qa/run-key-ui.mjs http://127.0.0.1:3118/
+node qa/note-blink.cjs chromium http://127.0.0.1:3118/
 ```
 
 `src/engine.js`는 화면과 독립적인 120 Hz 엔진이다. `render.js`는 도트·코트, `app.js`는 동현랭·입력·메뉴·소리를 담당한다. `build.cjs`는 원본 실행기와 글꼴을 포함한 단일 HTML을 `dist`에 만든다.
