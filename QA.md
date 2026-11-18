@@ -6,6 +6,8 @@
 - 단위 검사: core40·skill-rules16·skill-cues18·mungchi10·motion10·round7·serve-timing6·racket-input11·rally-skills13·new-skills13 통과. 일반 자동 진행 리턴 없는 설정 0.
 - Chromium(dist): 예제270·레이아웃/전체화면53·저장20·가상 패드7·관객/그림18·뭉치 S/A 6흐름·윈도우 동작26·run-key 9 통과. pageerror 0.
 - 미확인: 실제 맥·윈도우·아이폰·안드로이드 기기의 화면에서 보는 색과 깜빡임(검사는 Chromium·WebKit·Firefox). 그 밖은 v0.23과 같음.
+- 공개 후: [v0.24 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.24) `4ff84a8`, [Pages 작업](https://github.com/Raspberry-Kim/donghyun-lab18/actions/runs/44219814464) 성공. 공개 HTML SHA-256 `ebe58b145fe3e98ada361af608cb1f14b6f6495850b7b5d6265229cc002a575b` = dist. 공개판에서 note-blink 8묶음 재통과(Chromium).
+- 보관: [Zenodo 24328441](https://zenodo.org/records/24328441), DOI `10.5281/zenodo.24328441`. ZIP MD5 `f05835ee4437e871f877ef827250ad30`. git archive v0.24와 파일 차이 0(59개), ROM·에뮬레이터 상태 확장자 파일 0. 기존 태그 변경 0. 본 공개 결과 문단은 태그 뒤 문서 기록임.
 
 ## v0.23 · 2026-11-18 · 안내 상자 빨간 테두리 점멸
 - 바꾼 것: 코트 위 ‘데스크톱 권장’ 안내 상자의 테두리. 옅은 점선 1px → 빨간 실선 2px, 1초 주기 점멸(켜짐 0.5초·꺼짐 0.5초). 안쪽 여백 10·14px → 9·13px로 상자 크기 1200×41.6(1280 화면)·358×80(390 화면) 그대로.
