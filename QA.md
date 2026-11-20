@@ -8,6 +8,8 @@
 - 단위 검사: core40·skill-rules16·skill-cues18·mungchi10·motion10·round7·serve-timing6·racket-input11·rally-skills13·new-skills13 통과.
 - Chromium(dist): 예제270·레이아웃/전체화면53·저장20·가상 패드7·뭉치 S/A 6흐름·윈도우 동작26·run-key 9·특수기술 표지18·안내 상자 8묶음 통과. pageerror 0.
 - 미확인: 실제 맥·윈도우·아이폰·안드로이드 기기의 스피커·이어폰으로 들은 소리. 검사는 브라우저에서 시작된 소리의 수와 종류를 센 것.
+- 공개 후: [v0.25 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.25) `61e3a38`, [Pages 작업](https://github.com/Raspberry-Kim/donghyun-lab18/actions/runs/44669781291) 성공. 공개 HTML SHA-256 `687f0b988ed039fb279fe0c12f771395b73e94e5cacb5435194a9c035f3c2888` = dist. 공개판에서 출전 뒤 5초 동안 시작된 소리 0(Chromium·WebKit), 바닥글 링크 20개·가로 넘침 0(1280·390 화면).
+- 보관: [Zenodo 24386207](https://zenodo.org/records/24386207), DOI `10.5281/zenodo.24386207`. ZIP MD5 `51294d0ef3699ac396c87e7647c1aff0`. git archive v0.25와 파일 차이 0(59개), ROM·에뮬레이터 상태 확장자 파일 0. 기존 태그 변경 0. 본 공개 결과 문단은 태그 뒤 문서 기록임.
 
 ## v0.24 · 2026-11-18 · 안내 상자 살구색 테두리·처음 열 번만 점멸
 - 바꾼 것: 코트 위 ‘데스크톱 권장’ 안내 상자의 테두리 색과 깜빡이는 횟수. 밝은 화면 #c8402f → #eba88a·어두운 화면 #f0705c → #a96a5b. 끝없는 점멸 → 페이지를 열 때 처음 열 번(10초)만 깜빡이고 켜진 채 머묾. 실선 2px·상자 크기 1200×41.6(1280 화면) 그대로.
