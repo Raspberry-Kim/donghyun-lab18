@@ -2,9 +2,9 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it using the metadata below."
 title: "Donghyunte (동현테): a fixed-view single-player tennis laboratory configured through Donghyun-lang"
 type: software
-version: "0.24"
+version: "0.25"
 doi: "10.5281/zenodo.24133576"
-date-released: "2026-11-18"
+date-released: "2026-11-20"
 authors:
   - family-names: Kim
     given-names: Dong Hyun
@@ -26,7 +26,10 @@ abstract: >-
   constants and hit rules of this independent implementation do not
   numerically match the original. In-app "Why Open?" and "Mathematical
   principles" pages explain the history of open tennis and the engine's
-  equations. Version 0.13 adds two players, Ippi and Ppaekppaek, with four
+  equations. Version 0.25 removes the looping crowd murmur and the background
+  melody that started as soon as a match began; the court is quiet when
+  nothing is happening, while applause, cheers and protests remain.
+  Version 0.13 adds two players, Ippi and Ppaekppaek, with four
   new rally-long abilities (a flood that slows the opponent, a front-wheel
   dash that can skid past the ball, five hearts of which one is the real
   ball, and a tipsy walk toward the net) and expands the examples to 81.

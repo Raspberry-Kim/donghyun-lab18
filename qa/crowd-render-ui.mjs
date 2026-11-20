@@ -11,6 +11,12 @@ await p.addInitScript(()=>{
  let api;Object.defineProperty(window,'TeCrowd',{configurable:true,get:()=>api,set(v){
   const Base=v.Crowd;v.Crowd=class extends Base{constructor(...args){super(...args);window.__crowd=this;}};api=v;
  }});
+ // 시작되는 소리 원천(오실레이터·버퍼)을 모두 적는다. 가만히 있을 때 나는 소리가 없는지 본다.
+ window.__snd=[];
+ for(const [C,kind] of [[window.OscillatorNode,'osc'],[window.AudioBufferSourceNode,'buf']]){
+  if(!C)continue;const start=C.prototype.start;
+  C.prototype.start=function(...a){window.__snd.push({kind,loop:!!this.loop});return start.apply(this,a);};
+ }
 });
 await p.goto(url);await p.click('[data-tab=players]');
 await p.locator('#roster').screenshot({path:out+'/roster.png'});
@@ -49,7 +55,7 @@ const sheet=await p.evaluate(()=>{
 fs.writeFileSync(out+'/fallen.png',Buffer.from(sheet.split(',')[1],'base64'));
 const audio=await p.evaluate(async()=>{
  const context=new OfflineAudioContext(2,22050*4,22050),result=[];
- for(const kind of ['murmur','applause','cheer','protest']){
+ for(const kind of ['applause','cheer','protest']){
   const buffer=TeCrowd.synth(context,kind);let peak=0,sum=0;
   for(const channel of [0,1])for(const v of buffer.getChannelData(channel)){peak=Math.max(peak,Math.abs(v));sum+=v*v;}
   result.push({kind,duration:buffer.duration,peak,rms:Math.sqrt(sum/(buffer.length*2))});
@@ -60,23 +66,37 @@ assert.ok(audio.every(a=>a.peak<=.651&&a.rms>.01&&Number.isFinite(a.rms)));check
 console.log('Synth buffers',JSON.stringify(audio));
 await p.click('[data-tab=play]');await p.click('#court-start');
 await p.waitForFunction(()=>window.__crowd?.enabled);
-assert.equal(await p.evaluate(()=>__crowd.nodes.size),1);checks++;
-// Real X-key serve; ambience must not create an extra loop.
-await p.keyboard.press('x');await p.waitForTimeout(450);await p.keyboard.press('x');
-assert.equal(await p.evaluate(()=>__crowd.ambient.loop),true);checks++;
+// 출전 뒤 아무것도 누르지 않으면 소리가 없다: 반복되는 관중 소리도 배경 선율도 없다(실제 시간 2.5초).
+await p.waitForTimeout(2500);
+assert.deepEqual(await p.evaluate(()=>({nodes:__crowd.nodes.size,started:__snd.length,phase:TeApp.match.phase})),{nodes:0,started:0,phase:'ready'});checks++;
+// Real X-key serve: 동작에는 소리가 나고, 반복되는 소리는 없다.
+await p.keyboard.press('x');await p.waitForTimeout(450);await p.keyboard.press('x');await p.waitForTimeout(200);
+const served=await p.evaluate(()=>({started:__snd.length,loops:__snd.filter(s=>s.loop).length}));
+assert.ok(served.started>0,'서브 소리가 나지 않았다');assert.equal(served.loops,0);checks++;
 // Event fixtures exercise the real audio consumer, not only a mapping helper.
-for(const [event,expected] of [[{type:'point'},'applause'],[{type:'fault'},'murmur'],[{type:'hit',text:'smash'},'cheer'],[{type:'crack'},'protest']]){
+for(const [event,expected] of [[{type:'point'},'applause'],[{type:'hit',text:'smash'},'cheer'],[{type:'crack'},'protest']]){
  await p.evaluate(e=>{__crowd.next=0;TeApp.match.events=[e];advanceTime(20);},event);
  assert.equal(await p.evaluate(()=>__crowd.lastReaction),expected);checks++;
 }
+// 폴트·렛·네트에는 관중 반응이 없다(웅성거림을 뺐다).
+for(const type of ['fault','let','net']){
+ await p.evaluate(type=>{__crowd.next=0;__crowd.lastReaction=null;TeApp.match.events=[{type}];advanceTime(20);},type);
+ assert.equal(await p.evaluate(()=>__crowd.lastReaction),null);
+}
+assert.equal(await p.evaluate(()=>TeCrowd.reaction([{type:'fault'},{type:'let'},{type:'net'}])),null);checks++;
 await p.click('#sound');assert.equal(await p.evaluate(()=>__crowd.nodes.size),0);checks++;
 await p.evaluate(()=>{TeApp.match.events=[{type:'point'}];advanceTime(20);});
 assert.equal(await p.evaluate(()=>__crowd.nodes.size),0);checks++;
+// 소리를 다시 켜도 가만히 있으면 조용하고, 득점하면 박수가 난다.
 await p.click('#sound');await p.evaluate(()=>advanceTime(20));
+assert.equal(await p.evaluate(()=>__crowd.nodes.size),0);
+await p.evaluate(()=>{TeApp.match.events=[{type:'point'}];advanceTime(20);});
 assert.equal(await p.evaluate(()=>__crowd.nodes.size),1);checks++;
 await p.locator('#stage').focus();await p.keyboard.press('Enter');await p.evaluate(()=>advanceTime(20));
 assert.equal(await p.evaluate(()=>__crowd.nodes.size),0);checks++;
 await p.keyboard.press('Enter');await p.evaluate(()=>advanceTime(20));
+assert.equal(await p.evaluate(()=>__crowd.nodes.size),0);
+await p.evaluate(()=>{TeApp.match.events=[{type:'point'}];advanceTime(20);});
 assert.equal(await p.evaluate(()=>__crowd.nodes.size),1);checks++;
 await p.click('[data-tab=players]');await p.evaluate(()=>advanceTime(20));
 assert.equal(await p.evaluate(()=>__crowd.nodes.size),0);checks++;
