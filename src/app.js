@@ -48,8 +48,12 @@ $('#code').oninput=validate;$('#code').onscroll=()=>{hlSync();$('#lines').scroll
 $('#code').onfocus=()=>{if(active&&!match.paused&&match.phase!=='match'){match.paused=true;keys.clear();draw();}};
 function audio(){
  if(!ctx)try{ctx=new (window.AudioContext||window.webkitAudioContext)();crowd=new TeCrowd.Crowd(ctx);}catch(e){return;}
- if(ctx.state==='suspended')ctx.resume().catch(()=>{});
+ wake();
 }
+/* 소리 장치가 돌고 있지 않으면 다시 켠다. Safari는 탭을 바꾸거나 통화가 끝난 뒤 'interrupted'로 남는다. 화면 복귀로는 장치를 새로 만들지 않는다. */
+function wake(){if(!ctx||ctx.state==='running'||ctx.state==='closed')return;try{const r=ctx.resume();if(r&&r.catch)r.catch(()=>{});}catch(e){}}
+['pointerdown','keydown','touchend','click'].forEach(ev=>addEventListener(ev,wake,true));
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)wake();});addEventListener('pageshow',wake);addEventListener('focus',wake);
 function tone(freq=.0,dur=.08,type='triangle',vol=.035,delay=0){
  if(!ctx||!sound)return;
  const t=ctx.currentTime+delay,o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.value=freq;

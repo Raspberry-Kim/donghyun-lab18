@@ -1,4 +1,4 @@
-# 동현테 v0.25
+# 동현테 v0.26
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24133576.svg)](https://doi.org/10.5281/zenodo.24133576)
 
@@ -6,7 +6,7 @@
 
 [바로 하기](https://raspberry-kim.github.io/donghyun-lab18/) · [GitHub](https://github.com/Raspberry-Kim/donghyun-lab18)
 
-모든 판을 묶는 DOI는 [`10.5281/zenodo.24133576`](https://doi.org/10.5281/zenodo.24133576)이다. 이번 판은 [v0.25 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.25)이며 Zenodo 보관본은 위 개념 DOI의 최신 판에서 확인할 수 있다. 앞선 판은 [v0.16 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.16)·[Zenodo 보관본](https://zenodo.org/records/24226005)(DOI `10.5281/zenodo.24226005`), [v0.15 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.15)·[Zenodo 보관본](https://zenodo.org/records/24221442)(DOI `10.5281/zenodo.24221442`), [v0.14 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.14)·[Zenodo 보관본](https://zenodo.org/records/24184356)(DOI `10.5281/zenodo.24184356`), [v0.13 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.13)·[Zenodo 보관본](https://zenodo.org/records/24183790)(DOI `10.5281/zenodo.24183790`), [v0.12 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.12)·[Zenodo 보관본](https://zenodo.org/records/24159947)(DOI `10.5281/zenodo.24159947`), [v0.11 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.11)·[Zenodo 보관본](https://zenodo.org/records/24157838)(DOI `10.5281/zenodo.24157838`), [v0.10 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.10)·[Zenodo 보관본](https://zenodo.org/records/24152944)(DOI `10.5281/zenodo.24152944`)에 남아 있다.
+모든 판을 묶는 DOI는 [`10.5281/zenodo.24133576`](https://doi.org/10.5281/zenodo.24133576)이다. 이번 판은 [v0.26 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.26)이며 Zenodo 보관본은 위 개념 DOI의 최신 판에서 확인할 수 있다. 앞선 판은 [v0.16 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.16)·[Zenodo 보관본](https://zenodo.org/records/24226005)(DOI `10.5281/zenodo.24226005`), [v0.15 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.15)·[Zenodo 보관본](https://zenodo.org/records/24221442)(DOI `10.5281/zenodo.24221442`), [v0.14 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.14)·[Zenodo 보관본](https://zenodo.org/records/24184356)(DOI `10.5281/zenodo.24184356`), [v0.13 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.13)·[Zenodo 보관본](https://zenodo.org/records/24183790)(DOI `10.5281/zenodo.24183790`), [v0.12 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.12)·[Zenodo 보관본](https://zenodo.org/records/24159947)(DOI `10.5281/zenodo.24159947`), [v0.11 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.11)·[Zenodo 보관본](https://zenodo.org/records/24157838)(DOI `10.5281/zenodo.24157838`), [v0.10 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.10)·[Zenodo 보관본](https://zenodo.org/records/24152944)(DOI `10.5281/zenodo.24152944`)에 남아 있다.
 
 그 앞 판은 [v0.18 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.18)·[Zenodo 보관본](https://zenodo.org/records/24237360)(DOI `10.5281/zenodo.24237360`)이다. v0.18은 v0.16에서 두 단계 올린 판이며 v0.17은 따로 공개하지 않았다.
 
@@ -19,6 +19,8 @@ v0.21은 [v0.21 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/relea
 v0.22는 [v0.22 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.22)·[Zenodo 보관본](https://zenodo.org/records/24299745)(DOI `10.5281/zenodo.24299745`)이다. ZIP의 모든 파일을 v0.22 태그와 대조해 차이 없음을 확인했다.
 
 v0.23은 [v0.23 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.23)·[Zenodo 보관본](https://zenodo.org/records/24316563)(DOI `10.5281/zenodo.24316563`)이다. ZIP의 모든 파일을 v0.23 태그와 대조해 차이 없음을 확인했다.
+
+v0.26에서는 소리 장치가 돌고 있지 않으면 다시 켠다. Safari가 탭 전환이나 통화 뒤에 소리 장치를 멈춰 두어도, 누르거나 화면으로 돌아오면 소리가 이어진다. 규칙·능력치·기술·저장 형식은 v0.25와 같다.
 
 v0.25에서는 출전하자마자 나던 배경 소리를 뺐다. 관중 웅성거림의 반복과 배경 선율이 없어져, 아무 동작도 없을 때에는 조용하다. 토스·타구·바운드 소리, 득점음·폴트음, 특수기술 효과음, 관중의 박수·환호·항의는 그대로다. 규칙·능력치·기술·저장 형식은 v0.24와 같다.
 
@@ -46,7 +48,7 @@ v0.15에서는 ‘수학적 원리’의 말을 다듬었다. 화면 투영 절�
 
 v0.14에서는 동현이 남색 야구모자를 거꾸로 썼다. 앞에서는 이마 위 조임 띠 구멍으로 흰머리가 살짝 보이고, 뒤에서는 챙이 목 쪽으로 나온다. 샤아자쿠의 발동 표지와 코트 테두리, 공 쪽으로 달려가는 궤적은 하늘색에서 붉은 계열로 바뀌었다.
 
-v0.13에서는 선수 둘이 더 왔다. **이삐**는 꽥꽥만 한 키의 단발 어린 소녀로, 얼굴은 슈슈를 닮았다(공격 70 · 수비 90 · 이동 100). S **양재천범람**을 켜면 내가 친 공과 함께 물결이 네트를 넘어 상대를 덮치고, 젖은 상대의 이동은 90% 느려진다. A **브롬톤앞바퀴**는 닿지 않는 공에 타격 키를 누르면 앞바퀴를 타고 0.2초 동안 굴러가 친다. 동현의 샤아자쿠보다 조금 느리고, 다섯 번에 한 번꼴로 공 옆으로 미끄러져 놓친다. **빽빽**은 슈슈와 거의 같은 모습에 똥머리와 연보라 원피스만 다르다(공격 90 · 수비 100 · 이동 110). S **오마이갓**을 켜면 내가 친 공이 하트 다섯 갈래로 갈라지는데 진짜는 무작위 하나뿐이다. 상대가 우연히 진짜를 고르면 랠리가 이어진다. A **백미취사완료**를 켜면 내가 공을 칠 때부터 상대가 취한 듯 비틀거리며 네트 쪽으로 걸어온다. 선수는 아홉, 기술은 열여덟, 예제는 81개가 됐다.
+v0.13에서는 선수 둘이 더 왔다. **이삐**는 꽥꽥만 한 키의 단발 어린 소녀로, 얼굴은 슈슈를 닮았다(공격 70 · 수비 90 · 이동 100). S **양재천범람**을 켜면 내가 친 공과 함께 물결이 네트를 넘어 상대를 덮치고, 젖은 상대의 이동은 90% 느려진다. A **브롬톤앞바퀴**는 닿지 않는 공에 타격 키를 누르면 앞바퀴를 타고 0.2초 동안 굴러가 친다. 동현의 샤아자쿠보다 조금 느리고, 다섯 번에 한 번꼴로 공 옆으로 미끄러져 놓친다. **빽빽**은 슈슈와 거의 같은 모습에 똥머리와 연보라 원피스만 다르다(공격 90 · 수비 100 · 이동 110). S **오마이갓**을 켜면 내가 친 공이 하트 다섯 갈래로 갈라지는데 진짜는 무작위 하나다. 상대가 우연히 진짜를 고르면 랠리가 이어진다. A **백미취사완료**를 켜면 내가 공을 칠 때부터 상대가 취한 듯 비틀거리며 네트 쪽으로 걸어온다. 선수는 아홉, 기술은 열여덟, 예제는 81개가 됐다.
 
 v0.12에서는 ‘수학적 원리’를 처음부터 다시 맞춰 봤다. 스매시의 수평 속도 배수를 바운드 뒤(×0.74)와 바운드 전(×0.80×0.74≈0.59)으로 나눠 바로 적었고, 긴 식은 좁은 화면에서 잘리지 않고 그 자리에서 줄이 바뀐다. 경기 규칙과 조작은 그대로다.
 
@@ -162,7 +164,7 @@ node qa/note-blink.cjs chromium http://127.0.0.1:3118/
 
 `src/engine.js`는 화면과 독립적인 120 Hz 엔진이다. `render.js`는 도트·코트, `app.js`는 동현랭·입력·메뉴·소리를 담당한다. `build.cjs`는 원본 실행기와 글꼴을 포함한 단일 HTML을 `dist`에 만든다.
 
-웹 배포 대상은 `dist`뿐이다. 롬·에뮬레이터 상태·원작 캡처·비공개 분석 자료는 저장소·릴리스·Zenodo 보관본에 포함하지 않는다.
+웹 배포 대상은 `dist`다. 롬·에뮬레이터 상태·원작 캡처·비공개 분석 자료는 저장소·릴리스·Zenodo 보관본에 포함하지 않는다.
 
 ## 시리즈 연결
 
