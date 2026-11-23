@@ -6,6 +6,7 @@
 - 단위 검사: core40·skill-rules16·skill-cues18·mungchi10·motion10·round7·serve-timing6·racket-input11·rally-skills13·new-skills13 통과.
 - Chromium(dist): 예제270·레이아웃/전체화면53·저장20·가상 패드7·뭉치 S/A 6흐름·윈도우 동작26·run-key 9·관중 소리18·안내 상자 8묶음 통과.
 - 실기기 미확인.
+- 공개 후: [v0.26 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.26) `ecaedc3`. 보관: [Zenodo 24464231](https://zenodo.org/records/24464231), DOI `10.5281/zenodo.24464231`. 기존 태그 변경 0. 이 줄은 태그 뒤 문서 기록임.
 
 ## v0.25 · 2026-11-20 · 배경 소리 제거
 - 바꾼 것: 출전 뒤 계속 나던 관중 웅성거림 반복과 배경 선율을 뺌. 폴트·렛·네트의 웅성거림 반응도 뺌. 타구·바운드·토스·득점음·폴트음·특수기술 효과음·박수·환호·항의는 그대로.
