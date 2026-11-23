@@ -59,7 +59,7 @@ const skillStyles={
  predict:['#fff1a6','바운드 예측','이번 랠리 · 착지 표식을 보자'],
  flood:['#9fd8f0','물결이 덮친다','이번 랠리 · 내 공이 네트를 넘으면 상대가 잠긴다'],
  wheel:['#ffd27a','앞바퀴 순간이동','이번 랠리 · 먼 공으로 굴러가 친다 · 가끔 놓친다'],
- hearts:['#ff9fc0','하트 다섯 갈래','이번 랠리 · 진짜 공은 하나뿐'],
+ hearts:['#ff9fc0','하트 다섯 갈래','이번 랠리 · 진짜 공은 하나'],
  drunk:['#f3e9c8','상대가 비틀거린다','이번 랠리 · 네트 쪽으로 걸어온다']
 };
 // Display-only half-turn at an end change. Court art/camera never moves.
