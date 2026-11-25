@@ -7,7 +7,7 @@ let tossGain=null,crowd=null,menu=null,padMenu={up:false,down:false};
 /* 특수기술의 동작은 게임의 내용이므로 운영체제의 ‘동작 줄이기’(윈도우 ‘애니메이션 효과’ 끔 등)를 따라 멈추지 않는다.
    동작을 줄여 보려면 주소 끝에 ?motion=reduce 를 붙인다. */
 R.reducedMotion=new URLSearchParams(location.search).get('motion')==='reduce';
-document.documentElement.classList.toggle('motion-reduce',R.reducedMotion); // 안내 상자 테두리의 처음 열 번 점멸도 이때만 없앤다(style.css)
+document.documentElement.classList.toggle('motion-reduce',R.reducedMotion); // 안내 상자 테두리의 처음 열 번 점멸도 이때만 없앤다(style.css). 표식은 index.html 머리에서 먼저 붙인다
 const captions=['WIMBLEDON / GRASS','AUSTRALIA / HARD','US / HARD','FRANCE / CLAY'];
 const encode=n=>'도'+'오'.repeat(n-1)+'옹';
 const makeCode=(p=0,l=0,c=0)=>`나는 동현이냐?\n   ㅋㅋ 선수 ${p+1} · ${E.PLAYERS[p].name}\n  뿡뿡 ${encode(p+1)}~뿡뿡뿡\n   ㅋㅋ 난이도 ${l+1} · ${E.LEVELS[l].name}\n  뿡뿡 ${encode(l+1)}~뿡뿡뿡\n   ㅋㅋ 경기장 ${c+1} · ${E.COURTS[c].name}\n  뿡뿡 ${encode(c+1)}~뿡뿡뿡\n동현이구나`;

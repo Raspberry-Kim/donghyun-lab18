@@ -2,9 +2,9 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it using the metadata below."
 title: "Donghyunte (동현테): a fixed-view single-player tennis laboratory configured through Donghyun-lang"
 type: software
-version: "0.26"
+version: "0.27"
 doi: "10.5281/zenodo.24133576"
-date-released: "2026-11-23"
+date-released: "2026-11-25"
 authors:
   - family-names: Kim
     given-names: Dong Hyun
@@ -26,7 +26,9 @@ abstract: >-
   constants and hit rules of this independent implementation do not
   numerically match the original. In-app "Why Open?" and "Mathematical
   principles" pages explain the history of open tennis and the engine's
-  equations. Version 0.26 resumes the audio device whenever it is not
+  equations. Version 0.27 keeps the document tabs within the screen width
+  in mobile Safari and Firefox and applies the ?motion=reduce marker before
+  the first paint. Version 0.26 resumed the audio device whenever it was not
   running, for example after Safari interrupts it. Version 0.25 removes the looping crowd murmur and the background
   melody that started as soon as a match began; the court is quiet when
   nothing is happening, while applause, cheers and protests remain.

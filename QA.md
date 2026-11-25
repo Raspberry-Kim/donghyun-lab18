@@ -1,5 +1,14 @@
 # 동현테 첫 구현·검사 기록
 
+## v0.27 · 2026-11-25 · 글 넘침·동작 줄이기 표식
+- 바꾼 것: 설명 탭의 문단·목록에 `overflow-wrap:break-word`, 수식 설명 칸 격자를 `48px minmax(0,1fr)`로. `?motion=reduce` 표식(`motion-reduce`)을 페이지 머리의 스크립트에서 먼저 붙임. 규칙·능력치·기술·저장 형식 변경 없음.
+- 넘침 확인(WebKit·Firefox, index.html): 폭 320·360·375·390·414·430·768에서 6탭 모두 가로 넘침 0. v0.26 공개본은 같은 검사에서 폭 320의 ‘수학적 원리’ 탭이 26px 넘침.
+- 배치 확인(Chromium): 폭 1280·390에서 설명 탭 문단·제목·표의 위치와 크기가 v0.26 공개본과 같음.
+- 표식 확인: `qa/note-blink.cjs` 8묶음을 Chromium·WebKit·Firefox에서 세 번씩 돌려 모두 통과. `?motion=reduce`에서 점멸 시작 0번. v0.26은 전체 검사 묶음 속에서 이 항목의 점멸 시작이 1번으로 잡힌 일이 두 번 있었음(Chromium). 공개본을 따로 열어 본 아홉 번에서는 0번.
+- 단위 검사: core·skill-rules·skill-cues·mungchi·motion·round·serve-timing·racket-input·rally-skills·new-skills·bot 통과.
+- Chromium: 예제270·레이아웃/전체화면53·저장·가상 패드·뭉치 S/A·윈도우 동작26·run-key·관중 소리 통과.
+- 실기기 미확인.
+
 ## v0.26 · 2026-11-23 · 소리 다시 켜기
 - 바꾼 것: 소리 장치가 running·closed가 아니면 resume. 이전 조건은 suspended. 누름·키·터치 끝·클릭과 화면 복귀(visibilitychange·pageshow·focus)에서 호출. 글 손질(페이지 두 곳·특수기술 설명·표지·문서).
 - 다시 켜기 확인(Chromium, dist): 소리 장치 상태를 interrupted로 꾸민 뒤 키 한 번·마우스 한 번에 각각 resume 1회, 상태 running. v0.25 공개본은 같은 시험에서 resume 0회.
