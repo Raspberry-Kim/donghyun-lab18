@@ -8,6 +8,7 @@
 - 단위 검사: core·skill-rules·skill-cues·mungchi·motion·round·serve-timing·racket-input·rally-skills·new-skills·bot 통과.
 - Chromium: 예제270·레이아웃/전체화면53·저장·가상 패드·뭉치 S/A·윈도우 동작26·run-key·관중 소리 통과.
 - 실기기 미확인.
+- 공개 후: [v0.27 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.27) `e9c37a1`. 보관: [Zenodo 24519526](https://zenodo.org/records/24519526), DOI `10.5281/zenodo.24519526`. 기존 태그 변경 0. 이 줄은 태그 뒤 문서 기록임.
 
 ## v0.26 · 2026-11-23 · 소리 다시 켜기
 - 바꾼 것: 소리 장치가 running·closed가 아니면 resume. 이전 조건은 suspended. 누름·키·터치 끝·클릭과 화면 복귀(visibilitychange·pageshow·focus)에서 호출. 글 손질(페이지 두 곳·특수기술 설명·표지·문서).
