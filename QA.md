@@ -5,6 +5,7 @@
 - 아이콘 확인: 세 파일이 동현랭의 파일과 바이트 단위로 같음. 머리글의 포동이 아이콘은 그대로임.
 - 판 표시 확인: 우상단·바닥글 v0.28.
 - 실기기 미확인.
+- 공개 후: [v0.28 릴리스](https://github.com/Raspberry-Kim/donghyun-lab18/releases/tag/v0.28) `c7eefc3`. 보관: [Zenodo 24545834](https://zenodo.org/records/24545834), DOI `10.5281/zenodo.24545834`. 기존 태그 변경 0. 이 줄은 태그 뒤 문서 기록임.
 
 ## v0.27 · 2026-11-25 · 글 넘침·동작 줄이기 표식
 - 바꾼 것: 설명 탭의 문단·목록에 `overflow-wrap:break-word`, 수식 설명 칸 격자를 `48px minmax(0,1fr)`로. `?motion=reduce` 표식(`motion-reduce`)을 페이지 머리의 스크립트에서 먼저 붙임. 규칙·능력치·기술·저장 형식 변경 없음.
